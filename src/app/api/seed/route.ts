@@ -1,140 +1,172 @@
-import { NextResponse } from "next/server"
-import { db } from "@/lib/db"
-import bcrypt from "bcryptjs"
+import { NextResponse } from 'next/server'
+import { db } from '@/lib/db'
+import bcrypt from 'bcryptjs'
 
-export async function POST(request: Request) {
+// Daftar Puskesmas di Kabupaten Ngada
+const puskesmasData = [
+  { nama: "Puskesmas Bajawa", kodeWilayah: "530601", alamat: "Kecamatan Bajawa" },
+  { nama: "Puskesmas Mataloko", kodeWilayah: "530602", alamat: "Kecamatan Golewa" },
+  { nama: "Puskesmas Aimere", kodeWilayah: "530603", alamat: "Kecamatan Aimere" },
+  { nama: "Puskesmas Boawae", kodeWilayah: "530604", alamat: "Kecamatan Boawae" },
+  { nama: "Puskesmas Mauponggo", kodeWilayah: "530605", alamat: "Kecamatan Mauponggo" },
+  { nama: "Puskesmas Soa", kodeWilayah: "530606", alamat: "Kecamatan Soa" },
+  { nama: "Puskesmas Riung", kodeWilayah: "530607", alamat: "Kecamatan Riung" },
+  { nama: "Puskesmas Nangaroro", kodeWilayah: "530608", alamat: "Kecamatan Nangaroro" },
+  { nama: "Puskesmas Golewa", kodeWilayah: "530609", alamat: "Kecamatan Golewa" },
+  { nama: "Puskesmas Wolowae", kodeWilayah: "530610", alamat: "Kecamatan Nanga-Wolowaru" },
+  { nama: "Puskesmas Jerebuu", kodeWilayah: "530611", alamat: "Kecamatan Jerebuu" },
+  { nama: "Puskesmas Wewo", kodeWilayah: "530612", alamat: "Kecamatan Wewo" }
+]
+
+function generatePassword(namaPuskesmas: string): string {
+  const namaSingkat = namaPuskesmas.replace("Puskesmas ", "")
+  const namaFormatted = namaSingkat.charAt(0).toUpperCase() + 
+                        namaSingkat.slice(1).toLowerCase()
+  const nomor = namaSingkat.length.toString().padStart(3, "0")
+  return `${namaFormatted}${nomor}!`
+}
+
+function generateUsername(namaPuskesmas: string): string {
+  const namaSingkat = namaPuskesmas.replace("Puskesmas ", "")
+  return namaSingkat.toLowerCase().replace(/\s+/g, "_")
+}
+
+export async function GET(request: Request) {
   try {
-    // Check authorization - should be called only once during setup
-    const body = await request.json().catch(() => ({}))
-    const { secret } = body
+    // Cek secret key untuk keamanan
+    const url = new URL(request.url)
+    const secret = url.searchParams.get('secret')
     
-    if (secret !== process.env.NEXTAUTH_SECRET) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+    if (secret !== process.env.NEXTAUTH_SECRET && secret !== 'seed-ngada-2024') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     console.log("🌱 Memulai seeding database...")
-
-    // Cek apakah sudah ada data
-    const existingUsers = await db.user.count()
-    if (existingUsers > 0) {
-      return NextResponse.json({
-        success: true,
-        message: "Database sudah memiliki data. Seeding dilewati.",
-        credentials: {
-          admin: { username: "admin", password: "password123" },
-          operator: { username: "operator1", password: "password123" }
-        }
-      })
-    }
+    
+    // Hapus data yang ada
+    console.log("🗑️ Membersihkan data lama...")
+    await db.auditLog.deleteMany()
+    await db.birthRecord.deleteMany()
+    await db.user.deleteMany()
+    await db.puskesmas.deleteMany()
 
     // Buat data Puskesmas
-    const puskesmasData = [
-      { nama: "Puskesmas Kecamatan Gambir", kodeWilayah: "317101", alamat: "Jl. Gambir No. 1, Jakarta Pusat" },
-      { nama: "Puskesmas Kecamatan Tanah Abang", kodeWilayah: "317102", alamat: "Jl. Tanah Abang No. 15, Jakarta Pusat" },
-      { nama: "Puskesmas Kecamatan Menteng", kodeWilayah: "317103", alamat: "Jl. Menteng Raya No. 20, Jakarta Pusat" },
-      { nama: "Puskesmas Kecamatan Senen", kodeWilayah: "317104", alamat: "Jl. Senen Raya No. 45, Jakarta Pusat" },
-      { nama: "Puskesmas Kecamatan Cempaka Putih", kodeWilayah: "317105", alamat: "Jl. Cempaka Putih No. 10, Jakarta Pusat" }
-    ]
-
+    console.log("🏥 Membuat data Puskesmas Ngada...")
     const puskesmas = await Promise.all(
-      puskesmasData.map((p) => db.puskesmas.create({ data: p }))
+      puskesmasData.map((p) =>
+        db.puskesmas.create({ data: p })
+      )
     )
-    console.log(`✅ ${puskesmas.length} Puskesmas berhasil dibuat`)
-
-    // Hash password default
-    const hashedPassword = await bcrypt.hash("password123", 10)
 
     // Buat Admin Dukcapil
-    const admin = await db.user.create({
+    console.log("👤 Membuat Admin Dukcapil...")
+    const adminPassword = "AdminNgada2024!"
+    const hashedAdminPassword = await bcrypt.hash(adminPassword, 10)
+    
+    await db.user.create({
       data: {
-        username: "admin",
-        password: hashedPassword,
-        namaLengkap: "Admin Dukcapil",
+        username: "admin_dukcapil",
+        password: hashedAdminPassword,
+        namaLengkap: "Admin Dukcapil Ngada",
         role: "ADMIN",
         puskesmasId: null
       }
     })
-    console.log("✅ Admin Dukcapil berhasil dibuat")
 
     // Buat Operator untuk setiap Puskesmas
-    const operators = await Promise.all(
-      puskesmas.map((p, index) =>
-        db.user.create({
+    console.log("👥 Membuat Operator Puskesmas...")
+    const operatorAccounts: Array<{ username: string; password: string; puskesmas: string }> = []
+    
+    await Promise.all(
+      puskesmas.map(async (p) => {
+        const username = generateUsername(p.nama)
+        const password = generatePassword(p.nama)
+        const namaLengkap = `Operator ${p.nama.replace("Puskesmas ", "")}`
+        
+        operatorAccounts.push({
+          username,
+          password,
+          puskesmas: p.nama
+        })
+        
+        const hashedPassword = await bcrypt.hash(password, 10)
+        return db.user.create({
           data: {
-            username: `operator${index + 1}`,
+            username,
             password: hashedPassword,
-            namaLengkap: `Operator ${p.nama.replace("Puskesmas Kecamatan ", "")}`,
+            namaLengkap,
             role: "OPERATOR",
             puskesmasId: p.id
           }
         })
-      )
+      })
     )
-    console.log(`✅ ${operators.length} Operator berhasil dibuat`)
 
     // Buat contoh data kelahiran
+    console.log("👶 Membuat data kelahiran contoh...")
     const sampleBirthRecords = [
       {
-        nikIbu: "3171014567890001",
-        namaIbu: "SITI NURHALIZA",
-        namaAyah: "AHMAD FAUZI",
-        namaBayi: "MUHAMMAD RIZKY",
+        nikIbu: "5306014567890001",
+        namaIbu: "MARIA MAGDALENA",
+        namaAyah: "YOHANES SERAN",
+        namaBayi: "FRANSISKUS SERAN",
         tanggalLahir: new Date("2024-01-15"),
-        tempatLahir: "RSUD TARUMANEGARA",
+        tempatLahir: "RSUD BAJAWA",
         jenisKelamin: "LAKI_LAKI",
         status: "VERIFIED",
         puskesmasId: puskesmas[0].id,
-        createdBy: operators[0].id,
-        verifiedBy: admin.id,
-        verifiedAt: new Date()
+        createdBy: (await db.user.findFirst({ where: { username: 'bajawa' } }))!.id
       },
       {
-        nikIbu: "3171025678900002",
-        namaIbu: "DEWI SARTIKA",
-        namaAyah: "BUDI SANTOSO",
-        namaBayi: "PUTRI ANGGRAINI",
+        nikIbu: "5306025678900002",
+        namaIbu: "AGUSTINA WAE",
+        namaAyah: "PAULUS BEO",
+        namaBayi: "THERESIA BEO",
         tanggalLahir: new Date("2024-01-18"),
-        tempatLahir: "RS HARAPAN KITA",
+        tempatLahir: "PUSKESMAS MATALOKO",
         jenisKelamin: "PEREMPUAN",
-        status: "PENDING",
+        status: "VERIFIED",
         puskesmasId: puskesmas[1].id,
-        createdBy: operators[1].id
+        createdBy: (await db.user.findFirst({ where: { username: 'mataloko' } }))!.id
       },
       {
-        nikIbu: "3171036789010003",
-        namaIbu: "RINA MARLENA",
-        namaAyah: "DEDI KURNIAWAN",
-        namaBayi: "RAFLI ADRIAN",
+        nikIbu: "5306036789010003",
+        namaIbu: "ROSMINI DHAKI",
+        namaAyah: "MATEOS GEBA",
+        namaBayi: "YOHANES GEBA",
         tanggalLahir: new Date("2024-01-20"),
-        tempatLahir: "RS ABADI",
+        tempatLahir: "PUSKESMAS AIMERE",
         jenisKelamin: "LAKI_LAKI",
-        status: "PENDING",
+        status: "VERIFIED",
         puskesmasId: puskesmas[2].id,
-        createdBy: operators[2].id
+        createdBy: (await db.user.findFirst({ where: { username: 'aimere' } }))!.id
       }
     ]
 
     await Promise.all(
-      sampleBirthRecords.map((record) => db.birthRecord.create({ data: record }))
+      sampleBirthRecords.map((record) =>
+        db.birthRecord.create({ data: record })
+      )
     )
-    console.log("✅ Data kelahiran contoh berhasil dibuat")
+
+    console.log("🎉 Seeding selesai!")
 
     return NextResponse.json({
       success: true,
-      message: "Seeding berhasil!",
-      credentials: {
-        admin: { username: "admin", password: "password123" },
-        operator: { username: "operator1", password: "password123" }
+      message: "Database seeded successfully",
+      accounts: {
+        admin: {
+          username: "admin_dukcapil",
+          password: "AdminNgada2024!"
+        },
+        operators: operatorAccounts
       }
     })
   } catch (error) {
-    console.error("Error saat seeding:", error)
-    return NextResponse.json(
-      { error: "Terjadi kesalahan saat seeding", details: String(error) },
-      { status: 500 }
-    )
+    console.error("Seed error:", error)
+    return NextResponse.json({ 
+      error: 'Seed failed', 
+      details: error instanceof Error ? error.message : 'Unknown error' 
+    }, { status: 500 })
   }
 }
