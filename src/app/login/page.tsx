@@ -1,7 +1,7 @@
 "use client"
 
 // Halaman Login untuk Sistem Pencatatan Nama Bayi Baru Lahir
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { signIn } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -11,7 +11,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Baby, Loader2, AlertCircle } from "lucide-react"
 
-export default function LoginPage() {
+// Komponen login form yang menggunakan useSearchParams
+function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [username, setUsername] = useState("")
@@ -48,6 +49,82 @@ export default function LoginPage() {
   }
 
   return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {error && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
+      
+      <div className="space-y-2">
+        <Label htmlFor="username">Username</Label>
+        <Input
+          id="username"
+          type="text"
+          placeholder="Masukkan username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+          disabled={isLoading}
+          autoComplete="username"
+        />
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="password">Password</Label>
+        <Input
+          id="password"
+          type="password"
+          placeholder="Masukkan password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          disabled={isLoading}
+          autoComplete="current-password"
+        />
+      </div>
+      
+      <Button 
+        type="submit" 
+        className="w-full" 
+        disabled={isLoading}
+      >
+        {isLoading ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Memproses...
+          </>
+        ) : (
+          "Masuk"
+        )}
+      </Button>
+    </form>
+  )
+}
+
+// Loading fallback untuk Suspense
+function LoginLoading() {
+  return (
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <Label>Username</Label>
+        <Input disabled placeholder="Memuat..." />
+      </div>
+      <div className="space-y-2">
+        <Label>Password</Label>
+        <Input disabled placeholder="Memuat..." type="password" />
+      </div>
+      <Button disabled className="w-full">
+        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        Memuat...
+      </Button>
+    </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="space-y-1 text-center pb-6">
@@ -64,57 +141,9 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-            
-            <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
-              <Input
-                id="username"
-                type="text"
-                placeholder="Masukkan username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-                disabled={isLoading}
-                autoComplete="username"
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Masukkan password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                disabled={isLoading}
-                autoComplete="current-password"
-              />
-            </div>
-            
-            <Button 
-              type="submit" 
-              className="w-full" 
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Memproses...
-                </>
-              ) : (
-                "Masuk"
-              )}
-            </Button>
-          </form>
+          <Suspense fallback={<LoginLoading />}>
+            <LoginForm />
+          </Suspense>
           
           <div className="mt-6 pt-6 border-t text-center text-sm text-muted-foreground">
             <p>Sistem Pencatatan Nama Bayi Baru Lahir</p>
