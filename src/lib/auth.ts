@@ -6,33 +6,41 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { db } from "./db"
 import bcrypt from "bcryptjs"
 
-// Helper untuk mendapatkan NEXTAUTH_URL yang valid
-function getValidNextAuthUrl(): string | undefined {
+// Helper untuk mengecek apakah URL adalah placeholder
+function isPlaceholderUrl(url: string | undefined): boolean {
+  if (!url) return true
+  return (
+    url.includes('[') ||
+    url.includes(']') ||
+    url.includes('nama-aplikasi') ||
+    url.includes('your-domain') ||
+    url.includes('placeholder') ||
+    !url.startsWith('http')
+  )
+}
+
+// Helper untuk mendapatkan URL yang valid
+function getValidNextAuthUrl(): string {
   const nextauthUrl = process.env.NEXTAUTH_URL
   const vercelUrl = process.env.VERCEL_URL
   
-  // Jika NEXTAUTH_URL tidak diset atau merupakan placeholder, gunakan VERCEL_URL
-  if (!nextauthUrl || 
-      nextauthUrl.includes('[') || 
-      nextauthUrl.includes('nama-aplikasi') ||
-      nextauthUrl.includes('your-domain')) {
-    if (vercelUrl) {
-      return `https://${vercelUrl}`
-    }
-    // Fallback untuk development
-    return "http://localhost:3000"
+  // Jika NEXTAUTH_URL valid, gunakan itu
+  if (nextauthUrl && !isPlaceholderUrl(nextauthUrl)) {
+    return nextauthUrl
   }
   
-  return nextauthUrl
+  // Jika ada VERCEL_URL, gunakan itu
+  if (vercelUrl) {
+    return `https://${vercelUrl}`
+  }
+  
+  // Fallback untuk development
+  return "http://localhost:3000"
 }
 
-// Set NEXTAUTH_URL secara dinamis jika diperlukan
-if (typeof process !== 'undefined') {
-  const validUrl = getValidNextAuthUrl()
-  if (validUrl && !process.env.NEXTAUTH_URL) {
-    process.env.NEXTAUTH_URL = validUrl
-  }
-}
+// Override NEXTAUTH_URL jika placeholder (harus dilakukan di module level)
+const validNextAuthUrl = getValidNextAuthUrl()
+process.env.NEXTAUTH_URL = validNextAuthUrl
 
 // Ekstensi tipe untuk NextAuth
 declare module "next-auth" {
