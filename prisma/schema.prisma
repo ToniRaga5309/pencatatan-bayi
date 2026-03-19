@@ -57,13 +57,14 @@ model BirthRecord {
   tanggalLahir    DateTime     @map("tanggal_lahir")
   tempatLahir     String       @map("tempat_lahir") @db.VarChar(150)
   jenisKelamin    String       @map("jenis_kelamin") @db.VarChar(15)
-  status          String       @default("PENDING") @db.VarChar(20)
+  status          String       @default("VERIFIED") @db.VarChar(20)
   alasanPenolakan String?      @map("alasan_penolakan") @db.Text
   isDeleted       Boolean      @default(false) @map("is_deleted")
   puskesmasId     String       @map("puskesmas_id")
   createdBy       String       @map("created_by")
   verifiedBy      String?      @map("verified_by")
   verifiedAt      DateTime?    @map("verified_at")
+  downloadedAt    DateTime?    @map("downloaded_at")
   createdAt       DateTime     @default(now()) @map("created_at")
   updatedAt       DateTime     @updatedAt @map("updated_at")
 

@@ -14,7 +14,7 @@ export async function GET() {
       )
     }
 
-    // Ambil 5 data terbaru
+    // Ambil 5 data terbaru (semua sudah VERIFIED)
     const records = await db.birthRecord.findMany({
       where: {
         puskesmasId: user.puskesmasId,

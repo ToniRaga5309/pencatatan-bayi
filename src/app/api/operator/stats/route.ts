@@ -20,7 +20,8 @@ export async function GET() {
     const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0)
 
     // Query statistik berdasarkan puskesmas user
-    const [totalBulanIni, totalPending, totalVerified, totalRejected] = await Promise.all([
+    // Semua data langsung VERIFIED, tidak ada PENDING atau REJECTED
+    const [totalBulanIni, totalVerified, totalAllTime] = await Promise.all([
       // Total data bulan ini
       db.birthRecord.count({
         where: {
@@ -32,15 +33,7 @@ export async function GET() {
           isDeleted: false
         }
       }),
-      // Total pending
-      db.birthRecord.count({
-        where: {
-          puskesmasId: user.puskesmasId,
-          status: "PENDING",
-          isDeleted: false
-        }
-      }),
-      // Total verified
+      // Total verified (data aktif)
       db.birthRecord.count({
         where: {
           puskesmasId: user.puskesmasId,
@@ -48,11 +41,10 @@ export async function GET() {
           isDeleted: false
         }
       }),
-      // Total rejected
+      // Total semua waktu
       db.birthRecord.count({
         where: {
           puskesmasId: user.puskesmasId,
-          status: "REJECTED",
           isDeleted: false
         }
       })
@@ -60,9 +52,8 @@ export async function GET() {
 
     return NextResponse.json({
       totalBulanIni,
-      totalPending,
       totalVerified,
-      totalRejected
+      totalAllTime
     })
   } catch (error) {
     console.error("Error fetching stats:", error)

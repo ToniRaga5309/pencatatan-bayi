@@ -10,13 +10,12 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { 
-  Baby, Clock, CheckCircle, XCircle, Download, Users, Loader2, 
-  Search, Eye, CheckSquare, XSquare, ChevronLeft, ChevronRight,
-  Shield, FileText, LogOut
+  Baby, Download, Users, Loader2, 
+  Search, Eye, ChevronLeft, ChevronRight,
+  FileText, LogOut, CheckCircle
 } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -32,7 +31,7 @@ interface BirthRecord {
   tempatLahir: string
   jenisKelamin: string
   status: string
-  alasanPenolakan: string | null
+  downloadedAt: Date | null
   createdAt: Date
   puskesmas: { nama: string }
   creator: { namaLengkap: string }
@@ -40,9 +39,8 @@ interface BirthRecord {
 
 interface DashboardStats {
   totalAll: number
-  totalPending: number
-  totalVerified: number
-  totalRejected: number
+  totalNew: number
+  totalDownloaded: number
   puskesmasList: Array<{ id: string; nama: string }>
 }
 
@@ -54,7 +52,6 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true)
   const [isStatsLoading, setIsStatsLoading] = useState(true)
   const [search, setSearch] = useState("")
-  const [statusFilter, setStatusFilter] = useState("")
   const [puskesmasFilter, setPuskesmasFilter] = useState("")
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -62,10 +59,8 @@ export default function AdminDashboard() {
   // Dialog states
   const [selectedRecord, setSelectedRecord] = useState<BirthRecord | null>(null)
   const [showDetail, setShowDetail] = useState(false)
-  const [showReject, setShowReject] = useState(false)
-  const [rejectReason, setRejectReason] = useState("")
-  const [isProcessing, setIsProcessing] = useState(false)
   const [showNikMap, setShowNikMap] = useState<Record<string, boolean>>({})
+  const [isDownloading, setIsDownloading] = useState(false)
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -80,7 +75,7 @@ export default function AdminDashboard() {
       fetchStats()
       fetchRecords()
     }
-  }, [session, page, statusFilter, puskesmasFilter])
+  }, [session, page, puskesmasFilter])
 
   const fetchStats = async () => {
     setIsStatsLoading(true)
@@ -102,7 +97,6 @@ export default function AdminDashboard() {
     try {
       const params = new URLSearchParams()
       if (search) params.append("search", search)
-      if (statusFilter && statusFilter !== "all") params.append("status", statusFilter)
       if (puskesmasFilter && puskesmasFilter !== "all") params.append("puskesmasId", puskesmasFilter)
       params.append("page", page.toString())
       params.append("limit", "15")
@@ -125,94 +119,62 @@ export default function AdminDashboard() {
     fetchRecords()
   }
 
-  const handleVerify = async (record: BirthRecord) => {
-    setIsProcessing(true)
+  // Download semua data (Register)
+  const handleDownloadRegister = async () => {
+    setIsDownloading(true)
     try {
-      const response = await fetch(`/api/admin/birth-records/${record.id}/verify`, {
-        method: "POST"
-      })
-      if (response.ok) {
-        toast.success("Data berhasil diverifikasi")
-        fetchRecords()
-        fetchStats()
-      } else {
-        const data = await response.json()
-        toast.error(data.error || "Gagal memverifikasi")
-      }
-    } catch {
-      toast.error("Terjadi kesalahan")
-    } finally {
-      setIsProcessing(false)
-    }
-  }
-
-  const handleReject = async () => {
-    if (!selectedRecord || !rejectReason.trim()) {
-      toast.error("Mohon isi alasan penolakan")
-      return
-    }
-
-    setIsProcessing(true)
-    try {
-      const response = await fetch(`/api/admin/birth-records/${selectedRecord.id}/reject`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ alasanPenolakan: rejectReason })
-      })
-      if (response.ok) {
-        toast.success("Data berhasil ditolak")
-        setShowReject(false)
-        setRejectReason("")
-        setSelectedRecord(null)
-        fetchRecords()
-        fetchStats()
-      } else {
-        const data = await response.json()
-        toast.error(data.error || "Gagal menolak data")
-      }
-    } catch {
-      toast.error("Terjadi kesalahan")
-    } finally {
-      setIsProcessing(false)
-    }
-  }
-
-  const handleExport = async () => {
-    try {
-      toast.info("Mengunduh data...")
-      const response = await fetch("/api/admin/export")
+      toast.info("Mengunduh register...")
+      const response = await fetch("/api/admin/register")
       if (response.ok) {
         const blob = await response.blob()
         const url = window.URL.createObjectURL(blob)
         const a = document.createElement("a")
         a.href = url
-        a.download = `data-kelahiran-${new Date().toISOString().split("T")[0]}.xlsx`
+        a.download = `register-kelahiran-${new Date().toISOString().split("T")[0]}.xlsx`
         a.click()
         window.URL.revokeObjectURL(url)
-        toast.success("Data berhasil diunduh")
+        toast.success("Register berhasil diunduh")
       } else {
-        toast.error("Gagal mengekspor data")
+        toast.error("Gagal mengunduh register")
       }
     } catch {
-      toast.error("Terjadi kesalahan saat ekspor")
+      toast.error("Terjadi kesalahan saat mengunduh")
+    } finally {
+      setIsDownloading(false)
+    }
+  }
+
+  // Download data baru saja (Data Baru)
+  const handleDownloadNew = async () => {
+    setIsDownloading(true)
+    try {
+      toast.info("Mengunduh data baru...")
+      const response = await fetch("/api/admin/download-new")
+      if (response.ok) {
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = `data-baru-kelahiran-${new Date().toISOString().split("T")[0]}.xlsx`
+        a.click()
+        window.URL.revokeObjectURL(url)
+        toast.success("Data baru berhasil diunduh")
+        // Refresh data setelah download
+        fetchStats()
+        fetchRecords()
+      } else {
+        const data = await response.json()
+        toast.error(data.error || "Gagal mengunduh data baru")
+      }
+    } catch {
+      toast.error("Terjadi kesalahan saat mengunduh")
+    } finally {
+      setIsDownloading(false)
     }
   }
 
   const toggleNikVisibility = (id: string) => {
     setShowNikMap(prev => ({ ...prev, [id]: !prev[id] }))
-  }
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "PENDING":
-        return <Badge variant="secondary"><Clock className="w-3 h-3 mr-1" />Menunggu</Badge>
-      case "VERIFIED":
-        return <Badge className="bg-green-600"><CheckCircle className="w-3 h-3 mr-1" />Terverifikasi</Badge>
-      case "REJECTED":
-        return <Badge variant="destructive"><XCircle className="w-3 h-3 mr-1" />Ditolak</Badge>
-      default:
-        return <Badge variant="outline">{status}</Badge>
-    }
   }
 
   if (status === "loading" || isStatsLoading) {
@@ -234,7 +196,7 @@ export default function AdminDashboard() {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold text-slate-900">Dashboard Admin</h1>
-            <p className="text-sm text-slate-500">Dukcapil - Verifikasi Data Kelahiran</p>
+            <p className="text-sm text-slate-500">Dukcapil - Data Kelahiran</p>
           </div>
           <div className="flex items-center gap-4">
             <Button variant="outline" size="sm" asChild>
@@ -255,7 +217,7 @@ export default function AdminDashboard() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-6">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-slate-600">Total Data</CardTitle>
@@ -269,34 +231,23 @@ export default function AdminDashboard() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">Menunggu Verifikasi</CardTitle>
-              <Clock className="w-5 h-5 text-amber-500" />
+              <CardTitle className="text-sm font-medium text-slate-600">Data Baru</CardTitle>
+              <Download className="w-5 h-5 text-blue-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-amber-600">{stats?.totalPending ?? 0}</div>
-              <p className="text-xs text-slate-500 mt-1">Perlu ditinjau</p>
+              <div className="text-3xl font-bold text-blue-600">{stats?.totalNew ?? 0}</div>
+              <p className="text-xs text-slate-500 mt-1">Belum pernah diunduh</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">Terverifikasi</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-600">Sudah Diunduh</CardTitle>
               <CheckCircle className="w-5 h-5 text-green-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-green-600">{stats?.totalVerified ?? 0}</div>
-              <p className="text-xs text-slate-500 mt-1">Data valid</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">Ditolak</CardTitle>
-              <XCircle className="w-5 h-5 text-red-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-red-600">{stats?.totalRejected ?? 0}</div>
-              <p className="text-xs text-slate-500 mt-1">Data ditolak</p>
+              <div className="text-3xl font-bold text-green-600">{stats?.totalDownloaded ?? 0}</div>
+              <p className="text-xs text-slate-500 mt-1">Data sudah diunduh</p>
             </CardContent>
           </Card>
         </div>
@@ -307,12 +258,29 @@ export default function AdminDashboard() {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
                 <CardTitle>Data Kelahiran</CardTitle>
-                <CardDescription>Seluruh data dari semua Puskesmas</CardDescription>
+                <CardDescription>Data baru yang belum pernah diunduh</CardDescription>
               </div>
-              <Button onClick={handleExport}>
-                <Download className="w-4 h-4 mr-2" />
-                Export Excel
-              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  onClick={handleDownloadRegister}
+                  disabled={isDownloading}
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  Register
+                </Button>
+                <Button 
+                  onClick={handleDownloadNew}
+                  disabled={isDownloading}
+                >
+                  {isDownloading ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : (
+                    <Download className="w-4 h-4 mr-2" />
+                  )}
+                  Data Baru
+                </Button>
+              </div>
             </div>
           </CardHeader>
           <CardContent>
@@ -329,17 +297,6 @@ export default function AdminDashboard() {
                   <Search className="w-4 h-4" />
                 </Button>
               </div>
-              <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); setPage(1) }}>
-                <SelectTrigger className="w-full lg:w-48">
-                  <SelectValue placeholder="Semua Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Semua Status</SelectItem>
-                  <SelectItem value="PENDING">Menunggu</SelectItem>
-                  <SelectItem value="VERIFIED">Terverifikasi</SelectItem>
-                  <SelectItem value="REJECTED">Ditolak</SelectItem>
-                </SelectContent>
-              </Select>
               <Select value={puskesmasFilter} onValueChange={(v) => { setPuskesmasFilter(v); setPage(1) }}>
                 <SelectTrigger className="w-full lg:w-48">
                   <SelectValue placeholder="Semua Puskesmas" />
@@ -377,7 +334,7 @@ export default function AdminDashboard() {
                   ) : records.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={7} className="text-center py-8 text-slate-500">
-                        Tidak ada data ditemukan
+                        Tidak ada data baru. Data yang sudah diunduh disembunyikan dari daftar ini.
                       </TableCell>
                     </TableRow>
                   ) : (
@@ -395,41 +352,20 @@ export default function AdminDashboard() {
                         <TableCell>{record.namaIbu}</TableCell>
                         <TableCell>{record.puskesmas.nama}</TableCell>
                         <TableCell>{formatDateIndonesia(record.tanggalLahir)}</TableCell>
-                        <TableCell>{getStatusBadge(record.status)}</TableCell>
+                        <TableCell>
+                          <Badge className="bg-green-600">
+                            <CheckCircle className="w-3 h-3 mr-1" />Terverifikasi
+                          </Badge>
+                        </TableCell>
                         <TableCell className="text-right">
-                          <div className="flex justify-end gap-1">
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={() => { setSelectedRecord(record); setShowDetail(true) }}
-                              title="Lihat Detail"
-                            >
-                              <Eye className="w-4 h-4" />
-                            </Button>
-                            {record.status === "PENDING" && (
-                              <>
-                                <Button 
-                                  variant="ghost" 
-                                  size="sm"
-                                  className="text-green-600 hover:text-green-700"
-                                  onClick={() => handleVerify(record)}
-                                  disabled={isProcessing}
-                                  title="Verifikasi"
-                                >
-                                  <CheckSquare className="w-4 h-4" />
-                                </Button>
-                                <Button 
-                                  variant="ghost" 
-                                  size="sm"
-                                  className="text-red-600 hover:text-red-700"
-                                  onClick={() => { setSelectedRecord(record); setShowReject(true) }}
-                                  title="Tolak"
-                                >
-                                  <XSquare className="w-4 h-4" />
-                                </Button>
-                              </>
-                            )}
-                          </div>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => { setSelectedRecord(record); setShowDetail(true) }}
+                            title="Lihat Detail"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </Button>
                         </TableCell>
                       </TableRow>
                     ))
@@ -517,61 +453,16 @@ export default function AdminDashboard() {
               </div>
               <div>
                 <Label className="text-slate-500">Status</Label>
-                {getStatusBadge(selectedRecord.status)}
+                <Badge className="bg-green-600">
+                  <CheckCircle className="w-3 h-3 mr-1" />Terverifikasi
+                </Badge>
               </div>
               <div className="col-span-2">
                 <Label className="text-slate-500">Diinput Pada</Label>
                 <p className="font-medium">{formatDateIndonesia(selectedRecord.createdAt)}</p>
               </div>
-              {selectedRecord.status === "REJECTED" && selectedRecord.alasanPenolakan && (
-                <div className="col-span-2 bg-red-50 p-4 rounded-lg">
-                  <Label className="text-red-600">Alasan Penolakan</Label>
-                  <p className="text-red-700">{selectedRecord.alasanPenolakan}</p>
-                </div>
-              )}
             </div>
           )}
-        </DialogContent>
-      </Dialog>
-
-      {/* Reject Dialog */}
-      <Dialog open={showReject} onOpenChange={setShowReject}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Shield className="w-5 h-5 text-red-500" />
-              Tolak Data Kelahiran
-            </DialogTitle>
-            <DialogDescription>
-              Berikan alasan penolakan untuk data bayi: <strong>{selectedRecord?.namaBayi}</strong>
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <Label>Alasan Penolakan <span className="text-red-500">*</span></Label>
-              <Textarea
-                placeholder="Contoh: NIK ibu tidak valid, data tidak lengkap..."
-                value={rejectReason}
-                onChange={(e) => setRejectReason(e.target.value)}
-                rows={4}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => { setShowReject(false); setRejectReason("") }}>
-              Batal
-            </Button>
-            <Button variant="destructive" onClick={handleReject} disabled={isProcessing}>
-              {isProcessing ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Memproses...
-                </>
-              ) : (
-                "Tolak Data"
-              )}
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

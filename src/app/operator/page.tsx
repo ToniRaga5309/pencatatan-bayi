@@ -6,14 +6,13 @@ import { useSession, signOut } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Baby, Clock, CheckCircle, XCircle, Plus, FileText, Loader2, LogOut } from "lucide-react"
+import { Baby, CheckCircle, Plus, FileText, Loader2, LogOut, Database } from "lucide-react"
 import Link from "next/link"
 
 interface DashboardStats {
   totalBulanIni: number
-  totalPending: number
   totalVerified: number
-  totalRejected: number
+  totalAllTime: number
 }
 
 export default function OperatorDashboard() {
@@ -86,7 +85,7 @@ export default function OperatorDashboard() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-6">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-slate-600">
@@ -96,46 +95,33 @@ export default function OperatorDashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">{stats?.totalBulanIni ?? 0}</div>
-              <p className="text-xs text-slate-500 mt-1">Bayi tercatat</p>
+              <p className="text-xs text-slate-500 mt-1">Bayi tercatat bulan ini</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-slate-600">
-                Menunggu Verifikasi
-              </CardTitle>
-              <Clock className="w-5 h-5 text-amber-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-amber-600">{stats?.totalPending ?? 0}</div>
-              <p className="text-xs text-slate-500 mt-1">Data pending</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">
-                Terverifikasi
+                Total Terverifikasi
               </CardTitle>
               <CheckCircle className="w-5 h-5 text-green-500" />
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-green-600">{stats?.totalVerified ?? 0}</div>
-              <p className="text-xs text-slate-500 mt-1">Data valid</p>
+              <p className="text-xs text-slate-500 mt-1">Data aktif</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-slate-600">
-                Ditolak
+                Total Keseluruhan
               </CardTitle>
-              <XCircle className="w-5 h-5 text-red-500" />
+              <Database className="w-5 h-5 text-blue-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-red-600">{stats?.totalRejected ?? 0}</div>
-              <p className="text-xs text-slate-500 mt-1">Perlu perbaikan</p>
+              <div className="text-3xl font-bold text-blue-600">{stats?.totalAllTime ?? 0}</div>
+              <p className="text-xs text-slate-500 mt-1">Semua data</p>
             </CardContent>
           </Card>
         </div>
@@ -164,7 +150,7 @@ export default function OperatorDashboard() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg">Riwayat Input</h3>
-                  <p className="text-sm text-slate-500">Lihat dan edit data yang sudah diinput</p>
+                  <p className="text-sm text-slate-500">Lihat data yang sudah diinput</p>
                 </div>
               </CardContent>
             </Card>
@@ -192,7 +178,7 @@ function RecentRecords() {
     id: string
     namaBayi: string
     namaIbu: string
-    status: string
+    tanggalLahir: string
     createdAt: string
   }>>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -243,14 +229,8 @@ function RecentRecords() {
             <p className="text-sm text-slate-500">Ibu: {record.namaIbu}</p>
           </div>
           <div className="text-right">
-            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-              record.status === "PENDING" 
-                ? "bg-amber-100 text-amber-700" 
-                : record.status === "VERIFIED"
-                ? "bg-green-100 text-green-700"
-                : "bg-red-100 text-red-700"
-            }`}>
-              {record.status === "PENDING" ? "Menunggu" : record.status === "VERIFIED" ? "Terverifikasi" : "Ditolak"}
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
+              Terverifikasi
             </span>
             <p className="text-xs text-slate-400 mt-1">
               {new Date(record.createdAt).toLocaleDateString("id-ID")}

@@ -1,4 +1,4 @@
-// API untuk mengambil semua data kelahiran (Admin)
+// API untuk mengambil data kelahiran (Admin) - hanya data baru yang belum diunduh
 import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
@@ -13,20 +13,18 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url)
     const search = searchParams.get("search") || ""
-    const status = searchParams.get("status") || ""
     const puskesmasId = searchParams.get("puskesmasId") || ""
     const page = parseInt(searchParams.get("page") || "1")
     const limit = parseInt(searchParams.get("limit") || "15")
     const skip = (page - 1) * limit
 
-    // Build where clause
-    const where: Record<string, unknown> = { isDeleted: false }
-
-    if (status && ["PENDING", "VERIFIED", "REJECTED"].includes(status)) {
-      where.status = status
+    // Build where clause - hanya tampilkan data yang belum diunduh
+    const where: Record<string, unknown> = { 
+      isDeleted: false,
+      downloadedAt: null  // Hanya data yang belum pernah diunduh
     }
 
-    if (puskesmasId) {
+    if (puskesmasId && puskesmasId !== "all") {
       where.puskesmasId = puskesmasId
     }
 
@@ -44,9 +42,24 @@ export async function GET(request: NextRequest) {
         skip,
         take: limit,
         orderBy: { createdAt: "desc" },
-        include: {
-          puskesmas: { select: { nama: true } },
-          creator: { select: { namaLengkap: true } }
+        select: {
+          id: true,
+          nikIbu: true,
+          namaIbu: true,
+          namaAyah: true,
+          namaBayi: true,
+          tanggalLahir: true,
+          tempatLahir: true,
+          jenisKelamin: true,
+          status: true,
+          downloadedAt: true,
+          createdAt: true,
+          puskesmas: { 
+            select: { nama: true } 
+          },
+          creator: { 
+            select: { namaLengkap: true } 
+          }
         }
       }),
       db.birthRecord.count({ where })
