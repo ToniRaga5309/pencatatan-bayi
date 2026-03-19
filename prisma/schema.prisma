@@ -76,6 +76,7 @@ model BirthRecord {
   @@index([puskesmasId])
   @@index([status])
   @@index([tanggalLahir])
+  @@index([downloadedAt])
   @@map("birth_records")
 }
 
