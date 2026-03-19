@@ -6,6 +6,34 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { db } from "./db"
 import bcrypt from "bcryptjs"
 
+// Helper untuk mendapatkan NEXTAUTH_URL yang valid
+function getValidNextAuthUrl(): string | undefined {
+  const nextauthUrl = process.env.NEXTAUTH_URL
+  const vercelUrl = process.env.VERCEL_URL
+  
+  // Jika NEXTAUTH_URL tidak diset atau merupakan placeholder, gunakan VERCEL_URL
+  if (!nextauthUrl || 
+      nextauthUrl.includes('[') || 
+      nextauthUrl.includes('nama-aplikasi') ||
+      nextauthUrl.includes('your-domain')) {
+    if (vercelUrl) {
+      return `https://${vercelUrl}`
+    }
+    // Fallback untuk development
+    return "http://localhost:3000"
+  }
+  
+  return nextauthUrl
+}
+
+// Set NEXTAUTH_URL secara dinamis jika diperlukan
+if (typeof process !== 'undefined') {
+  const validUrl = getValidNextAuthUrl()
+  if (validUrl && !process.env.NEXTAUTH_URL) {
+    process.env.NEXTAUTH_URL = validUrl
+  }
+}
+
 // Ekstensi tipe untuk NextAuth
 declare module "next-auth" {
   interface User {
