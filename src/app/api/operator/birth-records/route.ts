@@ -1,0 +1,191 @@
+// API untuk CRUD data kelahiran (Operator)
+import { NextRequest, NextResponse } from "next/server"
+import { getCurrentUser } from "@/lib/auth"
+import { db } from "@/lib/db"
+import { createAuditLog } from "@/lib/audit"
+import { validateNIK } from "@/lib/utils-common"
+import { z } from "zod"
+
+// Schema validasi untuk input data kelahiran
+const birthRecordSchema = z.object({
+  nikIbu: z.string()
+    .length(16, "NIK harus 16 digit")
+    .regex(/^\d{16}$/, "NIK harus berupa angka"),
+  namaIbu: z.string()
+    .min(3, "Nama ibu minimal 3 karakter")
+    .max(100, "Nama ibu maksimal 100 karakter"),
+  namaAyah: z.string()
+    .min(3, "Nama ayah minimal 3 karakter")
+    .max(100, "Nama ayah maksimal 100 karakter"),
+  namaBayi: z.string()
+    .min(3, "Nama bayi minimal 3 karakter")
+    .max(100, "Nama bayi maksimal 100 karakter"),
+  tanggalLahir: z.string()
+    .refine((val) => {
+      const date = new Date(val)
+      const today = new Date()
+      today.setHours(23, 59, 59, 999)
+      return date <= today
+    }, "Tanggal lahir tidak boleh lebih dari hari ini"),
+  tempatLahir: z.string()
+    .min(2, "Tempat lahir minimal 2 karakter")
+    .max(100, "Tempat lahir maksimal 100 karakter"),
+  jenisKelamin: z.enum(["LAKI_LAKI", "PEREMPUAN"], {
+    message: "Pilih jenis kelamin yang valid"
+  }),
+  beratBadan: z.number().min(0.5).max(10).optional(),
+  panjangBadan: z.number().min(20).max(70).optional()
+})
+
+// GET: Ambil semua data kelahiran operator
+export async function GET(request: NextRequest) {
+  try {
+    const user = await getCurrentUser()
+
+    if (!user || user.role !== "OPERATOR" || !user.puskesmasId) {
+      return NextResponse.json(
+        { error: "Tidak memiliki akses" },
+        { status: 403 }
+      )
+    }
+
+    const { searchParams } = new URL(request.url)
+    const search = searchParams.get("search") || ""
+    const status = searchParams.get("status") || ""
+    const page = parseInt(searchParams.get("page") || "1")
+    const limit = parseInt(searchParams.get("limit") || "10")
+    const skip = (page - 1) * limit
+
+    // Build where clause
+    const where: Record<string, unknown> = {
+      puskesmasId: user.puskesmasId,
+      isDeleted: false
+    }
+
+    if (status && ["PENDING", "VERIFIED", "REJECTED"].includes(status)) {
+      where.status = status
+    }
+
+    if (search) {
+      where.OR = [
+        { namaBayi: { contains: search } },
+        { nikIbu: { contains: search } },
+        { namaIbu: { contains: search } }
+      ]
+    }
+
+    const [records, total] = await Promise.all([
+      db.birthRecord.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: "desc" },
+        include: {
+          puskesmas: {
+            select: { nama: true }
+          }
+        }
+      }),
+      db.birthRecord.count({ where })
+    ])
+
+    return NextResponse.json({
+      records,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
+    })
+  } catch (error) {
+    console.error("Error fetching birth records:", error)
+    return NextResponse.json(
+      { error: "Terjadi kesalahan server" },
+      { status: 500 }
+    )
+  }
+}
+
+// POST: Tambah data kelahiran baru
+export async function POST(request: NextRequest) {
+  try {
+    const user = await getCurrentUser()
+
+    if (!user || user.role !== "OPERATOR" || !user.puskesmasId) {
+      return NextResponse.json(
+        { error: "Tidak memiliki akses" },
+        { status: 403 }
+      )
+    }
+
+    const body = await request.json()
+    
+    // Validasi input
+    const validationResult = birthRecordSchema.safeParse(body)
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { 
+          error: "Data tidak valid", 
+          details: validationResult.error.flatten().fieldErrors 
+        },
+        { status: 400 }
+      )
+    }
+
+    const data = validationResult.data
+
+    // Validasi NIK lebih detail
+    const nikValidation = validateNIK(data.nikIbu)
+    if (!nikValidation.valid) {
+      return NextResponse.json(
+        { error: nikValidation.message },
+        { status: 400 }
+      )
+    }
+
+    // Simpan data
+    const birthRecord = await db.birthRecord.create({
+      data: {
+        nikIbu: data.nikIbu,
+        namaIbu: data.namaIbu.toUpperCase(),
+        namaAyah: data.namaAyah.toUpperCase(),
+        namaBayi: data.namaBayi.toUpperCase(),
+        tanggalLahir: new Date(data.tanggalLahir),
+        tempatLahir: data.tempatLahir.toUpperCase(),
+        jenisKelamin: data.jenisKelamin,
+        beratBadan: data.beratBadan,
+        panjangBadan: data.panjangBadan,
+        status: "PENDING",
+        puskesmasId: user.puskesmasId,
+        createdBy: user.id
+      }
+    })
+
+    // Catat audit log
+    await createAuditLog({
+      userId: user.id,
+      action: "CREATE",
+      entity: "BirthRecord",
+      entityId: birthRecord.id,
+      details: {
+        namaBayi: birthRecord.namaBayi,
+        namaIbu: birthRecord.namaIbu
+      },
+      ipAddress: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || undefined,
+      userAgent: request.headers.get("user-agent") || undefined
+    })
+
+    return NextResponse.json({
+      success: true,
+      message: "Data berhasil disimpan",
+      data: birthRecord
+    })
+  } catch (error) {
+    console.error("Error creating birth record:", error)
+    return NextResponse.json(
+      { error: "Terjadi kesalahan server" },
+      { status: 500 }
+    )
+  }
+}

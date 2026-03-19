@@ -1,0 +1,14 @@
+{
+  "version": "0.3.6-fix",
+  "datasource": "db",
+  "generator": "client",
+  "entries": [
+    {
+      "id": "01",
+      "lastMigrationName": "20250101000000_init",
+      "startedAt": "2025-01-01T00:00:00.000Z",
+      "finishedAt": "2025-01-01T00:00:00.000Z",
+      "raw": "-- CreateTable\nCREATE TABLE"
+    }
+  ]
+}
