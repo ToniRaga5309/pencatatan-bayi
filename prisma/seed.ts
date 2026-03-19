@@ -92,7 +92,7 @@ async function main() {
   const operatorAccounts: Array<{ username: string; password: string; namaLengkap: string; puskesmas: string }> = []
   
   const operators = await Promise.all(
-    puskesmas.map((p) => {
+    puskesmas.map(async (p) => {
       const username = generateUsername(p.nama)
       const password = generatePassword(p.nama)
       const namaLengkap = `Operator ${p.nama.replace("Puskesmas ", "")}`
@@ -104,17 +104,16 @@ async function main() {
         puskesmas: p.nama
       })
       
-      return bcrypt.hash(password, 10).then((hashedPassword) =>
-        prisma.user.create({
-          data: {
-            username,
-            password: hashedPassword,
-            namaLengkap,
-            role: "OPERATOR",
-            puskesmasId: p.id
-          }
-        })
-      )
+      const hashedPassword = await bcrypt.hash(password, 10)
+      return prisma.user.create({
+        data: {
+          username,
+          password: hashedPassword,
+          namaLengkap,
+          role: "OPERATOR",
+          puskesmasId: p.id
+        }
+      })
     })
   )
 
@@ -148,8 +147,7 @@ async function main() {
       jenisKelamin: "LAKI_LAKI",
       status: "VERIFIED",
       puskesmasId: puskesmas[0].id,
-      createdBy: operators[0].id,
-      downloadedAt: null
+      createdBy: operators[0].id
     },
     {
       nikIbu: "5306025678900002",
@@ -161,8 +159,7 @@ async function main() {
       jenisKelamin: "PEREMPUAN",
       status: "VERIFIED",
       puskesmasId: puskesmas[1].id,
-      createdBy: operators[1].id,
-      downloadedAt: null
+      createdBy: operators[1].id
     },
     {
       nikIbu: "5306036789010003",
@@ -174,8 +171,7 @@ async function main() {
       jenisKelamin: "LAKI_LAKI",
       status: "VERIFIED",
       puskesmasId: puskesmas[2].id,
-      createdBy: operators[2].id,
-      downloadedAt: null
+      createdBy: operators[2].id
     }
   ]
 
