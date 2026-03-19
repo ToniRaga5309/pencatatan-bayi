@@ -30,9 +30,8 @@ export async function GET(request: NextRequest) {
         tanggalLahir: true,
         tempatLahir: true,
         jenisKelamin: true,
-        status: true,
         createdAt: true,
-        puskesmas: { select: { nama: true, kodeWilayah: true } },
+        puskesmas: { select: { nama: true } },
         creator: { select: { namaLengkap: true } }
       }
     })
@@ -41,7 +40,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Tidak ada data baru untuk diunduh" }, { status: 400 })
     }
 
-    // Format data untuk Excel
+    // Format data untuk Excel sesuai template
     const excelData = records.map((record, index) => ({
       "No": index + 1,
       "Nama Bayi": record.namaBayi,
@@ -52,7 +51,6 @@ export async function GET(request: NextRequest) {
       "Nama Ibu": record.namaIbu,
       "Nama Ayah": record.namaAyah,
       "Puskesmas": record.puskesmas.nama,
-      "Kode Wilayah": record.puskesmas.kodeWilayah,
       "Diinput Oleh": record.creator.namaLengkap,
       "Tanggal Input": new Date(record.createdAt).toLocaleDateString("id-ID")
     }))
@@ -73,7 +71,6 @@ export async function GET(request: NextRequest) {
       { wch: 25 }, // Nama Ibu
       { wch: 25 }, // Nama Ayah
       { wch: 30 }, // Puskesmas
-      { wch: 15 }, // Kode Wilayah
       { wch: 25 }, // Diinput Oleh
       { wch: 15 }  // Tanggal Input
     ]
