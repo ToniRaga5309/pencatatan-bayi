@@ -8,14 +8,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
-import { ArrowLeft, Search, Loader2, Eye, Edit, ChevronLeft, ChevronRight, AlertCircle, CheckCircle, XCircle, Clock } from "lucide-react"
+import { ArrowLeft, Search, Loader2, Eye, ChevronLeft, ChevronRight, CheckCircle } from "lucide-react"
 import Link from "next/link"
-import { toast } from "sonner"
-import { maskNIK, formatDateIndonesia, getJenisKelaminLabel, getStatusLabel } from "@/lib/utils-common"
+import { formatDateIndonesia, getJenisKelaminLabel } from "@/lib/utils-common"
 
 interface BirthRecord {
   id: string
@@ -26,10 +24,7 @@ interface BirthRecord {
   tanggalLahir: Date
   tempatLahir: string
   jenisKelamin: string
-  beratBadan: number | null
-  panjangBadan: number | null
   status: string
-  alasanPenolakan: string | null
   createdAt: Date
   puskesmas: { nama: string }
 }
@@ -40,15 +35,10 @@ export default function RiwayatPage() {
   const [records, setRecords] = useState<BirthRecord[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState("")
-  const [statusFilter, setStatusFilter] = useState("")
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [selectedRecord, setSelectedRecord] = useState<BirthRecord | null>(null)
   const [showDetail, setShowDetail] = useState(false)
-  const [showEdit, setShowEdit] = useState(false)
-  const [editFormData, setEditFormData] = useState<Record<string, string>>({})
-  const [editErrors, setEditErrors] = useState<Record<string, string>>({})
-  const [isUpdating, setIsUpdating] = useState(false)
 
   // Redirect jika belum login
   useEffect(() => {
@@ -62,14 +52,13 @@ export default function RiwayatPage() {
     if (session?.user) {
       fetchRecords()
     }
-  }, [session, page, statusFilter])
+  }, [session, page])
 
   const fetchRecords = async () => {
     setIsLoading(true)
     try {
       const params = new URLSearchParams()
       if (search) params.append("search", search)
-      if (statusFilter) params.append("status", statusFilter)
       params.append("page", page.toString())
       params.append("limit", "10")
 
@@ -81,7 +70,6 @@ export default function RiwayatPage() {
       }
     } catch (error) {
       console.error("Error fetching records:", error)
-      toast.error("Gagal memuat data")
     } finally {
       setIsLoading(false)
     }
@@ -92,108 +80,9 @@ export default function RiwayatPage() {
     fetchRecords()
   }
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "PENDING":
-        return <Badge variant="secondary"><Clock className="w-3 h-3 mr-1" />Menunggu</Badge>
-      case "VERIFIED":
-        return <Badge className="bg-green-600"><CheckCircle className="w-3 h-3 mr-1" />Terverifikasi</Badge>
-      case "REJECTED":
-        return <Badge variant="destructive"><XCircle className="w-3 h-3 mr-1" />Ditolak</Badge>
-      default:
-        return <Badge variant="outline">{status}</Badge>
-    }
-  }
-
   const handleViewDetail = (record: BirthRecord) => {
     setSelectedRecord(record)
     setShowDetail(true)
-  }
-
-  const handleEdit = (record: BirthRecord) => {
-    if (record.status !== "PENDING") {
-      toast.error("Hanya data dengan status Menunggu yang dapat diedit")
-      return
-    }
-    setSelectedRecord(record)
-    setEditFormData({
-      nikIbu: record.nikIbu,
-      namaIbu: record.namaIbu,
-      namaAyah: record.namaAyah,
-      namaBayi: record.namaBayi,
-      tanggalLahir: new Date(record.tanggalLahir).toISOString().split("T")[0],
-      tempatLahir: record.tempatLahir,
-      jenisKelamin: record.jenisKelamin,
-      beratBadan: record.beratBadan?.toString() || "",
-      panjangBadan: record.panjangBadan?.toString() || ""
-    })
-    setEditErrors({})
-    setShowEdit(true)
-  }
-
-  const validateEditForm = () => {
-    const errors: Record<string, string> = {}
-    
-    if (!editFormData.nikIbu || !/^\d{16}$/.test(editFormData.nikIbu)) {
-      errors.nikIbu = "NIK harus 16 digit angka"
-    }
-    if (!editFormData.namaIbu || editFormData.namaIbu.length < 3) {
-      errors.namaIbu = "Nama ibu minimal 3 karakter"
-    }
-    if (!editFormData.namaAyah || editFormData.namaAyah.length < 3) {
-      errors.namaAyah = "Nama ayah minimal 3 karakter"
-    }
-    if (!editFormData.namaBayi || editFormData.namaBayi.length < 3) {
-      errors.namaBayi = "Nama bayi minimal 3 karakter"
-    }
-    if (!editFormData.tanggalLahir) {
-      errors.tanggalLahir = "Tanggal lahir wajib diisi"
-    }
-    if (!editFormData.tempatLahir || editFormData.tempatLahir.length < 2) {
-      errors.tempatLahir = "Tempat lahir minimal 2 karakter"
-    }
-    if (!editFormData.jenisKelamin) {
-      errors.jenisKelamin = "Pilih jenis kelamin"
-    }
-
-    setEditErrors(errors)
-    return Object.keys(errors).length === 0
-  }
-
-  const handleUpdate = async () => {
-    if (!validateEditForm() || !selectedRecord) return
-
-    setIsUpdating(true)
-    try {
-      const response = await fetch(`/api/operator/birth-records/${selectedRecord.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          nikIbu: editFormData.nikIbu,
-          namaIbu: editFormData.namaIbu,
-          namaAyah: editFormData.namaAyah,
-          namaBayi: editFormData.namaBayi,
-          tanggalLahir: editFormData.tanggalLahir,
-          tempatLahir: editFormData.tempatLahir,
-          jenisKelamin: editFormData.jenisKelamin,
-          beratBadan: editFormData.beratBadan ? parseFloat(editFormData.beratBadan) : undefined,
-          panjangBadan: editFormData.panjangBadan ? parseFloat(editFormData.panjangBadan) : undefined
-        })
-      })
-
-      if (response.ok) {
-        toast.success("Data berhasil diperbarui")
-        setShowEdit(false)
-        fetchRecords()
-      } else {
-        const data = await response.json()
-        toast.error(data.error || "Gagal memperbarui data")
-      }
-    } catch {
-      toast.error("Terjadi kesalahan")
-    } finally {
-      setIsUpdating(false)
-    }
   }
 
   if (status === "loading") {
@@ -228,7 +117,7 @@ export default function RiwayatPage() {
           <CardHeader>
             <CardTitle>Data Kelahiran</CardTitle>
             <CardDescription>
-              Lihat dan kelola data kelahiran yang sudah diinput
+              Lihat data kelahiran yang sudah diinput
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -236,7 +125,7 @@ export default function RiwayatPage() {
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
               <div className="flex-1 flex gap-2">
                 <Input
-                  placeholder="Cari nama bayi atau NIK ibu..."
+                  placeholder="Cari nama bayi, NIK ibu, atau nama ibu..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -245,17 +134,6 @@ export default function RiwayatPage() {
                   <Search className="w-4 h-4" />
                 </Button>
               </div>
-              <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); setPage(1) }}>
-                <SelectTrigger className="w-full sm:w-48">
-                  <SelectValue placeholder="Semua Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Semua Status</SelectItem>
-                  <SelectItem value="PENDING">Menunggu</SelectItem>
-                  <SelectItem value="VERIFIED">Terverifikasi</SelectItem>
-                  <SelectItem value="REJECTED">Ditolak</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
 
             {/* Table */}
@@ -288,28 +166,22 @@ export default function RiwayatPage() {
                     records.map((record) => (
                       <TableRow key={record.id}>
                         <TableCell className="font-medium">{record.namaBayi}</TableCell>
-                        <TableCell className="font-mono text-sm">{maskNIK(record.nikIbu)}</TableCell>
+                        <TableCell className="font-mono text-sm">{record.nikIbu}</TableCell>
                         <TableCell>{record.namaIbu}</TableCell>
                         <TableCell>{formatDateIndonesia(record.tanggalLahir)}</TableCell>
-                        <TableCell>{getStatusBadge(record.status)}</TableCell>
+                        <TableCell>
+                          <Badge className="bg-green-600">
+                            <CheckCircle className="w-3 h-3 mr-1" />Terverifikasi
+                          </Badge>
+                        </TableCell>
                         <TableCell className="text-right">
-                          <div className="flex justify-end gap-2">
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={() => handleViewDetail(record)}
-                            >
-                              <Eye className="w-4 h-4" />
-                            </Button>
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={() => handleEdit(record)}
-                              disabled={record.status !== "PENDING"}
-                            >
-                              <Edit className="w-4 h-4" />
-                            </Button>
-                          </div>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => handleViewDetail(record)}
+                          >
+                            <Eye className="w-4 h-4" />
+                          </Button>
                         </TableCell>
                       </TableRow>
                     ))
@@ -390,153 +262,16 @@ export default function RiwayatPage() {
                 </div>
                 <div>
                   <Label className="text-slate-500">Status</Label>
-                  {getStatusBadge(selectedRecord.status)}
+                  <Badge className="bg-green-600">
+                    <CheckCircle className="w-3 h-3 mr-1" />Terverifikasi
+                  </Badge>
                 </div>
-                {selectedRecord.beratBadan && (
-                  <div>
-                    <Label className="text-slate-500">Berat Badan</Label>
-                    <p className="font-medium">{selectedRecord.beratBadan} kg</p>
-                  </div>
-                )}
-                {selectedRecord.panjangBadan && (
-                  <div>
-                    <Label className="text-slate-500">Panjang Badan</Label>
-                    <p className="font-medium">{selectedRecord.panjangBadan} cm</p>
-                  </div>
-                )}
               </div>
-              {selectedRecord.status === "REJECTED" && selectedRecord.alasanPenolakan && (
-                <div className="bg-red-50 p-4 rounded-lg">
-                  <Label className="text-red-600">Alasan Penolakan</Label>
-                  <p className="text-red-700">{selectedRecord.alasanPenolakan}</p>
-                </div>
-              )}
               <div className="text-sm text-slate-500">
                 Diinput pada: {formatDateIndonesia(selectedRecord.createdAt)}
               </div>
             </div>
           )}
-        </DialogContent>
-      </Dialog>
-
-      {/* Edit Dialog */}
-      <Dialog open={showEdit} onOpenChange={setShowEdit}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Edit Data Kelahiran</DialogTitle>
-            <DialogDescription>
-              Perbarui data kelahiran yang masih menunggu verifikasi
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label>NIK Ibu</Label>
-              <Input
-                value={editFormData.nikIbu || ""}
-                onChange={(e) => setEditFormData({...editFormData, nikIbu: e.target.value.replace(/\D/g, "").slice(0, 16)})}
-                className={editErrors.nikIbu ? "border-red-500" : ""}
-              />
-              {editErrors.nikIbu && <p className="text-sm text-red-500">{editErrors.nikIbu}</p>}
-            </div>
-            <div className="space-y-2">
-              <Label>Nama Ibu</Label>
-              <Input
-                value={editFormData.namaIbu || ""}
-                onChange={(e) => setEditFormData({...editFormData, namaIbu: e.target.value})}
-                className={editErrors.namaIbu ? "border-red-500" : ""}
-              />
-              {editErrors.namaIbu && <p className="text-sm text-red-500">{editErrors.namaIbu}</p>}
-            </div>
-            <div className="space-y-2">
-              <Label>Nama Ayah</Label>
-              <Input
-                value={editFormData.namaAyah || ""}
-                onChange={(e) => setEditFormData({...editFormData, namaAyah: e.target.value})}
-                className={editErrors.namaAyah ? "border-red-500" : ""}
-              />
-              {editErrors.namaAyah && <p className="text-sm text-red-500">{editErrors.namaAyah}</p>}
-            </div>
-            <div className="space-y-2">
-              <Label>Nama Bayi</Label>
-              <Input
-                value={editFormData.namaBayi || ""}
-                onChange={(e) => setEditFormData({...editFormData, namaBayi: e.target.value})}
-                className={editErrors.namaBayi ? "border-red-500" : ""}
-              />
-              {editErrors.namaBayi && <p className="text-sm text-red-500">{editErrors.namaBayi}</p>}
-            </div>
-            <div className="space-y-2">
-              <Label>Tanggal Lahir</Label>
-              <Input
-                type="date"
-                value={editFormData.tanggalLahir || ""}
-                onChange={(e) => setEditFormData({...editFormData, tanggalLahir: e.target.value})}
-                max={new Date().toISOString().split("T")[0]}
-                className={editErrors.tanggalLahir ? "border-red-500" : ""}
-              />
-              {editErrors.tanggalLahir && <p className="text-sm text-red-500">{editErrors.tanggalLahir}</p>}
-            </div>
-            <div className="space-y-2">
-              <Label>Tempat Lahir</Label>
-              <Input
-                value={editFormData.tempatLahir || ""}
-                onChange={(e) => setEditFormData({...editFormData, tempatLahir: e.target.value})}
-                className={editErrors.tempatLahir ? "border-red-500" : ""}
-              />
-              {editErrors.tempatLahir && <p className="text-sm text-red-500">{editErrors.tempatLahir}</p>}
-            </div>
-            <div className="space-y-2">
-              <Label>Jenis Kelamin</Label>
-              <Select 
-                value={editFormData.jenisKelamin} 
-                onValueChange={(v) => setEditFormData({...editFormData, jenisKelamin: v})}
-              >
-                <SelectTrigger className={editErrors.jenisKelamin ? "border-red-500" : ""}>
-                  <SelectValue placeholder="Pilih jenis kelamin" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="LAKI_LAKI">Laki-laki</SelectItem>
-                  <SelectItem value="PEREMPUAN">Perempuan</SelectItem>
-                </SelectContent>
-              </Select>
-              {editErrors.jenisKelamin && <p className="text-sm text-red-500">{editErrors.jenisKelamin}</p>}
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Berat Badan (kg)</Label>
-                <Input
-                  type="number"
-                  step="0.01"
-                  value={editFormData.beratBadan || ""}
-                  onChange={(e) => setEditFormData({...editFormData, beratBadan: e.target.value})}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Panjang Badan (cm)</Label>
-                <Input
-                  type="number"
-                  step="0.1"
-                  value={editFormData.panjangBadan || ""}
-                  onChange={(e) => setEditFormData({...editFormData, panjangBadan: e.target.value})}
-                />
-              </div>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowEdit(false)}>
-              Batal
-            </Button>
-            <Button onClick={handleUpdate} disabled={isUpdating}>
-              {isUpdating ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Menyimpan...
-                </>
-              ) : (
-                "Simpan Perubahan"
-              )}
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

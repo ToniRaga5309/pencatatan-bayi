@@ -32,9 +32,7 @@ const birthRecordSchema = z.object({
     .max(100, "Tempat lahir maksimal 100 karakter"),
   jenisKelamin: z.enum(["LAKI_LAKI", "PEREMPUAN"], {
     message: "Pilih jenis kelamin yang valid"
-  }),
-  beratBadan: z.number().min(0.5).max(10).optional(),
-  panjangBadan: z.number().min(20).max(70).optional()
+  })
 })
 
 // GET: Ambil semua data kelahiran operator
@@ -51,7 +49,6 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url)
     const search = searchParams.get("search") || ""
-    const status = searchParams.get("status") || ""
     const page = parseInt(searchParams.get("page") || "1")
     const limit = parseInt(searchParams.get("limit") || "10")
     const skip = (page - 1) * limit
@@ -60,10 +57,6 @@ export async function GET(request: NextRequest) {
     const where: Record<string, unknown> = {
       puskesmasId: user.puskesmasId,
       isDeleted: false
-    }
-
-    if (status && ["PENDING", "VERIFIED", "REJECTED"].includes(status)) {
-      where.status = status
     }
 
     if (search) {
@@ -80,7 +73,17 @@ export async function GET(request: NextRequest) {
         skip,
         take: limit,
         orderBy: { createdAt: "desc" },
-        include: {
+        select: {
+          id: true,
+          nikIbu: true,
+          namaIbu: true,
+          namaAyah: true,
+          namaBayi: true,
+          tanggalLahir: true,
+          tempatLahir: true,
+          jenisKelamin: true,
+          status: true,
+          createdAt: true,
           puskesmas: {
             select: { nama: true }
           }
@@ -144,7 +147,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Simpan data
+    // Simpan data dengan status VERIFIED (langsung terverifikasi)
     const birthRecord = await db.birthRecord.create({
       data: {
         nikIbu: data.nikIbu,
@@ -154,9 +157,7 @@ export async function POST(request: NextRequest) {
         tanggalLahir: new Date(data.tanggalLahir),
         tempatLahir: data.tempatLahir.toUpperCase(),
         jenisKelamin: data.jenisKelamin,
-        beratBadan: data.beratBadan,
-        panjangBadan: data.panjangBadan,
-        status: "PENDING",
+        status: "VERIFIED",
         puskesmasId: user.puskesmasId,
         createdBy: user.id
       }

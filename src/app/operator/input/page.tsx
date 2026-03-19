@@ -29,9 +29,7 @@ export default function InputDataPage() {
     namaBayi: "",
     tanggalLahir: "",
     tempatLahir: "",
-    jenisKelamin: "",
-    beratBadan: "",
-    panjangBadan: ""
+    jenisKelamin: ""
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -111,9 +109,7 @@ export default function InputDataPage() {
           namaBayi: formData.namaBayi,
           tanggalLahir: formData.tanggalLahir,
           tempatLahir: formData.tempatLahir,
-          jenisKelamin: formData.jenisKelamin,
-          beratBadan: formData.beratBadan ? parseFloat(formData.beratBadan) : undefined,
-          panjangBadan: formData.panjangBadan ? parseFloat(formData.panjangBadan) : undefined
+          jenisKelamin: formData.jenisKelamin
         })
       })
 
@@ -132,9 +128,7 @@ export default function InputDataPage() {
             namaBayi: "",
             tanggalLahir: "",
             tempatLahir: "",
-            jenisKelamin: "",
-            beratBadan: "",
-            panjangBadan: ""
+            jenisKelamin: ""
           })
           setErrors({})
           setShowSuccess(true)
@@ -158,6 +152,25 @@ export default function InputDataPage() {
     } finally {
       setIsLoading(false)
       setSaveAndContinue(false)
+    }
+  }
+
+  // Handler khusus untuk NIK - hanya menerima angka, maksimal 16 digit
+  const handleNIKChange = (value: string) => {
+    // Hanya ambil karakter angka
+    const numericValue = value.replace(/\D/g, "")
+    // Batasi maksimal 16 digit
+    const limitedValue = numericValue.slice(0, 16)
+    
+    setFormData(prev => ({ ...prev, nikIbu: limitedValue }))
+    
+    // Hapus error saat user mulai mengetik
+    if (errors.nikIbu) {
+      setErrors(prev => {
+        const newErrors = { ...prev }
+        delete newErrors.nikIbu
+        return newErrors
+      })
     }
   }
 
@@ -227,15 +240,21 @@ export default function InputDataPage() {
                 </Label>
                 <Input
                   id="nikIbu"
+                  type="text"
+                  inputMode="numeric"
                   placeholder="Masukkan 16 digit NIK ibu"
                   value={formData.nikIbu}
-                  onChange={(e) => handleInputChange("nikIbu", e.target.value.replace(/\D/g, "").slice(0, 16))}
-                  className={errors.nikIbu ? "border-red-500" : ""}
+                  onChange={(e) => handleNIKChange(e.target.value)}
+                  maxLength={16}
+                  className={`font-mono tracking-wider ${errors.nikIbu ? "border-red-500" : ""}`}
                 />
-                {errors.nikIbu && (
+                {errors.nikIbu ? (
                   <p className="text-sm text-red-500">{errors.nikIbu}</p>
+                ) : (
+                  <p className="text-xs text-slate-500">
+                    NIK harus tepat 16 digit angka ({formData.nikIbu.length}/16 digit)
+                  </p>
                 )}
-                <p className="text-xs text-slate-500">NIK harus 16 digit angka</p>
               </div>
 
               {/* Nama Ibu */}
@@ -346,35 +365,6 @@ export default function InputDataPage() {
                 )}
               </div>
 
-              {/* Data Tambahan (Opsional) */}
-              <div className="border-t pt-6">
-                <h3 className="font-medium mb-4 text-slate-700">Data Tambahan (Opsional)</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="beratBadan">Berat Badan (kg)</Label>
-                    <Input
-                      id="beratBadan"
-                      type="number"
-                      step="0.01"
-                      placeholder="Contoh: 3.2"
-                      value={formData.beratBadan}
-                      onChange={(e) => handleInputChange("beratBadan", e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="panjangBadan">Panjang Badan (cm)</Label>
-                    <Input
-                      id="panjangBadan"
-                      type="number"
-                      step="0.1"
-                      placeholder="Contoh: 48"
-                      value={formData.panjangBadan}
-                      onChange={(e) => handleInputChange("panjangBadan", e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-
               {/* Puskesmas (Read-only) */}
               <div className="space-y-2">
                 <Label>Puskesmas</Label>
@@ -386,11 +376,11 @@ export default function InputDataPage() {
                 <p className="text-xs text-slate-500">Otomatis terisi berdasarkan akun yang login</p>
               </div>
 
-              {/* Warning */}
+              {/* Info */}
               <Alert>
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
-                  Pastikan semua data yang dimasukkan sudah benar. Data yang sudah disimpan hanya dapat diubah selama status masih &quot;Menunggu Verifikasi&quot;.
+                  Data yang disimpan akan langsung terverifikasi dan tercatat dalam sistem.
                 </AlertDescription>
               </Alert>
 

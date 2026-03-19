@@ -28,7 +28,7 @@ export async function GET() {
         id: true,
         namaBayi: true,
         namaIbu: true,
-        status: true,
+        tanggalLahir: true,
         createdAt: true
       }
     })
