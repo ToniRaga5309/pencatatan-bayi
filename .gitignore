@@ -50,3 +50,9 @@ prompt
 server.log
 # Skills directory
 /skills/
+
+# System/config files that may conflict
+.config
+.accesslog
+.stats
+*.log
