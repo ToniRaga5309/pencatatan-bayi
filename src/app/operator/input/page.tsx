@@ -1,6 +1,7 @@
 "use client"
 
 // Halaman Form Input Data Kelahiran
+// Urutan sesuai format Excel: Nama Bayi, Tempat, Tanggal Lahir, JK, NIK Ibu, Nama Ibu, Nama Ayah, Puskesmas
 import { useState } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
@@ -23,13 +24,13 @@ export default function InputDataPage() {
   const [savedBabyName, setSavedBabyName] = useState("")
   
   const [formData, setFormData] = useState({
+    namaBayi: "",
+    tempatLahir: "",
+    tanggalLahir: "",
+    jenisKelamin: "",
     nikIbu: "",
     namaIbu: "",
-    namaAyah: "",
-    namaBayi: "",
-    tanggalLahir: "",
-    tempatLahir: "",
-    jenisKelamin: ""
+    namaAyah: ""
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -43,22 +44,14 @@ export default function InputDataPage() {
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
 
-    // Validasi NIK
-    if (!formData.nikIbu) {
-      newErrors.nikIbu = "NIK ibu wajib diisi"
-    } else if (!/^\d{16}$/.test(formData.nikIbu)) {
-      newErrors.nikIbu = "NIK harus 16 digit angka"
+    // Validasi Nama Bayi
+    if (!formData.namaBayi || formData.namaBayi.length < 2) {
+      newErrors.namaBayi = "Nama bayi minimal 2 karakter"
     }
 
-    // Validasi nama
-    if (!formData.namaIbu || formData.namaIbu.length < 3) {
-      newErrors.namaIbu = "Nama ibu minimal 3 karakter"
-    }
-    if (!formData.namaAyah || formData.namaAyah.length < 3) {
-      newErrors.namaAyah = "Nama ayah minimal 3 karakter"
-    }
-    if (!formData.namaBayi || formData.namaBayi.length < 3) {
-      newErrors.namaBayi = "Nama bayi minimal 3 karakter"
+    // Validasi tempat lahir
+    if (!formData.tempatLahir || formData.tempatLahir.length < 2) {
+      newErrors.tempatLahir = "Tempat lahir minimal 2 karakter"
     }
 
     // Validasi tanggal lahir
@@ -73,14 +66,26 @@ export default function InputDataPage() {
       }
     }
 
-    // Validasi tempat lahir
-    if (!formData.tempatLahir || formData.tempatLahir.length < 2) {
-      newErrors.tempatLahir = "Tempat lahir minimal 2 karakter"
-    }
-
     // Validasi jenis kelamin
     if (!formData.jenisKelamin) {
       newErrors.jenisKelamin = "Pilih jenis kelamin"
+    }
+
+    // Validasi NIK
+    if (!formData.nikIbu) {
+      newErrors.nikIbu = "NIK ibu wajib diisi"
+    } else if (!/^\d{16}$/.test(formData.nikIbu)) {
+      newErrors.nikIbu = "NIK harus 16 digit angka"
+    }
+
+    // Validasi nama ibu
+    if (!formData.namaIbu || formData.namaIbu.length < 3) {
+      newErrors.namaIbu = "Nama ibu minimal 3 karakter"
+    }
+
+    // Validasi nama ayah
+    if (!formData.namaAyah || formData.namaAyah.length < 3) {
+      newErrors.namaAyah = "Nama ayah minimal 3 karakter"
     }
 
     setErrors(newErrors)
@@ -122,13 +127,13 @@ export default function InputDataPage() {
         if (continueInput) {
           // Reset form untuk input berikutnya
           setFormData({
+            namaBayi: "",
+            tempatLahir: "",
+            tanggalLahir: "",
+            jenisKelamin: "",
             nikIbu: "",
             namaIbu: "",
-            namaAyah: "",
-            namaBayi: "",
-            tanggalLahir: "",
-            tempatLahir: "",
-            jenisKelamin: ""
+            namaAyah: ""
           })
           setErrors({})
           setShowSuccess(true)
@@ -139,7 +144,6 @@ export default function InputDataPage() {
       } else {
         toast.error(result.error || "Gagal menyimpan data")
         if (result.details) {
-          // Handle validation errors from server
           const serverErrors: Record<string, string> = {}
           for (const [field, messages] of Object.entries(result.details)) {
             serverErrors[field] = (messages as string[])[0]
@@ -157,14 +161,11 @@ export default function InputDataPage() {
 
   // Handler khusus untuk NIK - hanya menerima angka, maksimal 16 digit
   const handleNIKChange = (value: string) => {
-    // Hanya ambil karakter angka
     const numericValue = value.replace(/\D/g, "")
-    // Batasi maksimal 16 digit
     const limitedValue = numericValue.slice(0, 16)
     
     setFormData(prev => ({ ...prev, nikIbu: limitedValue }))
     
-    // Hapus error saat user mulai mengetik
     if (errors.nikIbu) {
       setErrors(prev => {
         const newErrors = { ...prev }
@@ -176,7 +177,6 @@ export default function InputDataPage() {
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
-    // Hapus error saat user mulai mengetik
     if (errors[field]) {
       setErrors(prev => {
         const newErrors = { ...prev }
@@ -228,12 +228,86 @@ export default function InputDataPage() {
           <CardHeader>
             <CardTitle>Formulir Data Kelahiran</CardTitle>
             <CardDescription>
-              Isi data kelahiran bayi dengan lengkap dan benar
+              Isi data kelahiran bayi dengan lengkap dan benar sesuai urutan
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={(e) => handleSubmit(e, false)} className="space-y-6">
-              {/* NIK Ibu */}
+              {/* 1. Nama Bayi */}
+              <div className="space-y-2">
+                <Label htmlFor="namaBayi">
+                  Nama Bayi <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="namaBayi"
+                  placeholder="Masukkan nama bayi"
+                  value={formData.namaBayi}
+                  onChange={(e) => handleInputChange("namaBayi", e.target.value)}
+                  className={errors.namaBayi ? "border-red-500" : ""}
+                />
+                {errors.namaBayi && (
+                  <p className="text-sm text-red-500">{errors.namaBayi}</p>
+                )}
+              </div>
+
+              {/* 2. Tempat Lahir */}
+              <div className="space-y-2">
+                <Label htmlFor="tempatLahir">
+                  Tempat Lahir <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="tempatLahir"
+                  placeholder="Contoh: RSUD Bajawa, Puskesmas Mataloko"
+                  value={formData.tempatLahir}
+                  onChange={(e) => handleInputChange("tempatLahir", e.target.value)}
+                  className={errors.tempatLahir ? "border-red-500" : ""}
+                />
+                {errors.tempatLahir && (
+                  <p className="text-sm text-red-500">{errors.tempatLahir}</p>
+                )}
+              </div>
+
+              {/* 3. Tanggal Lahir */}
+              <div className="space-y-2">
+                <Label htmlFor="tanggalLahir">
+                  Tanggal Lahir <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="tanggalLahir"
+                  type="date"
+                  value={formData.tanggalLahir}
+                  onChange={(e) => handleInputChange("tanggalLahir", e.target.value)}
+                  max={new Date().toISOString().split("T")[0]}
+                  className={errors.tanggalLahir ? "border-red-500" : ""}
+                />
+                {errors.tanggalLahir && (
+                  <p className="text-sm text-red-500">{errors.tanggalLahir}</p>
+                )}
+              </div>
+
+              {/* 4. Jenis Kelamin */}
+              <div className="space-y-2">
+                <Label htmlFor="jenisKelamin">
+                  Jenis Kelamin <span className="text-red-500">*</span>
+                </Label>
+                <Select 
+                  value={formData.jenisKelamin} 
+                  onValueChange={(value) => handleInputChange("jenisKelamin", value)}
+                >
+                  <SelectTrigger className={errors.jenisKelamin ? "border-red-500" : ""}>
+                    <SelectValue placeholder="Pilih jenis kelamin" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="LAKI_LAKI">Laki-laki (L)</SelectItem>
+                    <SelectItem value="PEREMPUAN">Perempuan (P)</SelectItem>
+                  </SelectContent>
+                </Select>
+                {errors.jenisKelamin && (
+                  <p className="text-sm text-red-500">{errors.jenisKelamin}</p>
+                )}
+              </div>
+
+              {/* 5. NIK Ibu */}
               <div className="space-y-2">
                 <Label htmlFor="nikIbu">
                   NIK Ibu <span className="text-red-500">*</span>
@@ -257,7 +331,7 @@ export default function InputDataPage() {
                 )}
               </div>
 
-              {/* Nama Ibu */}
+              {/* 6. Nama Ibu */}
               <div className="space-y-2">
                 <Label htmlFor="namaIbu">
                   Nama Ibu <span className="text-red-500">*</span>
@@ -274,7 +348,7 @@ export default function InputDataPage() {
                 )}
               </div>
 
-              {/* Nama Ayah */}
+              {/* 7. Nama Ayah */}
               <div className="space-y-2">
                 <Label htmlFor="namaAyah">
                   Nama Ayah <span className="text-red-500">*</span>
@@ -291,89 +365,15 @@ export default function InputDataPage() {
                 )}
               </div>
 
-              {/* Nama Bayi */}
-              <div className="space-y-2">
-                <Label htmlFor="namaBayi">
-                  Nama Bayi <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="namaBayi"
-                  placeholder="Masukkan nama bayi"
-                  value={formData.namaBayi}
-                  onChange={(e) => handleInputChange("namaBayi", e.target.value)}
-                  className={errors.namaBayi ? "border-red-500" : ""}
-                />
-                {errors.namaBayi && (
-                  <p className="text-sm text-red-500">{errors.namaBayi}</p>
-                )}
-              </div>
-
-              {/* Tanggal Lahir */}
-              <div className="space-y-2">
-                <Label htmlFor="tanggalLahir">
-                  Tanggal Lahir <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="tanggalLahir"
-                  type="date"
-                  value={formData.tanggalLahir}
-                  onChange={(e) => handleInputChange("tanggalLahir", e.target.value)}
-                  max={new Date().toISOString().split("T")[0]}
-                  className={errors.tanggalLahir ? "border-red-500" : ""}
-                />
-                {errors.tanggalLahir && (
-                  <p className="text-sm text-red-500">{errors.tanggalLahir}</p>
-                )}
-              </div>
-
-              {/* Tempat Lahir */}
-              <div className="space-y-2">
-                <Label htmlFor="tempatLahir">
-                  Tempat Lahir <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="tempatLahir"
-                  placeholder="Contoh: RSUD Kota Bandung"
-                  value={formData.tempatLahir}
-                  onChange={(e) => handleInputChange("tempatLahir", e.target.value)}
-                  className={errors.tempatLahir ? "border-red-500" : ""}
-                />
-                {errors.tempatLahir && (
-                  <p className="text-sm text-red-500">{errors.tempatLahir}</p>
-                )}
-              </div>
-
-              {/* Jenis Kelamin */}
-              <div className="space-y-2">
-                <Label htmlFor="jenisKelamin">
-                  Jenis Kelamin <span className="text-red-500">*</span>
-                </Label>
-                <Select 
-                  value={formData.jenisKelamin} 
-                  onValueChange={(value) => handleInputChange("jenisKelamin", value)}
-                >
-                  <SelectTrigger className={errors.jenisKelamin ? "border-red-500" : ""}>
-                    <SelectValue placeholder="Pilih jenis kelamin" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="LAKI_LAKI">Laki-laki</SelectItem>
-                    <SelectItem value="PEREMPUAN">Perempuan</SelectItem>
-                  </SelectContent>
-                </Select>
-                {errors.jenisKelamin && (
-                  <p className="text-sm text-red-500">{errors.jenisKelamin}</p>
-                )}
-              </div>
-
-              {/* Puskesmas (Read-only) */}
+              {/* 8. Puskesmas (Read-only - otomatis dari akun login) */}
               <div className="space-y-2">
                 <Label>Puskesmas</Label>
                 <Input
-                  value={session?.user?.puskesmasNama || ""}
+                  value={session?.user?.puskesmasNama || "-"}
                   disabled
-                  className="bg-slate-50"
+                  className="bg-slate-100 font-medium"
                 />
-                <p className="text-xs text-slate-500">Otomatis terisi berdasarkan akun yang login</p>
+                <p className="text-xs text-slate-500">Otomatis terisi berdasarkan akun operator yang login</p>
               </div>
 
               {/* Info */}

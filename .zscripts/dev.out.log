@@ -1356,3 +1356,13 @@ https://next-auth.js.org/warnings#debug_enabled
  GET / 307 in 64ms (compile: 6ms, render: 58ms)
  GET /login 200 in 28ms (compile: 2ms, render: 25ms)
  GET /api/auth/session 200 in 49ms (compile: 36ms, render: 13ms)
+==========================================
+[2026-03-21 10:23:50] Starting: bun install
+==========================================
+[BUN] Installing dependencies...
+[0.11ms] ".env"
+bun install v1.3.10 (30e609e0)
+
+$ prisma generate
+Failed to load config file "/home/z/my-project" as a TypeScript/JavaScript module. Error: Error: ENOTDIR: not a directory, lstat '/home/z/my-project/.config/prisma'
+error: postinstall script from "nextjs_tailwind_shadcn_ts" exited with 1
