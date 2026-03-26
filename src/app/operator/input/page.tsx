@@ -83,9 +83,10 @@ export default function InputDataPage() {
       newErrors.namaIbu = "Nama ibu minimal 3 karakter"
     }
 
-    // Validasi nama ayah
-    if (!formData.namaAyah || formData.namaAyah.length < 3) {
-      newErrors.namaAyah = "Nama ayah minimal 3 karakter"
+    // Nama ayah bersifat OPSIONAL - tidak ada validasi wajib
+    // Jika diisi, minimal 2 karakter
+    if (formData.namaAyah && formData.namaAyah.length > 0 && formData.namaAyah.length < 2) {
+      newErrors.namaAyah = "Nama ayah minimal 2 karakter"
     }
 
     setErrors(newErrors)
@@ -110,7 +111,7 @@ export default function InputDataPage() {
         body: JSON.stringify({
           nikIbu: formData.nikIbu,
           namaIbu: formData.namaIbu,
-          namaAyah: formData.namaAyah,
+          namaAyah: formData.namaAyah || "-", // Default ke "-" jika kosong
           namaBayi: formData.namaBayi,
           tanggalLahir: formData.tanggalLahir,
           tempatLahir: formData.tempatLahir,
@@ -348,14 +349,14 @@ export default function InputDataPage() {
                 )}
               </div>
 
-              {/* 7. Nama Ayah */}
+              {/* 7. Nama Ayah - OPSIONAL */}
               <div className="space-y-2">
                 <Label htmlFor="namaAyah">
-                  Nama Ayah <span className="text-red-500">*</span>
+                  Nama Ayah <span className="text-slate-400 text-xs">(Opsional)</span>
                 </Label>
                 <Input
                   id="namaAyah"
-                  placeholder="Masukkan nama lengkap ayah"
+                  placeholder="Masukkan nama lengkap ayah (jika ada)"
                   value={formData.namaAyah}
                   onChange={(e) => handleInputChange("namaAyah", e.target.value)}
                   className={errors.namaAyah ? "border-red-500" : ""}

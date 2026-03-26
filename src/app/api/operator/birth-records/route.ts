@@ -15,10 +15,12 @@ const birthRecordSchema = z.object({
     .min(3, "Nama ibu minimal 3 karakter")
     .max(100, "Nama ibu maksimal 100 karakter"),
   namaAyah: z.string()
-    .min(3, "Nama ayah minimal 3 karakter")
-    .max(100, "Nama ayah maksimal 100 karakter"),
+    .min(2, "Nama ayah minimal 2 karakter")
+    .max(100, "Nama ayah maksimal 100 karakter")
+    .optional()
+    .or(z.literal("")),
   namaBayi: z.string()
-    .min(3, "Nama bayi minimal 3 karakter")
+    .min(2, "Nama bayi minimal 2 karakter")
     .max(100, "Nama bayi maksimal 100 karakter"),
   tanggalLahir: z.string()
     .refine((val) => {
@@ -152,7 +154,7 @@ export async function POST(request: NextRequest) {
       data: {
         nikIbu: data.nikIbu,
         namaIbu: data.namaIbu.toUpperCase(),
-        namaAyah: data.namaAyah.toUpperCase(),
+        namaAyah: (data.namaAyah && data.namaAyah.trim()) ? data.namaAyah.toUpperCase() : "-",
         namaBayi: data.namaBayi.toUpperCase(),
         tanggalLahir: new Date(data.tanggalLahir),
         tempatLahir: data.tempatLahir.toUpperCase(),

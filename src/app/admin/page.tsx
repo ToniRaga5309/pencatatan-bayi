@@ -232,8 +232,9 @@ export default function AdminDashboard() {
     if (!editForm.namaIbu || editForm.namaIbu.length < 3) {
       errors.namaIbu = "Nama ibu minimal 3 karakter"
     }
-    if (!editForm.namaAyah || editForm.namaAyah.length < 3) {
-      errors.namaAyah = "Nama ayah minimal 3 karakter"
+    // Nama ayah bersifat OPSIONAL
+    if (editForm.namaAyah && editForm.namaAyah.length > 0 && editForm.namaAyah.length < 2) {
+      errors.namaAyah = "Nama ayah minimal 2 karakter"
     }
 
     setFormErrors(errors)
@@ -700,10 +701,11 @@ export default function AdminDashboard() {
             </div>
 
             <div className="space-y-2">
-              <Label>Nama Ayah <span className="text-red-500">*</span></Label>
+              <Label>Nama Ayah <span className="text-slate-400 text-xs">(Opsional)</span></Label>
               <Input
                 value={editForm.namaAyah}
                 onChange={(e) => handleEditInputChange("namaAyah", e.target.value)}
+                placeholder="Masukkan nama ayah (jika ada)"
                 className={formErrors.namaAyah ? "border-red-500" : ""}
               />
               {formErrors.namaAyah && <p className="text-sm text-red-500">{formErrors.namaAyah}</p>}

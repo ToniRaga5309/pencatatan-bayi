@@ -11,7 +11,7 @@ export async function GET() {
       return NextResponse.json({ error: "Tidak memiliki akses" }, { status: 403 })
     }
 
-    const [totalAll, totalNew, totalDownloaded, puskesmasList] = await Promise.all([
+    const [totalAll, totalNew, totalDownloaded, puskesmasWithUsers] = await Promise.all([
       // Total semua data
       db.birthRecord.count({ 
         where: { isDeleted: false } 
@@ -30,8 +30,15 @@ export async function GET() {
           downloadedAt: { not: null } 
         } 
       }),
-      // Daftar puskesmas
+      // Daftar puskesmas yang memiliki user aktif
       db.puskesmas.findMany({
+        where: {
+          users: {
+            some: {
+              isActive: true
+            }
+          }
+        },
         select: { id: true, nama: true },
         orderBy: { nama: "asc" }
       })
@@ -41,7 +48,7 @@ export async function GET() {
       totalAll,
       totalNew,
       totalDownloaded,
-      puskesmasList
+      puskesmasList: puskesmasWithUsers
     })
   } catch (error) {
     console.error("Error fetching admin stats:", error)

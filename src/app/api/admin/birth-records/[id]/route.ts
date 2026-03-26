@@ -13,7 +13,7 @@ const updateBirthRecordSchema = z.object({
   jenisKelamin: z.enum(["LAKI_LAKI", "PEREMPUAN"]).optional(),
   nikIbu: z.string().length(16).regex(/^\d{16}$/).optional(),
   namaIbu: z.string().min(3).max(100).optional(),
-  namaAyah: z.string().min(3).max(100).optional()
+  namaAyah: z.string().min(2).max(100).optional().or(z.literal(""))
 })
 
 // GET - Ambil detail data kelahiran
@@ -92,7 +92,7 @@ export async function PUT(
         ...(data.jenisKelamin && { jenisKelamin: data.jenisKelamin }),
         ...(data.nikIbu && { nikIbu: data.nikIbu }),
         ...(data.namaIbu && { namaIbu: data.namaIbu.toUpperCase() }),
-        ...(data.namaAyah && { namaAyah: data.namaAyah.toUpperCase() })
+        namaAyah: (data.namaAyah && data.namaAyah.trim()) ? data.namaAyah.toUpperCase() : "-"
       }
     })
 
