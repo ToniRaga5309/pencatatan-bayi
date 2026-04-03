@@ -1,0 +1,95 @@
+// Skema database untuk Sistem Pencatatan Nama Bayi Baru Lahir
+// Database: SQLite (local development)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Tabel Puskesmas
+model Puskesmas {
+  id          String        @id @default(cuid())
+  nama        String
+  kodeWilayah String        @map("kode_wilayah")
+  alamat      String?
+  telepon     String?
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  users        User[]
+  birthRecords BirthRecord[]
+
+  @@map("puskesmas")
+}
+
+// Tabel User - menyimpan data pengguna (Admin, Operator, BPJS)
+model User {
+  id              String    @id @default(cuid())
+  username        String    @unique
+  password        String
+  namaLengkap     String    @map("nama_lengkap")
+  role            String    // ADMIN, OPERATOR, BPJS
+  isActive        Boolean   @default(true) @map("is_active")
+  puskesmasId     String?   @map("puskesmas_id")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  puskesmas       Puskesmas?    @relation(fields: [puskesmasId], references: [id], onDelete: SetNull)
+  auditLogs       AuditLog[]
+  createdRecords  BirthRecord[] @relation("CreatedByUser")
+  verifiedRecords BirthRecord[] @relation("VerifiedByUser")
+
+  @@map("users")
+}
+
+// Tabel BirthRecord - menyimpan data kelahiran bayi
+model BirthRecord {
+  id               String    @id @default(cuid())
+  nikIbu           String    @map("nik_ibu")
+  namaIbu          String    @map("nama_ibu")
+  namaAyah         String    @map("nama_ayah")
+  namaBayi         String    @map("nama_bayi")
+  nikBayi          String?   @map("nik_bayi") // NIK Bayi - diisi oleh Admin/Dukcapil
+  tanggalLahir     DateTime  @map("tanggal_lahir")
+  tempatLahir      String    @map("tempat_lahir")
+  jenisKelamin     String    @map("jenis_kelamin")
+  beratBadan       Float?    @map("berat_badan")
+  panjangBadan     Float?    @map("panjang_badan")
+  status           String    @default("PENDING") // PENDING, VERIFIED, REJECTED
+  alasanPenolakan  String?   @map("alasan_penolakan")
+  isDeleted        Boolean   @default(false) @map("is_deleted")
+  puskesmasId      String    @map("puskesmas_id")
+  createdBy        String    @map("created_by")
+  verifiedBy       String?   @map("verified_by")
+  verifiedAt       DateTime? @map("verified_at")
+  nikBayiUpdatedAt DateTime? @map("nik_bayi_updated_at") // Kapan NIK Bayi diupdate
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  puskesmas       Puskesmas    @relation(fields: [puskesmasId], references: [id], onDelete: Cascade)
+  creator         User         @relation("CreatedByUser", fields: [createdBy], references: [id], onDelete: Cascade)
+  verifier        User?        @relation("VerifiedByUser", fields: [verifiedBy], references: [id], onDelete: SetNull)
+
+  @@map("birth_records")
+}
+
+// Tabel AuditLog - menyimpan log aktivitas pengguna
+model AuditLog {
+  id          String      @id @default(cuid())
+  userId      String      @map("user_id")
+  action      String
+  entity      String
+  entityId    String?     @map("entity_id")
+  details     String?
+  ipAddress   String?     @map("ip_address")
+  userAgent   String?     @map("user_agent")
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("audit_logs")
+}
