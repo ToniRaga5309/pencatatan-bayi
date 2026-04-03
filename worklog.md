@@ -1300,3 +1300,74 @@ Stage Summary:
    - NEXTAUTH_SECRET (min 32 chars)
 4. In Supabase dashboard, run: prisma db push (or use Supabase migration)
 5. Seed database: Visit /api/seed?secret=YOUR_NEXTAUTH_SECRET
+
+---
+## Task ID: 20 - Vercel + Supabase Deployment Setup
+
+### Work Task
+Adjust code for Vercel deployment compatibility with Supabase database, push to GitHub, and deploy to Vercel.
+
+### Work Summary
+
+**Code Changes for Vercel + Supabase Compatibility:**
+
+1. **Installed packages:**
+   - `@prisma/adapter-pg@7.6.0` - Prisma driver adapter for PostgreSQL in serverless environments
+   - `pg@8.20.0` - PostgreSQL client library
+   - `@types/pg@8.20.0` - TypeScript types for pg
+
+2. **Updated `src/lib/db.ts`:**
+   - Added Prisma driver adapter (`PrismaPg`) for PostgreSQL connections
+   - Detects PostgreSQL connection strings and automatically uses driver adapter
+   - Connection pool settings: max 5 connections, 10s idle timeout, 15s connection timeout
+   - Falls back to standard PrismaClient for local SQLite development
+   - Preserves singleton pattern for connection efficiency in serverless
+
+3. **Updated `next.config.ts`:**
+   - Added `serverExternalPackages: ["pg"]` for proper Vercel serverless bundling
+
+4. **Updated `.env.example`:**
+   - Supabase PostgreSQL format with pooler URL and direct URL
+
+5. **Created GitHub repository:**
+   - Repository: `ToniRaga5309/sistem-pencatatan-bayi`
+   - All code pushed to `main` branch
+
+**Environment Variables for Vercel:**
+- `DATABASE_URL`: Session pooler URL for Supabase
+- `DIRECT_DATABASE_URL`: Direct connection URL for migrations
+- `NEXTAUTH_SECRET`: Authentication secret (use existing)
+
+**Limitations:**
+- Cannot deploy directly from sandbox (no Vercel credentials)
+- Cannot run `prisma db push` from sandbox (Supabase direct connection blocked)
+- User needs to import repo in Vercel and set environment variables
+
+### Deployment Instructions for User:
+1. Go to Vercel Dashboard → Add New Project → Import Git Repository
+2. Select `ToniRaga5309/sistem-pencatatan-bayi`
+3. Set environment variables:
+   - `DATABASE_URL` = `postgresql://postgres.tlprjtgvkwcnduiamcbe:5309023101020003@aws-1-ap-northeast-2.pooler.supabase.com:5432/postgres`
+   - `DIRECT_DATABASE_URL` = `postgresql://postgres:5309023101020003@db.tlprjtgvkwcnduiamcbe.supabase.co:5432/postgres`
+   - `NEXTAUTH_SECRET` = (use existing secret from previous deployment)
+4. Click Deploy
+
+### Verification:
+- ✅ ESLint: 0 errors
+- ✅ Code pushed to GitHub: `https://github.com/ToniRaga5309/sistem-pencatatan-bayi`
+- ✅ Prisma adapter configured for serverless
+- ✅ Next.js config includes server external packages
+- ❌ Direct Vercel deployment: requires Vercel token (not available in sandbox)
+- ❌ Schema sync: requires direct Supabase connection (blocked from sandbox)
+
+### Current Project Status Assessment
+- **Overall Status**: READY FOR VERCEL DEPLOYMENT
+- **Code**: All compatibility changes applied, lint clean
+- **GitHub**: Repository created and code pushed
+- **Database**: Supabase already has tables and data (user added operators manually)
+- **Next Step**: Import repo in Vercel, set env vars, deploy
+
+### Unresolved Issues
+- Vercel deployment requires manual import (no CLI credentials)
+- Schema sync with Supabase needs to be verified after deployment
+- User should run `prisma db push` locally if schema changes are needed
