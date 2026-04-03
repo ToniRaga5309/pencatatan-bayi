@@ -1259,3 +1259,44 @@ Stage Summary:
 - 1 UI text updated from SQLite to PostgreSQL reference
 - Codebase is now fully compatible with PostgreSQL (Supabase) for case-insensitive string search
 - No other string filter operators (startsWith, endsWith) needed modification
+
+---
+Task ID: 21 - PostgreSQL Migration for Vercel + Supabase Deployment
+Agent: Main Agent
+Task: Migrate entire codebase from SQLite to PostgreSQL (Supabase) for Vercel deployment, update seed data with 25 real puskesmas
+
+Work Log:
+- Changed prisma/schema.prisma: provider "sqlite" → "postgresql", added directUrl for Supabase pooling
+- Added @db.VarChar, @db.Text, @db.Char column type annotations for PostgreSQL
+- Added performance indexes on users (username, role), birth_records (puskesmasId, status, tanggal_lahir, createdAt), audit_logs (userId, action, createdAt)
+- Removed prisma/schema.production.prisma (no longer needed - main schema IS the production schema)
+- Updated prisma/seed.ts: 12 puskesmas → 25 puskesmas matching production deployment
+- Updated src/app/api/seed/route.ts: Same 25 puskesmas, admin username "admin_dukcapil"
+- Fixed 17 Prisma contains filters across 5 files to add mode: "insensitive" for PostgreSQL:
+  - src/app/api/operator/birth-records/route.ts (3 filters)
+  - src/app/api/bpjs/records/route.ts (4 filters)
+  - src/app/api/admin/nik-bayi/upload/route.ts (2 filters)
+  - src/app/api/admin/nik-bayi/route.ts (4 filters)
+  - src/app/api/admin/birth-records/route.ts (4 filters)
+- Updated src/app/api/setup/route.ts: Added missing columns (nik_bayi, nik_bayi_updated_at, telepon, berat_badan, panjang_badan), removed problematic audit_logs_entity_id_fkey, added missing indexes
+- Updated src/app/admin/settings/page.tsx: "SQLite (Prisma ORM)" → "PostgreSQL (Supabase)"
+- Created .env.example with Supabase DATABASE_URL and DIRECT_DATABASE_URL template
+- Updated .gitignore: Added /db/ and /upload/ exclusions
+- Admin username: admin → admin_dukcapil (matching production)
+- BPJS account preserved: bpjs1 / bpjs123
+
+Stage Summary:
+- All code is PostgreSQL-compatible and ready for Vercel deployment
+- 25 Puskesmas data from production screenshots integrated into seed
+- ESLint: 0 errors, 0 warnings
+- Local commit created: "Migrate to PostgreSQL (Supabase) for Vercel deployment"
+
+### Deployment Instructions for User:
+1. Push to GitHub: git push origin main
+2. On Vercel dashboard, import the GitHub repository
+3. Set environment variables on Vercel:
+   - DATABASE_URL (Supabase connection string with pgbouncer)
+   - DIRECT_DATABASE_URL (Supabase direct connection string)
+   - NEXTAUTH_SECRET (min 32 chars)
+4. In Supabase dashboard, run: prisma db push (or use Supabase migration)
+5. Seed database: Visit /api/seed?secret=YOUR_NEXTAUTH_SECRET
