@@ -292,7 +292,7 @@ export default function AdminSettingsPage() {
                 <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1">Database</p>
                 <div className="flex items-center gap-2">
                   <Database className="w-4 h-4 text-slate-400" />
-                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">SQLite (Prisma ORM)</p>
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">PostgreSQL (Supabase)</p>
                 </div>
               </div>
               <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">

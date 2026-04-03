@@ -1236,3 +1236,26 @@ Create admin settings page with system info display and quick actions, API endpo
 | `/admin/settings` | System settings page | ADMIN |
 | `/api/admin/clear-audit-logs` | Clear all audit logs (POST) | ADMIN |
 | `/api/admin/reports/monthly` | Monthly report data (GET) | ADMIN |
+
+---
+## Task ID: 21
+Agent: postgresql-fix-agent
+Task: Fix PostgreSQL case-insensitive queries and SQLite references
+
+Work Log:
+- Added `mode: "insensitive"` to all Prisma `contains` filters across 5 API route files to ensure case-insensitive string comparisons on PostgreSQL (which defaults to case-sensitive, unlike SQLite)
+- Updated `src/app/api/operator/birth-records/route.ts` — 3 filters (namaBayi, nikIbu, namaIbu)
+- Updated `src/app/api/bpjs/records/route.ts` — 4 filters (namaBayi, nikIbu, namaIbu, nikBayi)
+- Updated `src/app/api/admin/nik-bayi/upload/route.ts` — 2 filters (namaBayi in two whereClause branches)
+- Updated `src/app/api/admin/nik-bayi/route.ts` — 4 filters (namaBayi, nikIbu, namaIbu, nikBayi)
+- Updated `src/app/api/admin/birth-records/route.ts` — 4 filters (namaBayi, nikIbu, namaIbu, nikBayi)
+- Updated `src/app/admin/settings/page.tsx` — Changed "SQLite (Prisma ORM)" to "PostgreSQL (Supabase)" in the Database info card
+- No `startsWith` or `endsWith` filters were found in the codebase
+- Verified all `contains` filters in entire `src/` directory now have `mode: "insensitive"`
+- ESLint passes with 0 errors
+
+Stage Summary:
+- Total 17 `contains` filter occurrences updated across 5 files
+- 1 UI text updated from SQLite to PostgreSQL reference
+- Codebase is now fully compatible with PostgreSQL (Supabase) for case-insensitive string search
+- No other string filter operators (startsWith, endsWith) needed modification

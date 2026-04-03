@@ -48,5 +48,12 @@ test
 prompt
 
 server.log
+
 # Skills directory
 /skills/
+
+# SQLite local database (for local development only)
+/db/
+
+# Upload directory
+/upload/

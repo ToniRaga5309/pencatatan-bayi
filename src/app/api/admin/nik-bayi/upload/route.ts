@@ -64,11 +64,11 @@ export async function POST(request: NextRequest) {
           whereClause.id = recordId
         } else if (nikIbu && namaBayi) {
           whereClause.nikIbu = nikIbu
-          whereClause.namaBayi = { contains: namaBayi.toUpperCase() }
+          whereClause.namaBayi = { contains: namaBayi.toUpperCase(), mode: "insensitive" }
         } else if (nikIbu) {
           whereClause.nikIbu = nikIbu
         } else if (namaBayi) {
-          whereClause.namaBayi = { contains: namaBayi.toUpperCase() }
+          whereClause.namaBayi = { contains: namaBayi.toUpperCase(), mode: "insensitive" }
         } else {
           failed++
           errors.push({ row: rowNumber, reason: "Tidak ada identifier (ID, NIK Ibu, atau Nama Bayi)" })

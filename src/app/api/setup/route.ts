@@ -22,11 +22,11 @@ export async function POST(request: Request) {
       return NextResponse.json({
         success: true,
         message: "Database tables already exist",
-        next: "Run /api/seed to populate initial data"
+        next: "Run /api/seed?secret=YOUR_SECRET to populate initial data"
       })
     }
 
-    // Create tables using raw SQL
+    // Create tables using raw SQL (PostgreSQL/Supabase)
     await db.$executeRawUnsafe(`
       -- CreateTable: puskesmas
       CREATE TABLE IF NOT EXISTS "puskesmas" (
@@ -34,6 +34,7 @@ export async function POST(request: Request) {
           "nama" VARCHAR(150) NOT NULL,
           "kode_wilayah" VARCHAR(10) NOT NULL,
           "alamat" TEXT,
+          "telepon" VARCHAR(20),
           "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
           "updated_at" TIMESTAMP(3) NOT NULL,
           CONSTRAINT "puskesmas_pkey" PRIMARY KEY ("id")
@@ -56,13 +57,16 @@ export async function POST(request: Request) {
       -- CreateTable: birth_records
       CREATE TABLE IF NOT EXISTS "birth_records" (
           "id" TEXT NOT NULL,
-          "nik_ibu" CHAR(16) NOT NULL,
+          "nik_ibu" VARCHAR(16) NOT NULL,
           "nama_ibu" VARCHAR(100) NOT NULL,
           "nama_ayah" VARCHAR(100) NOT NULL,
           "nama_bayi" VARCHAR(100) NOT NULL,
+          "nik_bayi" VARCHAR(16),
           "tanggal_lahir" TIMESTAMP(3) NOT NULL,
           "tempat_lahir" VARCHAR(150) NOT NULL,
           "jenis_kelamin" VARCHAR(15) NOT NULL,
+          "berat_badan" DOUBLE PRECISION,
+          "panjang_badan" DOUBLE PRECISION,
           "status" VARCHAR(20) NOT NULL DEFAULT 'PENDING',
           "alasan_penolakan" TEXT,
           "is_deleted" BOOLEAN NOT NULL DEFAULT false,
@@ -70,6 +74,7 @@ export async function POST(request: Request) {
           "created_by" TEXT NOT NULL,
           "verified_by" TEXT,
           "verified_at" TIMESTAMP(3),
+          "nik_bayi_updated_at" TIMESTAMP(3),
           "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
           "updated_at" TIMESTAMP(3) NOT NULL,
           CONSTRAINT "birth_records_pkey" PRIMARY KEY ("id")
@@ -92,11 +97,14 @@ export async function POST(request: Request) {
       -- Create indexes
       CREATE UNIQUE INDEX IF NOT EXISTS "users_username_key" ON "users"("username");
       CREATE INDEX IF NOT EXISTS "users_username_idx" ON "users"("username");
+      CREATE INDEX IF NOT EXISTS "users_role_idx" ON "users"("role");
       CREATE INDEX IF NOT EXISTS "birth_records_puskesmas_id_idx" ON "birth_records"("puskesmas_id");
       CREATE INDEX IF NOT EXISTS "birth_records_status_idx" ON "birth_records"("status");
       CREATE INDEX IF NOT EXISTS "birth_records_tanggal_lahir_idx" ON "birth_records"("tanggal_lahir");
+      CREATE INDEX IF NOT EXISTS "birth_records_created_at_idx" ON "birth_records"("created_at");
       CREATE INDEX IF NOT EXISTS "audit_logs_user_id_idx" ON "audit_logs"("user_id");
       CREATE INDEX IF NOT EXISTS "audit_logs_action_idx" ON "audit_logs"("action");
+      CREATE INDEX IF NOT EXISTS "audit_logs_created_at_idx" ON "audit_logs"("created_at");
 
       -- Add foreign keys
       ALTER TABLE "users" ADD CONSTRAINT "users_puskesmas_id_fkey" 
@@ -113,9 +121,6 @@ export async function POST(request: Request) {
       
       ALTER TABLE "audit_logs" ADD CONSTRAINT "audit_logs_user_id_fkey" 
         FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-      
-      ALTER TABLE "audit_logs" ADD CONSTRAINT "audit_logs_entity_id_fkey" 
-        FOREIGN KEY ("entity_id") REFERENCES "birth_records"("id") ON DELETE SET NULL ON UPDATE CASCADE;
     `)
 
     console.log("✅ Tables created successfully")
@@ -123,7 +128,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       message: "Database tables created successfully!",
-      next: "Run /api/seed to populate initial data"
+      next: "Run /api/seed?secret=YOUR_SECRET to populate initial data"
     })
   } catch (error) {
     console.error("Setup error:", error)

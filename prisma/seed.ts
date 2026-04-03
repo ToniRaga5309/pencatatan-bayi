@@ -7,33 +7,63 @@ import bcrypt from "bcryptjs"
 
 const prisma = new PrismaClient()
 
-// Daftar Puskesmas di Kabupaten Ngada
+// Daftar Puskesmas di Kabupaten Ngada (sesuai data production)
 const puskesmasData = [
-  { nama: "Puskesmas Bajawa", kodeWilayah: "530601", alamat: "Kecamatan Bajawa" },
-  { nama: "Puskesmas Mataloko", kodeWilayah: "530602", alamat: "Kecamatan Golewa" },
-  { nama: "Puskesmas Aimere", kodeWilayah: "530603", alamat: "Kecamatan Aimere" },
-  { nama: "Puskesmas Boawae", kodeWilayah: "530604", alamat: "Kecamatan Boawae" },
-  { nama: "Puskesmas Mauponggo", kodeWilayah: "530605", alamat: "Kecamatan Mauponggo" },
-  { nama: "Puskesmas Soa", kodeWilayah: "530606", alamat: "Kecamatan Soa" },
-  { nama: "Puskesmas Riung", kodeWilayah: "530607", alamat: "Kecamatan Riung" },
-  { nama: "Puskesmas Nangaroro", kodeWilayah: "530608", alamat: "Kecamatan Nangaroro" },
-  { nama: "Puskesmas Golewa", kodeWilayah: "530609", alamat: "Kecamatan Golewa" },
-  { nama: "Puskesmas Wolowae", kodeWilayah: "530610", alamat: "Kecamatan Nanga-Wolowaru" },
-  { nama: "Puskesmas Jerebuu", kodeWilayah: "530611", alamat: "Kecamatan Jerebuu" },
-  { nama: "Puskesmas Wewo", kodeWilayah: "530612", alamat: "Kecamatan Wewo" }
+  { nama: "Puskesmas Mangulewa", kodeWilayah: "530601", alamat: "Kecamatan Mangulewa" },
+  { nama: "Puskesmas Laja", kodeWilayah: "530602", alamat: "Kecamatan Laja" },
+  { nama: "Puskesmas Boba", kodeWilayah: "530603", alamat: "Kecamatan Boba" },
+  { nama: "Puskesmas Natarandang", kodeWilayah: "530604", alamat: "Kecamatan Natarandang" },
+  { nama: "Puskesmas Uluwae", kodeWilayah: "530605", alamat: "Kecamatan Uluwae" },
+  { nama: "Puskesmas Inelika Raya", kodeWilayah: "530606", alamat: "Kecamatan Inelika Raya" },
+  { nama: "Puskesmas Watukapu", kodeWilayah: "530607", alamat: "Kecamatan Watukapu" },
+  { nama: "Puskesmas Ngara", kodeWilayah: "530608", alamat: "Kecamatan Ngara" },
+  { nama: "Puskesmas Lindi", kodeWilayah: "530609", alamat: "Kecamatan Lindi" },
+  { nama: "Puskesmas Maronggela", kodeWilayah: "530610", alamat: "Kecamatan Maronggela" },
+  { nama: "Puskesmas Watumanu", kodeWilayah: "530611", alamat: "Kecamatan Watumanu" },
+  { nama: "Puskesmas Dona", kodeWilayah: "530612", alamat: "Kecamatan Dona" },
+  { nama: "Puskesmas Rawangkalo", kodeWilayah: "530613", alamat: "Kecamatan Rawangkalo" },
+  { nama: "Puskesmas Lengkosambi", kodeWilayah: "530614", alamat: "Kecamatan Lengkosambi" },
+  { nama: "Puskesmas Riung", kodeWilayah: "530615", alamat: "Kecamatan Riung" },
+  { nama: "Puskesmas Waepana", kodeWilayah: "530616", alamat: "Kecamatan Waepana" },
+  { nama: "Puskesmas Soa", kodeWilayah: "530617", alamat: "Kecamatan Soa" },
+  { nama: "Puskesmas Radabata", kodeWilayah: "530618", alamat: "Kecamatan Radabata" },
+  { nama: "Puskesmas Koeloda", kodeWilayah: "530619", alamat: "Kecamatan Koeloda" },
+  { nama: "Puskesmas Inerie", kodeWilayah: "530620", alamat: "Kecamatan Inerie" },
+  { nama: "Puskesmas Aimere", kodeWilayah: "530621", alamat: "Kecamatan Aimere" },
+  { nama: "Puskesmas Kota", kodeWilayah: "530622", alamat: "Kecamatan Kota" },
+  { nama: "Puskesmas Wolowio", kodeWilayah: "530623", alamat: "Kecamatan Wolowio" },
+  { nama: "Puskesmas Surisina", kodeWilayah: "530624", alamat: "Kecamatan Surisina" },
+  { nama: "Puskesmas Langa", kodeWilayah: "530625", alamat: "Kecamatan Langa" }
 ]
 
-// Fungsi untuk generate password dari nama puskesmas
-function generatePassword(namaPuskesmas: string): string {
-  const namaSingkat = namaPuskesmas.replace("Puskesmas ", "")
-  return `${namaSingkat.toLowerCase()}123`
-}
-
-// Fungsi untuk generate username dari nama puskesmas
-function generateUsername(namaPuskesmas: string): string {
-  const namaSingkat = namaPuskesmas.replace("Puskesmas ", "")
-  return namaSingkat.toLowerCase().replace(/\s+/g, "")
-}
+// Operator data sesuai data production (username dan namaLengkap dari screenshot)
+const operatorData: Array<{ username: string; namaLengkap: string; puskesmasNama: string }> = [
+  { username: "mangulewa", namaLengkap: "PKM_MANGULEWA", puskesmasNama: "Puskesmas Mangulewa" },
+  { username: "laja", namaLengkap: "PKM_LAJA", puskesmasNama: "Puskesmas Laja" },
+  { username: "boba", namaLengkap: "PKM_BOBA", puskesmasNama: "Puskesmas Boba" },
+  { username: "natarandang", namaLengkap: "PKM_NATARANDANG", puskesmasNama: "Puskesmas Natarandang" },
+  { username: "uluwae", namaLengkap: "PKM_ULUWAE", puskesmasNama: "Puskesmas Uluwae" },
+  { username: "inelikaraya", namaLengkap: "PKM_INELIKA RAYA", puskesmasNama: "Puskesmas Inelika Raya" },
+  { username: "watukapu", namaLengkap: "PKM_WATUKAPU", puskesmasNama: "Puskesmas Watukapu" },
+  { username: "ngara", namaLengkap: "PKM_NGARA", puskesmasNama: "Puskesmas Ngara" },
+  { username: "lindi", namaLengkap: "PKM_LINDI", puskesmasNama: "Puskesmas Lindi" },
+  { username: "maronggela", namaLengkap: "PKM_MARONGGELA", puskesmasNama: "Puskesmas Maronggela" },
+  { username: "watumanu", namaLengkap: "PKM_WATUMANU", puskesmasNama: "Puskesmas Watumanu" },
+  { username: "dona", namaLengkap: "PKM_DONA", puskesmasNama: "Puskesmas Dona" },
+  { username: "rawangkalo", namaLengkap: "PKM_RAWANGKALO", puskesmasNama: "Puskesmas Rawangkalo" },
+  { username: "lengkosambi", namaLengkap: "PKM_LENGKOSAMBI", puskesmasNama: "Puskesmas Lengkosambi" },
+  { username: "riung", namaLengkap: "PKM_RIUNG", puskesmasNama: "Puskesmas Riung" },
+  { username: "waepana", namaLengkap: "PKM_WAEPANA", puskesmasNama: "Puskesmas Waepana" },
+  { username: "pkm_soa", namaLengkap: "PKM_SOA", puskesmasNama: "Puskesmas Soa" },
+  { username: "radabata", namaLengkap: "PKM_RADABATA", puskesmasNama: "Puskesmas Radabata" },
+  { username: "koeloda", namaLengkap: "PKM_KOELODA", puskesmasNama: "Puskesmas Koeloda" },
+  { username: "inerie", namaLengkap: "PKM_INERIE", puskesmasNama: "Puskesmas Inerie" },
+  { username: "aimere", namaLengkap: "PKM_AIMERE", puskesmasNama: "Puskesmas Aimere" },
+  { username: "kota", namaLengkap: "PKM_KOTA", puskesmasNama: "Puskesmas Kota" },
+  { username: "wolowio", namaLengkap: "PKM_WOLOWIO", puskesmasNama: "Puskesmas Wolowio" },
+  { username: "surisina", namaLengkap: "PKM_SURISINA", puskesmasNama: "Puskesmas Surisina" },
+  { username: "langa", namaLengkap: "PKM_LANGA", puskesmasNama: "Puskesmas Langa" }
+]
 
 async function main() {
   console.log("🌱 Memulai seeding database...")
@@ -55,14 +85,14 @@ async function main() {
   )
   console.log(`✅ ${puskesmas.length} Puskesmas berhasil dibuat\n`)
 
-  // Buat Admin Dukcapil
+  // Buat Admin Dukcapil (sesuai data production)
   console.log("👤 Membuat Admin Dukcapil...")
   const adminPassword = "admin123"
   const hashedAdminPassword = await bcrypt.hash(adminPassword, 10)
   
-  const admin = await prisma.user.create({
+  await prisma.user.create({
     data: {
-      username: "admin",
+      username: "admin_dukcapil",
       password: hashedAdminPassword,
       namaLengkap: "Admin Dukcapil Ngada",
       role: "ADMIN",
@@ -70,7 +100,7 @@ async function main() {
     }
   })
   console.log(`✅ Admin Dukcapil berhasil dibuat`)
-  console.log(`   Username: admin`)
+  console.log(`   Username: admin_dukcapil`)
   console.log(`   Password: ${adminPassword}\n`)
 
   // Buat BPJS User
@@ -91,33 +121,38 @@ async function main() {
   console.log(`   Username: bpjs1`)
   console.log(`   Password: ${bpjsPassword}\n`)
 
-  // Buat Operator untuk setiap Puskesmas
+  // Buat Operator untuk setiap Puskesmas (sesuai data production)
   console.log("👥 Membuat Operator Puskesmas...")
   console.log("─".repeat(60))
   
   const operatorAccounts: Array<{ username: string; password: string; namaLengkap: string; puskesmas: string }> = []
   
   const operators = await Promise.all(
-    puskesmas.map(async (p) => {
-      const username = generateUsername(p.nama)
-      const password = generatePassword(p.nama)
-      const namaLengkap = `Operator ${p.nama.replace("Puskesmas ", "")}`
+    operatorData.map(async (op, index) => {
+      const puskesmas = puskesmas.find(p => p.nama === op.puskesmasNama)
+      if (!puskesmas) {
+        console.log(`⚠️  Puskesmas tidak ditemukan: ${op.puskesmasNama}`)
+        return null
+      }
+
+      // Password: nama puskesmas (tanpa "Puskesmas ") + 123
+      const password = `${puskesmas.nama.replace("Puskesmas ", "").toLowerCase()}123`
       
       operatorAccounts.push({
-        username,
+        username: op.username,
         password,
-        namaLengkap,
-        puskesmas: p.nama
+        namaLengkap: op.namaLengkap,
+        puskesmas: puskesmas.nama
       })
       
       const hashedPassword = await bcrypt.hash(password, 10)
       return prisma.user.create({
         data: {
-          username,
+          username: op.username,
           password: hashedPassword,
-          namaLengkap,
+          namaLengkap: op.namaLengkap,
           role: "OPERATOR",
-          puskesmasId: p.id
+          puskesmasId: puskesmas.id
         }
       })
     })
@@ -128,11 +163,11 @@ async function main() {
   console.log("─".repeat(60))
   
   operatorAccounts.forEach((acc) => {
-    console.log(`   ${acc.username} / ${acc.password} (${acc.puskesmas})`)
+    console.log(`   ${acc.username.padEnd(18)} / ${acc.password.padEnd(22)} (${acc.puskesmas})`)
   })
   
   console.log("─".repeat(60))
-  console.log(`✅ ${operators.length} Operator berhasil dibuat\n`)
+  console.log(`✅ ${operatorAccounts.length} Operator berhasil dibuat\n`)
 
   // Buat contoh data kelahiran
   console.log("👶 Membuat data kelahiran contoh...")
@@ -147,7 +182,7 @@ async function main() {
       jenisKelamin: "LAKI_LAKI",
       status: "VERIFIED",
       puskesmasId: puskesmas[0].id,
-      createdBy: operators[0].id
+      createdBy: (await prisma.user.findFirst({ where: { username: 'mangulewa' } }))!.id
     },
     {
       nikIbu: "5306025678900002",
@@ -155,11 +190,11 @@ async function main() {
       namaAyah: "PAULUS BEO",
       namaBayi: "THERESIA BEO",
       tanggalLahir: new Date("2024-01-18"),
-      tempatLahir: "PUSKESMAS MATALOKO",
+      tempatLahir: "PUSKESMAS LAJA",
       jenisKelamin: "PEREMPUAN",
       status: "VERIFIED",
       puskesmasId: puskesmas[1].id,
-      createdBy: operators[1].id
+      createdBy: (await prisma.user.findFirst({ where: { username: 'laja' } }))!.id
     },
     {
       nikIbu: "5306036789010003",
@@ -167,11 +202,11 @@ async function main() {
       namaAyah: "MATEOS GEBA",
       namaBayi: "YOHANES GEBA",
       tanggalLahir: new Date("2024-01-20"),
-      tempatLahir: "PUSKESMAS AIMERE",
+      tempatLahir: "PUSKESMAS BOBA",
       jenisKelamin: "LAKI_LAKI",
       status: "VERIFIED",
       puskesmasId: puskesmas[2].id,
-      createdBy: operators[2].id
+      createdBy: (await prisma.user.findFirst({ where: { username: 'boba' } }))!.id
     },
     {
       nikIbu: "5306011234560004",
@@ -183,7 +218,7 @@ async function main() {
       jenisKelamin: "PEREMPUAN",
       status: "PENDING",
       puskesmasId: puskesmas[0].id,
-      createdBy: operators[0].id
+      createdBy: (await prisma.user.findFirst({ where: { username: 'mangulewa' } }))!.id
     },
     {
       nikIbu: "5306049876540005",
@@ -191,11 +226,11 @@ async function main() {
       namaAyah: "DOMINIKUS WUJA",
       namaBayi: "MARELIN WUJA",
       tanggalLahir: new Date("2024-02-10"),
-      tempatLahir: "PUSKESMAS BOAWAE",
+      tempatLahir: "PUSKESMAS NATARANDANG",
       jenisKelamin: "PEREMPUAN",
       status: "PENDING",
       puskesmasId: puskesmas[3].id,
-      createdBy: operators[3].id
+      createdBy: (await prisma.user.findFirst({ where: { username: 'natarandang' } }))!.id
     }
   ]
 
@@ -230,14 +265,14 @@ async function main() {
   console.log("\n📋 RINGKASAN AKUN LOGIN:")
   console.log("─".repeat(60))
   console.log("ADMIN DUKCAPIL:")
-  console.log("   Username: admin")
+  console.log("   Username: admin_dukcapil")
   console.log("   Password: admin123")
   console.log("─".repeat(60))
   console.log("BPJS:")
   console.log("   Username: bpjs1")
   console.log("   Password: bpjs123")
   console.log("─".repeat(60))
-  console.log("OPERATOR PUSKESMAS (12 akun):")
+  console.log("OPERATOR PUSKESMAS (25 akun):")
   console.log("   Lihat daftar lengkap di atas")
   console.log("─".repeat(60))
   console.log("=".repeat(60))
