@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { createAuditLog } from "@/lib/audit"
-import { ensureSchemaSynced } from "@/lib/schema-sync"
 import { z } from "zod"
 
 // Schema validasi untuk update nama
@@ -16,9 +15,6 @@ const updateProfileSchema = z.object({
 // GET: Ambil profil user saat ini
 export async function GET() {
   try {
-    // Pastikan skema database sudah sinkron
-    await ensureSchemaSynced()
-
     const user = await getCurrentUser()
 
     if (!user) {

@@ -3,12 +3,10 @@ import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { createAuditLog } from "@/lib/audit"
-import { ensureSchemaSynced } from "@/lib/schema-sync"
 import * as XLSX from "xlsx"
 
 export async function GET(request: NextRequest) {
   try {
-    await ensureSchemaSynced()
     const user = await getCurrentUser()
 
     if (!user || user.role !== "BPJS") {

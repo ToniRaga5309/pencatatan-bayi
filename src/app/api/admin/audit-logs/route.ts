@@ -1,14 +1,10 @@
 // API untuk mendapatkan audit logs (Admin)
 import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
-import { ensureSchemaSynced } from "@/lib/schema-sync"
 import { getAuditLogs } from "@/lib/audit"
 
 export async function GET(request: NextRequest) {
   try {
-    // Pastikan skema database sudah sinkron
-    await ensureSchemaSynced()
-
     const user = await getCurrentUser()
 
     if (!user || user.role !== "ADMIN") {

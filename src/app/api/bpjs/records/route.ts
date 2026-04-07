@@ -2,11 +2,9 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
-import { ensureSchemaSynced } from "@/lib/schema-sync"
 
 export async function GET(request: NextRequest) {
   try {
-    await ensureSchemaSynced()
     const user = await getCurrentUser()
 
     if (!user || user.role !== "BPJS") {

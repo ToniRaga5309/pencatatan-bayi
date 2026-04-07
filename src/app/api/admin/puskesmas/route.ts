@@ -17,9 +17,6 @@ const createPuskesmasSchema = z.object({
 // GET: List all puskesmas with operator and record counts
 export async function GET() {
   try {
-    // Pastikan skema database sudah sinkron
-    await ensureSchemaSynced()
-
     const user = await getCurrentUser()
 
     if (!user || user.role !== "ADMIN") {

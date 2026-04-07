@@ -13,7 +13,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { 
-  ArrowLeft, Users, Loader2, Plus, Edit, UserCheck, UserX, 
+  ArrowLeft, Users, Loader2, Plus, Edit, UserCheck, UserX, Trash2,
   Search, Shield, User, HeartPulse, Menu, UserCircle
 } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -48,8 +48,11 @@ export default function UsersManagementPage() {
   // Dialog states
   const [showAdd, setShowAdd] = useState(false)
   const [showEdit, setShowEdit] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [userToDelete, setUserToDelete] = useState<UserData | null>(null)
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null)
   const [isProcessing, setIsProcessing] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
   
   // Form data
   const [formData, setFormData] = useState({
@@ -62,7 +65,6 @@ export default function UsersManagementPage() {
   })
   const [puskesmasMode, setPuskesmasMode] = useState<"select" | "manual">("manual")
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
-  const [isSyncing, setIsSyncing] = useState(false)
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -72,25 +74,9 @@ export default function UsersManagementPage() {
     }
   }, [status, session, router])
 
-  const syncSchema = async (): Promise<boolean> => {
-    setIsSyncing(true)
-    try {
-      const response = await fetch("/api/admin/sync-schema", { method: "POST" })
-      return response.ok
-    } catch {
-      return false
-    } finally {
-      setIsSyncing(false)
-    }
-  }
-
   useEffect(() => {
     if (session?.user?.role === "ADMIN") {
-      const initialize = async () => {
-        await syncSchema()
-        fetchData()
-      }
-      initialize()
+      fetchData()
     }
   }, [session])
 
@@ -169,6 +155,36 @@ export default function UsersManagementPage() {
     } finally {
       setIsProcessing(false)
     }
+  }
+
+  const handleDeleteUser = async () => {
+    if (!userToDelete) return
+
+    setIsDeleting(true)
+    try {
+      const response = await fetch(`/api/admin/users/${userToDelete.id}`, {
+        method: "DELETE"
+      })
+
+      if (response.ok) {
+        toast.success(`User "${userToDelete.namaLengkap}" berhasil dihapus`)
+        setShowDeleteDialog(false)
+        setUserToDelete(null)
+        fetchData()
+      } else {
+        const data = await response.json()
+        toast.error(data.error || "Gagal menghapus user")
+      }
+    } catch {
+      toast.error("Terjadi kesalahan")
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
+  const openDeleteDialog = (user: UserData) => {
+    setUserToDelete(user)
+    setShowDeleteDialog(true)
   }
 
   const handleToggleStatus = async (user: UserData) => {
@@ -416,6 +432,16 @@ export default function UsersManagementPage() {
                             >
                               <Edit className="w-4 h-4" />
                             </Button>
+                            {session?.user?.id !== u.id && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => openDeleteDialog(u)}
+                                className="text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            )}
                             <Button 
                               variant="ghost" 
                               size="sm"
@@ -640,6 +666,43 @@ export default function UsersManagementPage() {
             <Button variant="outline" onClick={() => { setShowEdit(false); resetForm() }}>Batal</Button>
             <Button onClick={handleEditUser} disabled={isProcessing}>
               {isProcessing ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Menyimpan...</> : "Simpan"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete User Confirmation Dialog */}
+      <Dialog open={showDeleteDialog} onOpenChange={(open) => {
+        if (!open) {
+          setShowDeleteDialog(false)
+          setUserToDelete(null)
+        }
+      }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Hapus User</DialogTitle>
+            <DialogDescription>
+              Tindakan ini tidak dapat dibatalkan.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <div className="rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-4">
+              <p className="text-sm text-red-800 dark:text-red-200">
+                Apakah Anda yakin ingin menghapus user{" "}
+                <span className="font-semibold">"{userToDelete?.namaLengkap}"</span>{" "}
+                ({userToDelete?.username})?
+              </p>
+              <p className="text-xs text-red-600 dark:text-red-400 mt-2">
+                Semua data terkait user ini akan dihapus secara permanen.
+              </p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setShowDeleteDialog(false); setUserToDelete(null) }} disabled={isDeleting}>
+              Batal
+            </Button>
+            <Button variant="destructive" onClick={handleDeleteUser} disabled={isDeleting}>
+              {isDeleting ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Menghapus...</> : "Hapus"}
             </Button>
           </DialogFooter>
         </DialogContent>
