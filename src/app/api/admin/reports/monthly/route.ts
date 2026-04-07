@@ -2,10 +2,14 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
+import { ensureSchemaSynced } from "@/lib/schema-sync"
 import { getNamaBulan } from "@/lib/utils-common"
 
 export async function GET(request: NextRequest) {
   try {
+    // Pastikan skema database sudah sinkron
+    await ensureSchemaSynced()
+
     const user = await getCurrentUser()
     if (!user || user.role !== "ADMIN") {
       return NextResponse.json({ error: "Akses ditolak" }, { status: 403 })
@@ -115,8 +119,9 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     console.error("Error generating monthly report:", error)
+    const message = error instanceof Error ? error.message : String(error)
     return NextResponse.json(
-      { error: "Gagal membuat laporan bulanan" },
+      { error: "Gagal membuat laporan bulanan", details: message },
       { status: 500 }
     )
   }

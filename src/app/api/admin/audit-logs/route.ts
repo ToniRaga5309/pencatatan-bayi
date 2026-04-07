@@ -1,10 +1,14 @@
 // API untuk mendapatkan audit logs (Admin)
 import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
+import { ensureSchemaSynced } from "@/lib/schema-sync"
 import { getAuditLogs } from "@/lib/audit"
 
 export async function GET(request: NextRequest) {
   try {
+    // Pastikan skema database sudah sinkron
+    await ensureSchemaSynced()
+
     const user = await getCurrentUser()
 
     if (!user || user.role !== "ADMIN") {
@@ -41,6 +45,7 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     console.error("Error fetching audit logs:", error)
-    return NextResponse.json({ error: "Terjadi kesalahan server" }, { status: 500 })
+    const message = error instanceof Error ? error.message : String(error)
+    return NextResponse.json({ error: "Terjadi kesalahan server", details: message }, { status: 500 })
   }
 }

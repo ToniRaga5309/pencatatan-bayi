@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { createAuditLog } from "@/lib/audit"
+import { ensureSchemaSynced } from "@/lib/schema-sync"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
 
@@ -19,6 +20,9 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Pastikan skema database sudah sinkron sebelum operasi Prisma
+    await ensureSchemaSynced()
+
     const user = await getCurrentUser()
     const { id } = await params
 
@@ -97,8 +101,8 @@ export async function PUT(
       }
     })
 
-    // Audit log
-    await createAuditLog({
+    // Audit log (fire-and-forget)
+    createAuditLog({
       userId: user.id,
       action: "UPDATE",
       entity: "User",
@@ -113,7 +117,7 @@ export async function PUT(
       },
       ipAddress: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || undefined,
       userAgent: request.headers.get("user-agent") || undefined
-    })
+    }).catch(() => {})
 
     return NextResponse.json({
       success: true,
@@ -122,6 +126,7 @@ export async function PUT(
     })
   } catch (error) {
     console.error("Error updating user:", error)
-    return NextResponse.json({ error: "Terjadi kesalahan server" }, { status: 500 })
+    const message = error instanceof Error ? error.message : String(error)
+    return NextResponse.json({ error: "Terjadi kesalahan server", details: message }, { status: 500 })
   }
 }

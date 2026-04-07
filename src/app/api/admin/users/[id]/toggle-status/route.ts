@@ -3,12 +3,16 @@ import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { createAuditLog } from "@/lib/audit"
+import { ensureSchemaSynced } from "@/lib/schema-sync"
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Pastikan skema database sudah sinkron
+    await ensureSchemaSynced()
+
     const user = await getCurrentUser()
     const { id } = await params
 
@@ -33,8 +37,8 @@ export async function POST(
       data: { isActive: !existingUser.isActive }
     })
 
-    // Audit log
-    await createAuditLog({
+    // Audit log (fire-and-forget)
+    createAuditLog({
       userId: user.id,
       action: existingUser.isActive ? "DELETE" : "UPDATE",
       entity: "User",
@@ -45,7 +49,7 @@ export async function POST(
       },
       ipAddress: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || undefined,
       userAgent: request.headers.get("user-agent") || undefined
-    })
+    }).catch(() => {})
 
     return NextResponse.json({
       success: true,
@@ -54,6 +58,7 @@ export async function POST(
     })
   } catch (error) {
     console.error("Error toggling user status:", error)
-    return NextResponse.json({ error: "Terjadi kesalahan server" }, { status: 500 })
+    const message = error instanceof Error ? error.message : String(error)
+    return NextResponse.json({ error: "Terjadi kesalahan server", details: message }, { status: 500 })
   }
 }

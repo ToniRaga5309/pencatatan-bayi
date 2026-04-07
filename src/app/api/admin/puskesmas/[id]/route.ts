@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { createAuditLog } from "@/lib/audit"
+import { ensureSchemaSynced } from "@/lib/schema-sync"
 import { z } from "zod"
 import { getClientIp } from "@/lib/utils-common"
 
@@ -18,6 +19,9 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Pastikan skema database sudah sinkron
+    await ensureSchemaSynced()
+
     const user = await getCurrentUser()
 
     if (!user || user.role !== "ADMIN") {
@@ -58,8 +62,8 @@ export async function PUT(
       data: updateData
     })
 
-    // Audit log
-    await createAuditLog({
+    // Audit log (fire-and-forget)
+    createAuditLog({
       userId: user.id,
       action: "UPDATE",
       entity: "Puskesmas",
@@ -71,12 +75,13 @@ export async function PUT(
         telepon: updated.telepon
       },
       ipAddress: getClientIp(request.headers)
-    })
+    }).catch(() => {})
 
     return NextResponse.json(updated)
   } catch (error) {
     console.error("Error updating puskesmas:", error)
-    return NextResponse.json({ error: "Terjadi kesalahan server" }, { status: 500 })
+    const message = error instanceof Error ? error.message : String(error)
+    return NextResponse.json({ error: "Terjadi kesalahan server", details: message }, { status: 500 })
   }
 }
 
@@ -86,6 +91,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Pastikan skema database sudah sinkron
+    await ensureSchemaSynced()
+
     const user = await getCurrentUser()
 
     if (!user || user.role !== "ADMIN") {
@@ -132,8 +140,8 @@ export async function DELETE(
       where: { id }
     })
 
-    // Audit log
-    await createAuditLog({
+    // Audit log (fire-and-forget)
+    createAuditLog({
       userId: user.id,
       action: "DELETE",
       entity: "Puskesmas",
@@ -143,7 +151,7 @@ export async function DELETE(
         kodeWilayah: existing.kodeWilayah,
       },
       ipAddress: getClientIp(request.headers)
-    })
+    }).catch(() => {})
 
     return NextResponse.json({
       success: true,
@@ -151,6 +159,7 @@ export async function DELETE(
     })
   } catch (error) {
     console.error("Error deleting puskesmas:", error)
-    return NextResponse.json({ error: "Terjadi kesalahan server" }, { status: 500 })
+    const message = error instanceof Error ? error.message : String(error)
+    return NextResponse.json({ error: "Terjadi kesalahan server", details: message }, { status: 500 })
   }
 }
