@@ -7,10 +7,6 @@ const nextConfig: NextConfig = {
   // Performance optimizations
   poweredByHeader: false,
   compress: true,
-  // Optimize font loading
-  optimizeFonts: {
-    display: 'swap',
-  },
   // Image optimization
   images: {
     formats: ['image/avif', 'image/webp'],

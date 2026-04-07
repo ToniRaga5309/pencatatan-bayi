@@ -1,17 +1,11 @@
 // Layout utama untuk Sistem Pencatatan Nama Bayi Baru Lahir
 import type { Metadata } from "next"
-import dynamic from "next/dynamic"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "@/components/ui/sonner"
 import { SessionProvider } from "@/components/providers/session-provider"
 import { ThemeProvider } from "next-themes"
-
-// Lazy load SessionTimeoutWarning - only loads JS for authenticated users
-const SessionTimeoutWarning = dynamic(
-  () => import("@/components/session-timeout-warning").then((mod) => mod.SessionTimeoutWarning),
-  { ssr: false }
-)
+import { SessionTimeoutWarning } from "@/components/session-timeout-warning"
 
 const inter = Inter({
   variable: "--font-inter",
