@@ -183,7 +183,7 @@ export async function POST(request: NextRequest) {
       data: {
         nikIbu: data.nikIbu,
         namaIbu: data.namaIbu.toUpperCase(),
-        namaAyah: data.namaAyah ? data.namaAyah.toUpperCase() : null,
+        namaAyah: data.namaAyah ? data.namaAyah.toUpperCase() : "",
         namaBayi: data.namaBayi.toUpperCase(),
         tanggalLahir: new Date(data.tanggalLahir),
         tempatLahir: data.tempatLahir.toUpperCase(),
