@@ -38,18 +38,37 @@ export async function GET(request: NextRequest) {
     }
 
     if (nikStatus === "with_nik") {
-      where.nikBayi = { notIn: [null, ""] }
+      where.AND = [
+        { nikBayi: { not: null } },
+        { nikBayi: { not: "" } }
+      ]
     } else if (nikStatus === "without_nik") {
-      where.nikBayi = { in: [null, ""] }
+      where.OR = [
+        { nikBayi: null },
+        { nikBayi: "" }
+      ]
     }
 
     if (search) {
-      where.OR = [
+      // When filtering "without_nik", don't search by nikBayi (it's always null/empty)
+      const searchConditions: Array<Record<string, unknown>> = [
         { namaBayi: { contains: search, mode: "insensitive" } },
         { nikIbu: { contains: search, mode: "insensitive" } },
         { namaIbu: { contains: search, mode: "insensitive" } },
-        { nikBayi: { contains: search, mode: "insensitive" } }
       ]
+      if (nikStatus !== "without_nik") {
+        searchConditions.push({ nikBayi: { contains: search, mode: "insensitive" } })
+      }
+      // Merge with existing OR conditions if any
+      if (nikStatus === "without_nik") {
+        // Both nikStatus and search use OR - combine them with AND
+        where.OR = [
+          { AND: [{ nikBayi: null }, { OR: searchConditions }] },
+          { AND: [{ nikBayi: "" }, { OR: searchConditions }] },
+        ]
+      } else {
+        where.OR = searchConditions
+      }
     }
 
     const [records, total] = await Promise.all([
