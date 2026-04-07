@@ -5,7 +5,6 @@
 import { useEffect, useState, useRef } from "react"
 import Link from "next/link"
 import { Baby, Shield, ClipboardList, HeartPulse, Building, Users, Zap, ArrowRight } from "lucide-react"
-import { motion } from "framer-motion"
 
 // Animated counter component
 function AnimatedCounter({ target, duration = 2000 }: { target: number; duration?: number }) {
@@ -63,13 +62,9 @@ function FeatureCard({
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay }}
-      whileHover={{ scale: 1.03, y: -4 }}
-      className={`group relative p-6 rounded-2xl glass-card-deep ${hoverColors[colorClass] || ""} transition-all duration-300 cursor-default`}
+    <div
+      className={`group relative p-6 rounded-2xl glass-card-deep card-action-hover animate-fadeIn ${hoverColors[colorClass] || ""} transition-all duration-300 cursor-default`}
+      style={{ animationDelay: `${delay}s`, animationFillMode: 'both' }}
     >
       {/* Subtle inner glow on hover */}
       <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/0 to-transparent group-hover:from-emerald-50/30 dark:group-hover:from-emerald-900/10 transition-all duration-300 pointer-events-none" />
@@ -85,7 +80,7 @@ function FeatureCard({
           {description}
         </p>
       </div>
-    </motion.div>
+    </div>
   )
 }
 
@@ -123,57 +118,45 @@ export default function LandingPageContent() {
 
         {/* Hero Content */}
         <div className="relative z-10 container mx-auto px-4 py-20 sm:py-28 lg:py-36">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            className="flex flex-col items-center text-center max-w-3xl mx-auto"
+          <div
+            className="flex flex-col items-center text-center max-w-3xl mx-auto animate-fadeIn"
           >
             {/* App Icon with animated glow */}
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="mb-8 w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center shadow-2xl border border-white/20"
+            <div
+              className="mb-8 w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center shadow-2xl border border-white/20 animate-scaleIn"
+              style={{ animationDelay: '0.2s', animationFillMode: 'both' }}
             >
               <Baby className="w-10 h-10 sm:w-12 sm:h-12 text-white drop-shadow-[0_0_16px_rgba(255,255,255,0.4)]" />
-            </motion.div>
+            </div>
 
             {/* Title */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4 tracking-tight"
+            <h1
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4 tracking-tight animate-fadeIn"
+              style={{ animationDelay: '0.3s', animationFillMode: 'both' }}
             >
               Sistem Pencatatan
               <br />
               <span className="text-emerald-100">Bayi Baru Lahir</span>
-            </motion.h1>
+            </h1>
 
             {/* Subtitle */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-              className="text-emerald-100 text-base sm:text-lg mb-2 font-medium"
+            <p
+              className="text-emerald-100 text-base sm:text-lg mb-2 font-medium animate-fadeIn"
+              style={{ animationDelay: '0.5s', animationFillMode: 'both' }}
             >
               Kabupaten Ngada, NTT
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-              className="text-emerald-200/80 text-sm sm:text-base mb-10 max-w-xl"
+            </p>
+            <p
+              className="text-emerald-200/80 text-sm sm:text-base mb-10 max-w-xl animate-fadeIn"
+              style={{ animationDelay: '0.6s', animationFillMode: 'both' }}
             >
               Puskesmas & Dinas Kependudukan dan Pencatatan Sipil
-            </motion.p>
+            </p>
 
             {/* CTA Button with glow effect */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.7 }}
+            <div
+              className="animate-fadeIn"
+              style={{ animationDelay: '0.7s', animationFillMode: 'both' }}
             >
               <Link
                 href="/login"
@@ -188,8 +171,8 @@ export default function LandingPageContent() {
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </span>
               </Link>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </div>
 
         {/* Multi-layer wave separator */}
@@ -217,12 +200,8 @@ export default function LandingPageContent() {
         />
 
         <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-12"
+          <div
+            className="text-center mb-12 animate-fadeIn"
           >
             <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 mb-3">
               Fitur Utama Sistem
@@ -230,7 +209,7 @@ export default function LandingPageContent() {
             <p className="text-slate-500 dark:text-slate-400 max-w-lg mx-auto">
               Tiga pilar utama yang mendukung pencatatan kelahiran bayi di Kabupaten Ngada
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             <FeatureCard
@@ -262,12 +241,9 @@ export default function LandingPageContent() {
       <section className="py-14 sm:py-16 bg-slate-50 dark:bg-slate-800/30">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-3xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0 }}
-              className="text-center group"
+            <div
+              className="text-center group animate-fadeIn"
+              style={{ animationDelay: '0s', animationFillMode: 'both' }}
             >
               <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300">
                 <Building className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
@@ -276,14 +252,11 @@ export default function LandingPageContent() {
                 <AnimatedCounter target={12} />
               </p>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Puskesmas</p>
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-center group"
+            <div
+              className="text-center group animate-fadeIn"
+              style={{ animationDelay: '0.1s', animationFillMode: 'both' }}
             >
               <div className="w-12 h-12 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300">
                 <Users className="w-5 h-5 text-teal-600 dark:text-teal-400" />
@@ -292,14 +265,11 @@ export default function LandingPageContent() {
                 <AnimatedCounter target={3} />
               </p>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Peran Pengguna</p>
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-center group"
+            <div
+              className="text-center group animate-fadeIn"
+              style={{ animationDelay: '0.2s', animationFillMode: 'both' }}
             >
               <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300">
                 <Zap className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
@@ -308,7 +278,7 @@ export default function LandingPageContent() {
                 Terintegrasi
               </p>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Sistem</p>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -316,12 +286,8 @@ export default function LandingPageContent() {
       {/* CTA Section */}
       <section className="py-16 sm:py-20 bg-white dark:bg-slate-900">
         <div className="container mx-auto px-4 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="max-w-xl mx-auto"
+          <div
+            className="max-w-xl mx-auto animate-fadeIn"
           >
             <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 mb-3">
               Mulai Kelola Data Kelahiran
@@ -336,7 +302,7 @@ export default function LandingPageContent() {
               Masuk ke Sistem
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
-          </motion.div>
+          </div>
         </div>
       </section>
 

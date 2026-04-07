@@ -12,7 +12,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Baby, Loader2, AlertCircle, Shield, Stethoscope, HeartPulse, Eye, EyeOff, User, Lock } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { motion } from "framer-motion"
 
 function getGreeting(): string {
   const hour = new Date().getHours()
@@ -125,16 +124,12 @@ function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       {error && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <Alert variant="destructive" className="animate-slideUp">
+        <div className="animate-slideUp">
+          <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>{error}</AlertDescription>
           </Alert>
-        </motion.div>
+        </div>
       )}
 
       <div className="space-y-2">
@@ -209,8 +204,7 @@ function LoginForm() {
         </label>
       </div>
 
-      <motion.div whileTap={{ scale: 0.98 }}>
-        <Button
+      <Button
           type="submit"
           className="w-full h-11 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold shadow-md shadow-emerald-200/50 dark:shadow-emerald-900/30 transition-all duration-200 relative overflow-hidden group"
           disabled={isLoading}
@@ -229,7 +223,6 @@ function LoginForm() {
             </span>
           )}
         </Button>
-      </motion.div>
 
       {/* Role indicators */}
       <div className="flex items-center justify-center gap-4 pt-2">
@@ -407,11 +400,8 @@ function LoginContent() {
           </div>
 
           {/* Glassmorphism Card - Enhanced */}
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="glass-card-deep rounded-2xl p-6 sm:p-8"
+          <div
+            className="glass-card-deep rounded-2xl p-6 sm:p-8 animate-fadeIn"
           >
             {/* Time-based greeting */}
             <div className="mb-6">
@@ -430,7 +420,7 @@ function LoginContent() {
             <Suspense fallback={<LoginLoading />}>
               <LoginForm />
             </Suspense>
-          </motion.div>
+          </div>
         </div>
       </div>
 
