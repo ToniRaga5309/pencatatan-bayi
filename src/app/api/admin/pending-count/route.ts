@@ -2,9 +2,13 @@
 import { NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
+import { ensureSchemaSynced } from "@/lib/schema-sync"
 
 export async function GET() {
   try {
+    // Pastikan skema database sudah sinkron
+    await ensureSchemaSynced()
+
     const user = await getCurrentUser()
 
     if (!user || user.role !== "ADMIN") {
@@ -35,6 +39,7 @@ export async function GET() {
     })
   } catch (error) {
     console.error("Error fetching pending count:", error)
-    return NextResponse.json({ error: "Terjadi kesalahan server" }, { status: 500 })
+    const message = error instanceof Error ? error.message : String(error)
+    return NextResponse.json({ error: "Terjadi kesalahan server", details: message }, { status: 500 })
   }
 }

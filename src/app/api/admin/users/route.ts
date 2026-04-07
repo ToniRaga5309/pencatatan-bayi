@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { createAuditLog } from "@/lib/audit"
+import { ensureSchemaSynced } from "@/lib/schema-sync"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
 
@@ -19,6 +20,9 @@ const createUserSchema = z.object({
 // GET: Ambil semua user
 export async function GET() {
   try {
+    // Pastikan skema database sudah sinkron sebelum query Prisma
+    await ensureSchemaSynced()
+
     const user = await getCurrentUser()
 
     if (!user || user.role !== "ADMIN") {
@@ -35,13 +39,20 @@ export async function GET() {
     return NextResponse.json(users)
   } catch (error) {
     console.error("Error fetching users:", error)
-    return NextResponse.json({ error: "Terjadi kesalahan server" }, { status: 500 })
+    const message = error instanceof Error ? error.message : "Terjadi kesalahan server"
+    return NextResponse.json({ error: "Terjadi kesalahan server", details: message }, { status: 500 })
   }
 }
 
 // POST: Buat user baru
 export async function POST(request: NextRequest) {
   try {
+    // Pastikan skema database sudah sinkron sebelum operasi Prisma
+    const synced = await ensureSchemaSynced()
+    if (!synced) {
+      console.warn("[users/POST] Schema sync skipped or failed, continuing with Prisma...")
+    }
+
     const user = await getCurrentUser()
 
     if (!user || user.role !== "ADMIN") {
@@ -118,8 +129,8 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    // Audit log
-    await createAuditLog({
+    // Audit log (fire-and-forget, jangan blocking response)
+    createAuditLog({
       userId: user.id,
       action: "CREATE",
       entity: "User",
@@ -132,7 +143,7 @@ export async function POST(request: NextRequest) {
       },
       ipAddress: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || undefined,
       userAgent: request.headers.get("user-agent") || undefined
-    })
+    }).catch(() => {})
 
     return NextResponse.json({
       success: true,
@@ -141,6 +152,10 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error("Error creating user:", error)
-    return NextResponse.json({ error: "Terjadi kesalahan server" }, { status: 500 })
+    const message = error instanceof Error ? error.message : String(error)
+    return NextResponse.json(
+      { error: "Terjadi kesalahan server", details: message },
+      { status: 500 }
+    )
   }
 }

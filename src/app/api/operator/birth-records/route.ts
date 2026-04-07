@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { createAuditLog } from "@/lib/audit"
+import { ensureSchemaSynced } from "@/lib/schema-sync"
 import { validateNIK } from "@/lib/utils-common"
 import { z } from "zod"
 
@@ -38,6 +39,9 @@ const birthRecordSchema = z.object({
 // GET: Ambil semua data kelahiran operator (with sorting)
 export async function GET(request: NextRequest) {
   try {
+    // Pastikan skema database sudah sinkron
+    await ensureSchemaSynced()
+
     const user = await getCurrentUser()
 
     if (!user || user.role !== "OPERATOR" || !user.puskesmasId) {
@@ -125,8 +129,9 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     console.error("Error fetching birth records:", error)
+    const message = error instanceof Error ? error.message : String(error)
     return NextResponse.json(
-      { error: "Terjadi kesalahan server" },
+      { error: "Terjadi kesalahan server", details: message },
       { status: 500 }
     )
   }
@@ -135,6 +140,9 @@ export async function GET(request: NextRequest) {
 // POST: Tambah data kelahiran baru
 export async function POST(request: NextRequest) {
   try {
+    // Pastikan skema database sudah sinkron
+    await ensureSchemaSynced()
+
     const user = await getCurrentUser()
 
     if (!user || user.role !== "OPERATOR" || !user.puskesmasId) {
@@ -185,8 +193,8 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    // Catat audit log
-    await createAuditLog({
+    // Catat audit log (fire-and-forget)
+    createAuditLog({
       userId: user.id,
       action: "CREATE",
       entity: "BirthRecord",
@@ -197,7 +205,7 @@ export async function POST(request: NextRequest) {
       },
       ipAddress: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || undefined,
       userAgent: request.headers.get("user-agent") || undefined
-    })
+    }).catch(() => {})
 
     return NextResponse.json({
       success: true,
@@ -206,8 +214,9 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error("Error creating birth record:", error)
+    const message = error instanceof Error ? error.message : String(error)
     return NextResponse.json(
-      { error: "Terjadi kesalahan server" },
+      { error: "Terjadi kesalahan server", details: message },
       { status: 500 }
     )
   }

@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { createAuditLog } from "@/lib/audit"
+import { ensureSchemaSynced } from "@/lib/schema-sync"
 import { z } from "zod"
 import * as XLSX from "xlsx"
 
@@ -71,6 +72,9 @@ function normalizeJenisKelamin(value: string): "LAKI_LAKI" | "PEREMPUAN" | null 
 
 export async function POST(request: NextRequest) {
   try {
+    // Pastikan skema database sudah sinkron
+    await ensureSchemaSynced()
+
     const user = await getCurrentUser()
 
     if (!user || user.role !== "OPERATOR" || !user.puskesmasId) {
@@ -234,8 +238,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Catat audit log
-    await createAuditLog({
+    // Catat audit log (fire-and-forget)
+    createAuditLog({
       userId: user.id,
       action: "CREATE",
       entity: "BirthRecord",
@@ -246,7 +250,7 @@ export async function POST(request: NextRequest) {
       },
       ipAddress: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || undefined,
       userAgent: request.headers.get("user-agent") || undefined,
-    })
+    }).catch(() => {})
 
     return NextResponse.json({
       success: true,

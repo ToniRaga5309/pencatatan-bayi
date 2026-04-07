@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { createAuditLog } from "@/lib/audit"
+import { ensureSchemaSynced } from "@/lib/schema-sync"
 import { z } from "zod"
 
 const updateNikSchema = z.object({
@@ -15,6 +16,9 @@ const updateNikSchema = z.object({
 // GET: List all birth records with NIK bayi status
 export async function GET(request: NextRequest) {
   try {
+    // Pastikan skema database sudah sinkron
+    await ensureSchemaSynced()
+
     const user = await getCurrentUser()
 
     if (!user || user.role !== "ADMIN") {
@@ -109,13 +113,17 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     console.error("Error fetching NIK bayi records:", error)
-    return NextResponse.json({ error: "Terjadi kesalahan server" }, { status: 500 })
+    const message = error instanceof Error ? error.message : String(error)
+    return NextResponse.json({ error: "Terjadi kesalahan server", details: message }, { status: 500 })
   }
 }
 
 // POST: Update NIK bayi for a single record
 export async function POST(request: NextRequest) {
   try {
+    // Pastikan skema database sudah sinkron
+    await ensureSchemaSynced()
+
     const user = await getCurrentUser()
 
     if (!user || user.role !== "ADMIN") {
@@ -152,8 +160,8 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    // Audit log
-    await createAuditLog({
+    // Audit log (fire-and-forget)
+    createAuditLog({
       userId: user.id,
       action: "UPDATE",
       entity: "BirthRecord",
@@ -166,7 +174,7 @@ export async function POST(request: NextRequest) {
       },
       ipAddress: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || undefined,
       userAgent: request.headers.get("user-agent") || undefined
-    })
+    }).catch(() => {})
 
     return NextResponse.json({
       success: true,
@@ -175,6 +183,7 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error("Error updating NIK bayi:", error)
-    return NextResponse.json({ error: "Terjadi kesalahan server" }, { status: 500 })
+    const message = error instanceof Error ? error.message : String(error)
+    return NextResponse.json({ error: "Terjadi kesalahan server", details: message }, { status: 500 })
   }
 }
