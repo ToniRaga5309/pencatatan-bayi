@@ -59,3 +59,25 @@ Stage Summary:
 - NIK template now generated server-side - file should open correctly
 - Admin dashboard data should now display properly (Prisma adapter fix + filter fixes)
 - Deployed to https://pencatatan-bayi.vercel.app
+
+---
+Task ID: 4
+Agent: Main Agent
+Task: Fix admin dashboard data still not showing - auto-sync database schema
+
+Work Log:
+- Diagnosed root cause: production Supabase database was created by older version missing `is_deleted` column in `birth_records` table
+- Prisma client generates SQL referencing `is_deleted`, causing ALL birthRecord queries to fail
+- Frontend silently swallowed errors (no error display), so user just saw empty table
+- Fixed db.ts: removed invalid PrismaPg constructor options (max, idleTimeoutMillis, connectionTimeoutMillis)
+- Created /api/admin/sync-schema endpoint: checks and adds missing columns via ALTER TABLE ADD COLUMN IF NOT EXISTS
+- Modified admin dashboard frontend: added auto-sync logic (if data fetch fails, auto-sync schema and retry)
+- Added error banner with retry button for better debugging
+- Deployed to Vercel production
+
+Stage Summary:
+- Root cause: production DB missing `is_deleted` column → all birthRecord queries fail → empty table
+- Fix: Auto-sync schema endpoint + auto-retry logic in frontend
+- When admin visits dashboard, it will automatically sync missing columns and reload data
+- Deployed to https://pencatatan-bayi.vercel.app (commit 4c9563c)
+
