@@ -38,7 +38,7 @@ export async function GET() {
 
     return NextResponse.json(users)
   } catch (error) {
-    console.error("Error fetching users:", error)
+    console.error("[GET /api/admin/users] Error:", error)
     const message = error instanceof Error ? error.message : "Terjadi kesalahan server"
     return NextResponse.json({ error: "Terjadi kesalahan server", details: message }, { status: 500 })
   }
@@ -50,21 +50,32 @@ export async function POST(request: NextRequest) {
     // Pastikan skema database sudah sinkron sebelum operasi Prisma
     const synced = await ensureSchemaSynced()
     if (!synced) {
-      console.warn("[users/POST] Schema sync skipped or failed, continuing with Prisma...")
+      console.warn("[POST /api/admin/users] Schema sync skipped or failed, continuing with Prisma...")
     }
 
-    const user = await getCurrentUser()
+    const currentUser = await getCurrentUser()
 
-    if (!user || user.role !== "ADMIN") {
+    if (!currentUser || currentUser.role !== "ADMIN") {
       return NextResponse.json({ error: "Tidak memiliki akses" }, { status: 403 })
     }
 
     const body = await request.json()
-    const validationResult = createUserSchema.safeParse(body)
+    console.log("[POST /api/admin/users] Request body:", JSON.stringify({ ...body, password: "***" }))
+
+    // Validate input with Zod
+    let validationResult
+    try {
+      validationResult = createUserSchema.safeParse(body)
+    } catch (err) {
+      console.error("[POST /api/admin/users] Validation error:", err)
+      return NextResponse.json({ error: "Format data tidak valid" }, { status: 400 })
+    }
     
     if (!validationResult.success) {
+      const fieldErrors = validationResult.error.flatten().fieldErrors
+      console.warn("[POST /api/admin/users] Validation failed:", JSON.stringify(fieldErrors))
       return NextResponse.json(
-        { error: "Data tidak valid", details: validationResult.error.flatten().fieldErrors },
+        { error: "Data tidak valid", details: fieldErrors },
         { status: 400 }
       )
     }
@@ -72,9 +83,15 @@ export async function POST(request: NextRequest) {
     const data = validationResult.data
 
     // Cek apakah username sudah ada
-    const existingUser = await db.user.findUnique({
-      where: { username: data.username }
-    })
+    let existingUser
+    try {
+      existingUser = await db.user.findUnique({
+        where: { username: data.username }
+      })
+    } catch (err) {
+      console.error("[POST /api/admin/users] Error checking existing user:", err)
+      return NextResponse.json({ error: "Gagal memeriksa username. Coba lagi." }, { status: 500 })
+    }
 
     if (existingUser) {
       return NextResponse.json({ error: "Username sudah digunakan" }, { status: 400 })
@@ -89,21 +106,27 @@ export async function POST(request: NextRequest) {
         puskesmasId = data.puskesmasId
       } else if (data.puskesmasNama && data.puskesmasNama.trim().length >= 3) {
         // Cek apakah puskesmas dengan nama ini sudah ada
-        const existingPuskesmas = await db.puskesmas.findFirst({
-          where: { nama: { equals: data.puskesmasNama.trim(), mode: "insensitive" } }
-        })
-
-        if (existingPuskesmas) {
-          puskesmasId = existingPuskesmas.id
-        } else {
-          // Buat puskesmas baru
-          const newPuskesmas = await db.puskesmas.create({
-            data: {
-              nama: data.puskesmasNama.trim(),
-              kodeWilayah: "AUTO",
-            }
+        try {
+          const existingPuskesmas = await db.puskesmas.findFirst({
+            where: { nama: { equals: data.puskesmasNama.trim(), mode: "insensitive" } }
           })
-          puskesmasId = newPuskesmas.id
+
+          if (existingPuskesmas) {
+            puskesmasId = existingPuskesmas.id
+          } else {
+            // Buat puskesmas baru
+            const newPuskesmas = await db.puskesmas.create({
+              data: {
+                nama: data.puskesmasNama.trim(),
+                kodeWilayah: "AUTO",
+              }
+            })
+            puskesmasId = newPuskesmas.id
+            console.log("[POST /api/admin/users] Created new puskesmas:", newPuskesmas.id, newPuskesmas.nama)
+          }
+        } catch (err) {
+          console.error("[POST /api/admin/users] Error finding/creating puskesmas:", err)
+          return NextResponse.json({ error: "Gagal memproses puskesmas. Coba lagi." }, { status: 500 })
         }
       }
 
@@ -116,22 +139,29 @@ export async function POST(request: NextRequest) {
     const hashedPassword = await bcrypt.hash(data.password, 10)
 
     // Buat user
-    const newUser = await db.user.create({
-      data: {
-        username: data.username,
-        password: hashedPassword,
-        namaLengkap: data.namaLengkap.toUpperCase(),
-        role: data.role,
-        puskesmasId
-      },
-      include: {
-        puskesmas: { select: { nama: true } }
-      }
-    })
+    let newUser
+    try {
+      newUser = await db.user.create({
+        data: {
+          username: data.username,
+          password: hashedPassword,
+          namaLengkap: data.namaLengkap.toUpperCase(),
+          role: data.role,
+          puskesmasId
+        },
+        include: {
+          puskesmas: { select: { nama: true } }
+        }
+      })
+      console.log("[POST /api/admin/users] User created successfully:", newUser.id, newUser.username)
+    } catch (err) {
+      console.error("[POST /api/admin/users] Error creating user:", err)
+      return NextResponse.json({ error: "Gagal membuat user. Coba lagi." }, { status: 500 })
+    }
 
     // Audit log (fire-and-forget, jangan blocking response)
     createAuditLog({
-      userId: user.id,
+      userId: currentUser.id,
       action: "CREATE",
       entity: "User",
       entityId: newUser.id,
@@ -151,7 +181,7 @@ export async function POST(request: NextRequest) {
       data: { ...newUser, password: undefined }
     })
   } catch (error) {
-    console.error("Error creating user:", error)
+    console.error("[POST /api/admin/users] Unhandled error:", error)
     const message = error instanceof Error ? error.message : String(error)
     return NextResponse.json(
       { error: "Terjadi kesalahan server", details: message },
