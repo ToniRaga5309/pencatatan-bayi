@@ -54,8 +54,8 @@ export default function InputDataPage() {
     if (!formData.namaIbu || formData.namaIbu.length < 3) {
       newErrors.namaIbu = "Nama ibu minimal 3 karakter"
     }
-    if (!formData.namaAyah || formData.namaAyah.length < 3) {
-      newErrors.namaAyah = "Nama ayah minimal 3 karakter"
+    if (formData.namaAyah && formData.namaAyah.length > 0 && formData.namaAyah.length < 3) {
+      newErrors.namaAyah = "Nama ayah minimal 3 karakter jika diisi"
     }
     if (!formData.namaBayi || formData.namaBayi.length < 3) {
       newErrors.namaBayi = "Nama bayi minimal 3 karakter"
@@ -308,11 +308,11 @@ export default function InputDataPage() {
               {/* Nama Ayah */}
               <div className="space-y-2">
                 <Label htmlFor="namaAyah">
-                  Nama Ayah <span className="text-red-500">*</span>
+                  Nama Ayah <span className="text-slate-400 text-xs">(opsional)</span>
                 </Label>
                 <Input
                   id="namaAyah"
-                  placeholder="Masukkan nama lengkap ayah"
+                  placeholder="Masukkan nama lengkap ayah (opsional)"
                   value={formData.namaAyah}
                   onChange={(e) => handleInputChange("namaAyah", e.target.value)}
                   className={errors.namaAyah ? "border-red-500 focus-visible:ring-red-500" : "input-enhanced focus-visible:ring-emerald-500 focus-visible:border-emerald-500"}
