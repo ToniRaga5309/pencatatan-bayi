@@ -40,7 +40,7 @@ export async function GET() {
       // Total data dengan NIK bayi
       db.birthRecord.count({ 
         where: { 
-          isDeleted: false, 
+          isDeleted: false,
           AND: [
             { nikBayi: { not: null } },
             { nikBayi: { not: "" } }
