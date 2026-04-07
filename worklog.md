@@ -159,3 +159,37 @@ Stage Summary:
 - Root cause of empty puskesmas: no operators added yet (chicken-and-egg with issue 1) + no manual add option
 - Root cause of frequent sync: syncSchema was called on EVERY filter/page change instead of once
 - Deployed to https://pencatatan-bayi.vercel.app (commit 73c69fb)
+
+---
+Task ID: 8
+Agent: Main Agent
+Task: Comprehensive fix - server error when saving operator, schema sync in all API routes
+
+Work Log:
+1. Diagnosed root cause of server error when saving operator:
+   - Previous fix only called syncSchema() on frontend page load, NOT within API route handlers
+   - When POST /api/admin/users is called, Prisma queries fail if DB columns are missing
+   - Also found nikBayi column could have NOT NULL constraint from original migration
+2. Created reusable schema sync utility (src/lib/schema-sync.ts):
+   - ensureSchemaSynced() function using direct `pg` connection (bypasses Prisma entirely)
+   - Deduplication: concurrent calls share single sync promise
+   - Comprehensive column checks: 12 columns across 3 tables
+   - Nullable column fixes: ALTER COLUMN DROP NOT NULL for 11 columns
+   - Auto-creates audit_logs table if missing
+3. Updated ALL 27 API routes to call ensureSchemaSynced() before any Prisma operations:
+   - Admin routes: users, users/[id], toggle-status, puskesmas, puskesmas/[id], birth-records, stats, charts, pending-count, nik-bayi, download-new, export, reports/monthly, audit-logs, sync-schema, verify, reject
+   - Operator routes: birth-records, birth-records/[id], birth-records/import, stats, recent-records, chart
+   - BPJS routes: records, stats, export
+4. Improved error handling in ALL API routes:
+   - Changed generic "Terjadi kesalahan server" to include actual error message as `details` field
+   - Changed audit log calls to fire-and-forget (.catch(() => {})) for non-blocking responses
+5. Enhanced column type handling in schema-sync:
+   - If column exists with wrong type, attempts ALTER COLUMN TYPE
+   - Ensures all optional columns (nikBayi, beratBadan, panjangBadan, etc.) are nullable
+
+Stage Summary:
+- 27 files modified: 1 new (schema-sync.ts), 26 updated API routes
+- Root cause of operator server error: API routes didn't sync schema → Prisma fails on missing columns
+- Solution: Every API route now auto-syncs schema before any database operation
+- Sync is deduplicated (concurrent calls share single promise) for performance
+- Deployed to https://pencatatan-bayi.vercel.app (commit 7dcb2b4)
