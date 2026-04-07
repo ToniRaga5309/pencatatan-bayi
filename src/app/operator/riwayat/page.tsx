@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ArrowLeft, Search, Loader2, Eye, ChevronLeft, ChevronRight, CheckCircle, Clock, XCircle, Shield, FileText, Menu, LogOut, Plus, Printer, Upload, Download, AlertTriangle, UserCircle, Edit, Save } from "lucide-react"
+import { ArrowLeft, Search, Loader2, Eye, ChevronLeft, ChevronRight, CheckCircle, Clock, XCircle, Shield, FileText, Menu, LogOut, Plus, Printer, Upload, Download, AlertTriangle, UserCircle, Edit, Save, Trash2 } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -35,6 +35,7 @@ interface BirthRecord {
   status: string
   createdAt: string
   updatedAt: string
+  downloadedAt: string | null
   puskesmas: { nama: string }
 }
 
@@ -117,6 +118,11 @@ function RiwayatPageContent() {
   // Confirmation dialog
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
 
+  // Delete dialog
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState<BirthRecord | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+
   // Redirect jika belum login
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -169,6 +175,10 @@ function RiwayatPageContent() {
   }
 
   const openEditDialog = (record: BirthRecord) => {
+    if (record.downloadedAt) {
+      toast.error("Data yang sudah didownload oleh admin tidak dapat diedit")
+      return
+    }
     if (record.status !== "PENDING") return
     setEditRecord(record)
     setEditForm({
@@ -228,6 +238,38 @@ function RiwayatPageContent() {
     } finally {
       setIsSaving(false)
       setEditRecord(null)
+    }
+  }
+
+  const handleDeleteClick = (record: BirthRecord) => {
+    if (record.downloadedAt) {
+      toast.error("Data yang sudah didownload oleh admin tidak dapat dihapus")
+      return
+    }
+    setDeleteTarget(record)
+    setShowDeleteDialog(true)
+  }
+
+  const confirmDelete = async () => {
+    if (!deleteTarget) return
+    setIsDeleting(true)
+    try {
+      const response = await fetch(`/api/operator/birth-records/${deleteTarget.id}`, {
+        method: "DELETE",
+      })
+      if (response.ok) {
+        toast.success(`Data "${deleteTarget.namaBayi}" berhasil dihapus`)
+        setShowDeleteDialog(false)
+        setDeleteTarget(null)
+        fetchRecords()
+      } else {
+        const data = await response.json()
+        toast.error(data.error || "Gagal menghapus data")
+      }
+    } catch {
+      toast.error("Terjadi kesalahan")
+    } finally {
+      setIsDeleting(false)
     }
   }
 
@@ -524,10 +566,20 @@ function RiwayatPageContent() {
                             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleViewDetail(record)}>
                               <Eye className="w-4 h-4" />
                             </Button>
-                            {record.status === "PENDING" && (
+                            {!record.downloadedAt && record.status === "PENDING" && (
                               <Button variant="ghost" size="icon" className="h-8 w-8 text-amber-600 hover:text-amber-700 hover:bg-amber-50 dark:hover:bg-amber-900/20" onClick={() => openEditDialog(record)} title="Edit">
                                 <Edit className="w-4 h-4" />
                               </Button>
+                            )}
+                            {!record.downloadedAt && (
+                              <Button variant="ghost" size="icon" className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={() => handleDeleteClick(record)} title="Hapus">
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            )}
+                            {record.downloadedAt && (
+                              <span className="text-xs text-slate-400" title="Data sudah didownload admin, tidak bisa diedit/dihapus">
+                                <Download className="w-4 h-4 inline" />
+                              </span>
                             )}
                           </div>
                         </TableCell>
@@ -726,6 +778,27 @@ function RiwayatPageContent() {
             <Button variant="outline" onClick={() => setShowConfirmDialog(false)}>Batal</Button>
             <Button onClick={confirmEdit} disabled={isSaving} className="bg-emerald-600 hover:bg-emerald-700">
               {isSaving ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Menyimpan...</> : "Ya, Simpan"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Trash2 className="w-5 h-5 text-red-600" />
+              Hapus Data
+            </DialogTitle>
+            <DialogDescription>
+              Apakah Anda yakin ingin menghapus data &quot;{deleteTarget?.namaBayi}&quot;? Tindakan ini tidak dapat dibatalkan.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-3">
+            <Button variant="outline" onClick={() => { setShowDeleteDialog(false); setDeleteTarget(null) }}>Batal</Button>
+            <Button onClick={confirmDelete} disabled={isDeleting} className="bg-red-600 hover:bg-red-700">
+              {isDeleting ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Menghapus...</> : "Ya, Hapus"}
             </Button>
           </div>
         </DialogContent>

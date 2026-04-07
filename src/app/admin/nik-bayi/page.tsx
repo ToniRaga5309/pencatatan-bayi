@@ -77,6 +77,7 @@ export default function NikBayiManagementPage() {
   const [isUploading, setIsUploading] = useState(false)
   const [showNikMap, setShowNikMap] = useState<Record<string, boolean>>({})
   const [withoutNikCount, setWithoutNikCount] = useState(0)
+  const [schemaSynced, setSchemaSynced] = useState(false)
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -86,18 +87,25 @@ export default function NikBayiManagementPage() {
     }
   }, [status, session, router])
 
+  // Sync schema only once on initial mount
   useEffect(() => {
     if (session?.user?.role === "ADMIN") {
-      const initialize = async () => {
-        // Sync schema first, then fetch data
+      const initOnce = async () => {
         try {
           await fetch("/api/admin/sync-schema", { method: "POST" })
         } catch { /* ignore */ }
-        await Promise.all([fetchPuskesmas(), fetchRecords(), fetchWithoutNikCount()])
+        setSchemaSynced(true)
       }
-      initialize()
+      initOnce()
     }
-  }, [session, page, nikStatus, puskesmasFilter])
+  }, [session])
+
+  // Fetch data (without syncSchema) - runs on page/filter changes
+  useEffect(() => {
+    if (session?.user?.role === "ADMIN" && schemaSynced) {
+      Promise.all([fetchPuskesmas(), fetchRecords(), fetchWithoutNikCount()])
+    }
+  }, [session, page, nikStatus, puskesmasFilter, schemaSynced])
 
   const fetchPuskesmas = async () => {
     try {
