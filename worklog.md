@@ -81,3 +81,39 @@ Stage Summary:
 - nama ayah is now optional for operators
 - All changes deployed to production (deployments ee98dcb, 3be6534)
 - Production verified: login works, 34 users visible, all APIs functional
+---
+Task ID: 4
+Agent: Main Agent
+Task: Add delete user feature + optimize loading speed (round 2)
+
+Work Log:
+- Identified major performance bottleneck: `ensureSchemaSynced()` called on EVERY API request (~50+ locations)
+  - Each call creates a new pg Pool, runs 20+ ALTER TABLE DDL queries, then tears down the pool
+  - Admin dashboard loads 4 APIs in parallel = 4x redundant schema syncs
+  - Users page loads 2 APIs + 1 explicit sync call = 3x redundant schema syncs
+- Added 10-minute time-based cache to `ensureSchemaSynced()` - subsequent calls return cached result instantly
+- Removed `ensureSchemaSynced()` from ALL 18 GET/read-only API routes:
+  - Admin: stats, birth-records, charts, pending-count, audit-logs, puskesmas (GET only), reports/monthly, export, download-new, analytics (GET only)
+  - Operator: stats, chart, recent-records, birth-records (GET only)
+  - BPJS: records, stats, export
+  - Auth: profile (GET only)
+- Removed client-side `syncSchema()` call from users page initialization
+- Added DELETE /api/admin/users/[id] API endpoint:
+  - Authorization check (admin only)
+  - Self-deletion prevention
+  - FK-safe deletion (nullifies puskesmasId before deleting)
+  - Audit logging (fire-and-forget)
+- Added delete button + confirmation dialog in admin user management UI:
+  - Trash2 icon with red hover styling
+  - Hidden for currently logged-in user
+  - Confirmation dialog with user name/username display
+  - Loading state during deletion
+  - Toast notifications for success/error
+
+Stage Summary:
+- Loading speed dramatically improved: eliminated ~20 DDL queries per page load
+- GET API routes now respond instantly (no schema sync overhead)
+- Write routes still have schema sync safety (with 10-minute cache dedup)
+- Delete user feature fully functional with proper safety guards
+- 21 files modified, deployed to production (commit 0ece9a6)
+- Production URL: https://pencatatan-bayi.vercel.app
