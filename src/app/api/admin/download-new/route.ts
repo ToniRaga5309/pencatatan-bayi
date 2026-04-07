@@ -1,5 +1,4 @@
-// API untuk download data baru (belum pernah diunduh)
-// Dan update status downloadedAt
+// API untuk download data kelahiran yang sudah terverifikasi
 import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"

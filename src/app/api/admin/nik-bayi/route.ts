@@ -38,9 +38,9 @@ export async function GET(request: NextRequest) {
     }
 
     if (nikStatus === "with_nik") {
-      where.nikBayi = { not: null }
+      where.nikBayi = { notIn: [null, ""] }
     } else if (nikStatus === "without_nik") {
-      where.nikBayi = null
+      where.nikBayi = { in: [null, ""] }
     }
 
     if (search) {
