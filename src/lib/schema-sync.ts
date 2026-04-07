@@ -16,6 +16,8 @@ const columnsToSync = [
   { table: "birth_records", column: "verified_by", type: "TEXT" },
   { table: "birth_records", column: "verified_at", type: "TIMESTAMP(3)" },
   { table: "birth_records", column: "downloaded_at", type: "TIMESTAMP(3)" },
+  { table: "puskesmas", column: "telepon", type: "VARCHAR(20)" },
+  { table: "puskesmas", column: "alamat", type: "TEXT" },
 ]
 
 // Kolom yang harus NULLABLE (boleh kosong)
