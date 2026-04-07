@@ -130,3 +130,72 @@ export async function PUT(
     return NextResponse.json({ error: "Terjadi kesalahan server", details: message }, { status: 500 })
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    await ensureSchemaSynced()
+
+    const user = await getCurrentUser()
+    const { id } = await params
+
+    if (!user || user.role !== "ADMIN") {
+      return NextResponse.json({ error: "Tidak memiliki akses" }, { status: 403 })
+    }
+
+    // Find the user to delete
+    const existingUser = await db.user.findUnique({
+      where: { id },
+      include: { puskesmas: { select: { nama: true } } }
+    })
+
+    if (!existingUser) {
+      return NextResponse.json({ error: "User tidak ditemukan" }, { status: 404 })
+    }
+
+    // Prevent deleting yourself
+    if (existingUser.id === user.id) {
+      return NextResponse.json({ error: "Tidak dapat menghapus akun sendiri" }, { status: 400 })
+    }
+
+    // Nullify puskesmasId before deleting to avoid FK constraint issues
+    if (existingUser.puskesmasId) {
+      await db.user.update({
+        where: { id },
+        data: { puskesmasId: null }
+      })
+    }
+
+    // Delete the user
+    await db.user.delete({
+      where: { id }
+    })
+
+    // Audit log (fire-and-forget)
+    createAuditLog({
+      userId: user.id,
+      action: "DELETE",
+      entity: "User",
+      entityId: id,
+      details: {
+        username: existingUser.username,
+        namaLengkap: existingUser.namaLengkap,
+        role: existingUser.role,
+        puskesmas: existingUser.puskesmas?.nama || null,
+      },
+      ipAddress: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || undefined,
+      userAgent: request.headers.get("user-agent") || undefined
+    }).catch(() => {})
+
+    return NextResponse.json({
+      success: true,
+      message: "User berhasil dihapus"
+    })
+  } catch (error) {
+    console.error("Error deleting user:", error)
+    const message = error instanceof Error ? error.message : String(error)
+    return NextResponse.json({ error: "Terjadi kesalahan server", details: message }, { status: 500 })
+  }
+}

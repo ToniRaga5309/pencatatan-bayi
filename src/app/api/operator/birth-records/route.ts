@@ -40,9 +40,6 @@ const birthRecordSchema = z.object({
 // GET: Ambil semua data kelahiran operator (with sorting)
 export async function GET(request: NextRequest) {
   try {
-    // Pastikan skema database sudah sinkron
-    await ensureSchemaSynced()
-
     const user = await getCurrentUser()
 
     if (!user || user.role !== "OPERATOR" || !user.puskesmasId) {

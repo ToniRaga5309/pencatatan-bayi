@@ -2,6 +2,11 @@
 // Menggunakan direct pg connection (bukan Prisma) untuk menjamin kerja
 // bahkan ketika Prisma client bermasalah
 
+// Time-based cache: skip sync if already done within this window (ms)
+const SYNC_CACHE_TTL = 10 * 60 * 1000 // 10 minutes
+let lastSyncTime = 0
+let lastSyncResult: boolean = false
+
 // Daftar kolom yang perlu dicek/ditambahkan
 const columnsToSync = [
   { table: "birth_records", column: "is_deleted", type: "BOOLEAN NOT NULL DEFAULT false" },
@@ -42,15 +47,25 @@ let syncPromise: Promise<boolean> | null = null
  * Pastikan skema database sudah sesuai dengan Prisma schema.
  * Fungsi ini aman dipanggil berkali-kali (idempotent).
  * Menggunakan direct pg connection, bukan Prisma.
+ * Dilengkapi time-based cache: skip jika sudah sync dalam 10 menit terakhir.
  */
 export async function ensureSchemaSynced(): Promise<boolean> {
+  // Return cached result if within TTL
+  const now = Date.now()
+  if (now - lastSyncTime < SYNC_CACHE_TTL) {
+    return lastSyncResult
+  }
+
   // Deduplicate concurrent calls
   if (syncPromise) return syncPromise
 
   syncPromise = doSync()
 
   try {
-    return await syncPromise
+    const result = await syncPromise
+    lastSyncTime = Date.now()
+    lastSyncResult = result
+    return result
   } finally {
     syncPromise = null
   }
