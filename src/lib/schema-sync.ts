@@ -73,6 +73,14 @@ async function doSync(): Promise<boolean> {
     })
 
     try {
+      // 0. Drop FK constraint on audit_logs.entity_id (referencing birth_records is wrong)
+      try {
+        await pool.query(`ALTER TABLE IF EXISTS "audit_logs" DROP CONSTRAINT IF EXISTS "audit_logs_entity_id_fkey"`)
+        console.log("[schema-sync] Dropped invalid FK constraint on audit_logs.entity_id")
+      } catch {
+        // Ignore - constraint might not exist
+      }
+
       // 1. Tambahkan kolom yang belum ada
       for (const col of columnsToSync) {
         try {
@@ -111,7 +119,7 @@ async function doSync(): Promise<boolean> {
         // Ignore
       }
 
-      // 4. Ensure audit_logs table exists
+      // 4. Ensure audit_logs table exists (without FK on entity_id)
       try {
         await pool.query(`
           CREATE TABLE IF NOT EXISTS "audit_logs" (
@@ -128,9 +136,26 @@ async function doSync(): Promise<boolean> {
           )
         `)
       } catch {
+        // Ignore - table might already exist
+      }
+
+      // 5. Ensure foreign key on users.puskesmas_id exists
+      try {
+        await pool.query(`
+          DO $$ BEGIN
+            IF NOT EXISTS (
+              SELECT 1 FROM pg_constraint WHERE conname = 'users_puskesmas_id_fkey'
+            ) THEN
+              ALTER TABLE "users" ADD CONSTRAINT "users_puskesmas_id_fkey" 
+              FOREIGN KEY ("puskesmas_id") REFERENCES "puskesmas"("id") ON DELETE SET NULL;
+            END IF;
+          END $$
+        `)
+      } catch {
         // Ignore
       }
 
+      console.log("[schema-sync] Schema sync completed successfully")
       return true
     } finally {
       await pool.end()
