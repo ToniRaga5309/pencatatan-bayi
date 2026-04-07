@@ -102,3 +102,21 @@ Stage Summary:
 - Sync happens FIRST before any data fetch on every admin page
 - Deployed to https://pencatatan-bayi.vercel.app (commit 52a2dfb)
 
+---
+Task ID: 6
+Agent: Main Agent
+Task: 5 feature improvements per user request
+
+Work Log:
+1. Admin add operator - manual puskesmas name: Changed dropdown to toggle between "Pilih dari Daftar" and "Input Manual". When manual mode is used, puskesmas is auto-created if it doesn't exist.
+2. DownloadedAt tracking: Added `downloaded_at` column to BirthRecord. download-new endpoint now marks records as downloaded and only returns non-downloaded records. Register/NIK management still shows all records.
+3. Operator edit/delete: Operator can now edit data if not yet downloaded by admin (regardless of PENDING/VERIFIED status). Added DELETE endpoint for soft delete with same restriction.
+4. Auto-reload interval: Changed from 30s to 120s on admin dashboard.
+5. Puskesmas sync with operator: When adding operator with new puskesmas name, puskesmas is automatically created and linked.
+
+Stage Summary:
+- 7 files modified across schema, API routes, and UI components
+- Prisma regenerated with new downloadedAt field
+- Sync-schema endpoint updated to add downloaded_at column
+- Deployed to https://pencatatan-bayi.vercel.app (commit ace2873)
+
