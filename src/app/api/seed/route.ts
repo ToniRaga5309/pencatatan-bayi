@@ -89,7 +89,7 @@ export async function GET(request: Request) {
 
     // Buat Admin Dukcapil (sesuai data production)
     console.log("👤 Membuat Admin Dukcapil...")
-    const adminPassword = "admin123"
+    const adminPassword = "AdminNgada2024!"
     const hashedAdminPassword = await bcrypt.hash(adminPassword, 10)
     
     await db.user.create({
@@ -126,6 +126,7 @@ export async function GET(request: Request) {
         const pk = puskesmas.find(p => p.nama === op.puskesmasNama)
         if (!pk) return null
 
+        // Password sesuai database production - tidak diubah
         const password = `${pk.nama.replace("Puskesmas ", "").toLowerCase()}123`
         
         operatorAccounts.push({
