@@ -120,3 +120,42 @@ Stage Summary:
 - Sync-schema endpoint updated to add downloaded_at column
 - Deployed to https://pencatatan-bayi.vercel.app (commit ace2873)
 
+
+---
+Task ID: 7
+Agent: Main Agent
+Task: Fix 3 critical issues - operator addition error, puskesmas empty, sync too frequent
+
+Work Log:
+1. Diagnosed operator addition server error: users page (/admin/users) did NOT call syncSchema() before making API calls. When DB columns were missing, Prisma queries failed with server error.
+2. Added syncSchema() to users page initialization - runs once before fetching user/puskesmas data
+3. Changed default puskesmas input mode from "select" to "manual" for operator creation
+4. Fixed edit user API (/api/admin/users/[id]) to accept puskesmasNama parameter - finds or creates puskesmas when manual name is provided
+5. Updated users page edit dialog to support both select and manual modes with proper validation
+6. Completely rewrote puskesmas management page:
+   - Shows operator info alongside each puskesmas (name, active status)
+   - Added search functionality (search by puskesmas name or operator name)
+   - Added manual "Tambah Puskesmas" button for creating puskesmas entries
+   - Added helpful empty state message explaining how puskesmas entries are created
+   - Updated puskesmas API to include operator data in response
+7. Fixed database sync frequency on ALL admin pages:
+   - Admin dashboard: syncSchema runs ONCE on initial mount, data fetches on filter/page changes don't re-sync
+   - Admin nik-bayi: same fix - sync once, fetch without sync on changes
+   - Added schemaSynced state to gate data fetching until schema is ready
+   - Removed duplicate initial fetch in auto-refresh (was causing double fetch)
+   - Increased auto-refresh interval from 120s to 300s (5 minutes)
+8. Added delete functionality to operator riwayat page:
+   - Added delete button (red trash icon) for records not yet downloaded by admin
+   - Added delete confirmation dialog with cancel/confirm buttons
+   - Shows download indicator icon for records already downloaded by admin
+   - Added downloadedAt field to operator birth records API response
+   - Edit button only shows for non-downloaded + PENDING records
+   - Delete button shows for all non-downloaded records (any status)
+9. All changes pass ESLint check
+
+Stage Summary:
+- 8 files modified: admin users page, users API, users [id] API, puskesmas API, puskesmas page, admin dashboard, nik-bayi page, operator riwayat page, operator birth records API
+- Root cause of operator error: missing syncSchema on users page → Prisma fails on missing columns
+- Root cause of empty puskesmas: no operators added yet (chicken-and-egg with issue 1) + no manual add option
+- Root cause of frequent sync: syncSchema was called on EVERY filter/page change instead of once
+- Deployed to https://pencatatan-bayi.vercel.app (commit 73c69fb)
