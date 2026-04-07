@@ -57,8 +57,10 @@ export default function UsersManagementPage() {
     password: "",
     namaLengkap: "",
     role: "OPERATOR",
-    puskesmasId: ""
+    puskesmasId: "",
+    puskesmasNama: ""
   })
+  const [puskesmasMode, setPuskesmasMode] = useState<"select" | "manual">("select")
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
 
   useEffect(() => {
@@ -112,8 +114,13 @@ export default function UsersManagementPage() {
     if (!formData.namaLengkap || formData.namaLengkap.length < 3) {
       errors.namaLengkap = "Nama lengkap minimal 3 karakter"
     }
-    if (formData.role === "OPERATOR" && !formData.puskesmasId) {
-      errors.puskesmasId = "Pilih puskesmas untuk operator"
+    if (formData.role === "OPERATOR") {
+      if (puskesmasMode === "select" && !formData.puskesmasId) {
+        errors.puskesmasId = "Pilih puskesmas untuk operator"
+      }
+      if (puskesmasMode === "manual" && (!formData.puskesmasNama || formData.puskesmasNama.length < 3)) {
+        errors.puskesmasNama = "Nama puskesmas minimal 3 karakter"
+      }
     }
     
     setFormErrors(errors)
@@ -126,7 +133,8 @@ export default function UsersManagementPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
-          puskesmasId: formData.role === "OPERATOR" ? formData.puskesmasId : undefined
+          puskesmasId: formData.role === "OPERATOR" && puskesmasMode === "select" ? formData.puskesmasId : undefined,
+          puskesmasNama: formData.role === "OPERATOR" && puskesmasMode === "manual" ? formData.puskesmasNama : undefined,
         })
       })
       
@@ -217,8 +225,10 @@ export default function UsersManagementPage() {
       password: "",
       namaLengkap: "",
       role: "OPERATOR",
-      puskesmasId: ""
+      puskesmasId: "",
+      puskesmasNama: ""
     })
+    setPuskesmasMode("select")
     setFormErrors({})
     setSelectedUser(null)
   }
@@ -230,8 +240,10 @@ export default function UsersManagementPage() {
       password: "",
       namaLengkap: user.namaLengkap,
       role: user.role,
-      puskesmasId: user.puskesmasId || ""
+      puskesmasId: user.puskesmasId || "",
+      puskesmasNama: ""
     })
+    setPuskesmasMode(user.puskesmasId ? "select" : "manual")
     setFormErrors({})
     setShowEdit(true)
   }
@@ -451,19 +463,54 @@ export default function UsersManagementPage() {
               </Select>
             </div>
             {formData.role === "OPERATOR" && (
-              <div>
+              <div className="space-y-3">
                 <Label>Puskesmas <span className="text-red-500">*</span></Label>
-                <Select value={formData.puskesmasId} onValueChange={(v) => setFormData({...formData, puskesmasId: v})}>
-                  <SelectTrigger className={formErrors.puskesmasId ? "border-red-500" : ""}>
-                    <SelectValue placeholder="Pilih Puskesmas" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {puskesmasList.map((p) => (
-                      <SelectItem key={p.id} value={p.id}>{p.nama}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant={puskesmasMode === "select" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setPuskesmasMode("select")}
+                    className="flex-1"
+                  >
+                    Pilih dari Daftar
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={puskesmasMode === "manual" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setPuskesmasMode("manual")}
+                    className="flex-1"
+                  >
+                    Input Manual
+                  </Button>
+                </div>
+                {puskesmasMode === "select" ? (
+                  <Select value={formData.puskesmasId} onValueChange={(v) => setFormData({...formData, puskesmasId: v})}>
+                    <SelectTrigger className={formErrors.puskesmasId ? "border-red-500" : ""}>
+                      <SelectValue placeholder="Pilih Puskesmas" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {puskesmasList.map((p) => (
+                        <SelectItem key={p.id} value={p.id}>{p.nama}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Input
+                    value={formData.puskesmasNama}
+                    onChange={(e) => setFormData({...formData, puskesmasNama: e.target.value})}
+                    placeholder="Masukkan nama puskesmas baru"
+                    className={formErrors.puskesmasNama ? "border-red-500" : ""}
+                  />
+                )}
                 {formErrors.puskesmasId && <p className="text-sm text-red-500">{formErrors.puskesmasId}</p>}
+                {formErrors.puskesmasNama && <p className="text-sm text-red-500">{formErrors.puskesmasNama}</p>}
+                <p className="text-xs text-slate-500">
+                  {puskesmasMode === "manual" 
+                    ? "Puskesmas baru akan otomatis dibuat jika belum ada" 
+                    : "Pilih puskesmas yang sudah terdaftar"}
+                </p>
               </div>
             )}
           </div>
@@ -520,19 +567,49 @@ export default function UsersManagementPage() {
               </Select>
             </div>
             {formData.role === "OPERATOR" && (
-              <div>
+              <div className="space-y-3">
                 <Label>Puskesmas <span className="text-red-500">*</span></Label>
-                <Select value={formData.puskesmasId} onValueChange={(v) => setFormData({...formData, puskesmasId: v})}>
-                  <SelectTrigger className={formErrors.puskesmasId ? "border-red-500" : ""}>
-                    <SelectValue placeholder="Pilih Puskesmas" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {puskesmasList.map((p) => (
-                      <SelectItem key={p.id} value={p.id}>{p.nama}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant={puskesmasMode === "select" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setPuskesmasMode("select")}
+                    className="flex-1"
+                  >
+                    Pilih dari Daftar
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={puskesmasMode === "manual" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setPuskesmasMode("manual")}
+                    className="flex-1"
+                  >
+                    Input Manual
+                  </Button>
+                </div>
+                {puskesmasMode === "select" ? (
+                  <Select value={formData.puskesmasId} onValueChange={(v) => setFormData({...formData, puskesmasId: v})}>
+                    <SelectTrigger className={formErrors.puskesmasId ? "border-red-500" : ""}>
+                      <SelectValue placeholder="Pilih Puskesmas" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {puskesmasList.map((p) => (
+                        <SelectItem key={p.id} value={p.id}>{p.nama}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Input
+                    value={formData.puskesmasNama}
+                    onChange={(e) => setFormData({...formData, puskesmasNama: e.target.value})}
+                    placeholder="Masukkan nama puskesmas baru"
+                    className={formErrors.puskesmasNama ? "border-red-500" : ""}
+                  />
+                )}
                 {formErrors.puskesmasId && <p className="text-sm text-red-500">{formErrors.puskesmasId}</p>}
+                {formErrors.puskesmasNama && <p className="text-sm text-red-500">{formErrors.puskesmasNama}</p>}
               </div>
             )}
           </div>

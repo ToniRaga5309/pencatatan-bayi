@@ -70,6 +70,7 @@ model BirthRecord {
   verifiedBy       String?   @map("verified_by")
   verifiedAt       DateTime? @map("verified_at")
   nikBayiUpdatedAt DateTime? @map("nik_bayi_updated_at") // Kapan NIK Bayi diupdate
+  downloadedAt     DateTime? @map("downloaded_at") // Kapan data didownload oleh admin
   createdAt        DateTime  @default(now()) @map("created_at")
   updatedAt        DateTime  @updatedAt @map("updated_at")
 

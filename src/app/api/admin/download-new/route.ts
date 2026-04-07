@@ -1,4 +1,5 @@
-// API untuk download data kelahiran yang sudah terverifikasi
+// API untuk download data kelahiran baru (yang belum pernah didownload)
+// Setelah didownload, data ditandai downloadedAt agar tidak muncul lagi
 import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
@@ -13,11 +14,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Tidak memiliki akses" }, { status: 403 })
     }
 
-    // Ambil data kelahiran terbaru
+    // Ambil data kelahiran yang BELUM pernah didownload (downloadedAt is null)
     const records = await db.birthRecord.findMany({
       where: { 
         isDeleted: false,
-        status: "VERIFIED"
+        downloadedAt: null,
       },
       orderBy: { createdAt: "desc" },
       select: {
@@ -39,7 +40,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Tidak ada data baru untuk diunduh" }, { status: 400 })
     }
 
-    // Format data untuk Excel sesuai template
+    // Format data untuk Excel
     const excelData = records.map((record, index) => ({
       "No": index + 1,
       "Nama Bayi": record.namaBayi,
@@ -77,6 +78,13 @@ export async function GET(request: NextRequest) {
 
     // Generate buffer
     const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" })
+
+    // Tandai semua record sebagai sudah didownload
+    const recordIds = records.map(r => r.id)
+    await db.birthRecord.updateMany({
+      where: { id: { in: recordIds } },
+      data: { downloadedAt: new Date() }
+    })
 
     // Audit log
     await createAuditLog({

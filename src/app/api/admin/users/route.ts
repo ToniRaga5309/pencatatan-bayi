@@ -11,7 +11,9 @@ const createUserSchema = z.object({
   password: z.string().min(6),
   namaLengkap: z.string().min(3).max(100),
   role: z.enum(["ADMIN", "OPERATOR", "BPJS"]),
-  puskesmasId: z.string().optional()
+  // Operator bisa memilih puskesmas yang sudah ada ATAU memasukkan nama baru
+  puskesmasId: z.string().optional(),
+  puskesmasNama: z.string().optional(), // Nama puskesmas baru (jika tidak ada di dropdown)
 })
 
 // GET: Ambil semua user
@@ -67,9 +69,36 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Username sudah digunakan" }, { status: 400 })
     }
 
-    // Validasi puskesmas untuk operator
-    if (data.role === "OPERATOR" && !data.puskesmasId) {
-      return NextResponse.json({ error: "Operator harus memiliki puskesmas" }, { status: 400 })
+    // Tentukan puskesmasId untuk operator
+    let puskesmasId: string | null = null
+
+    if (data.role === "OPERATOR") {
+      if (data.puskesmasId) {
+        // Gunakan puskesmas yang sudah ada
+        puskesmasId = data.puskesmasId
+      } else if (data.puskesmasNama && data.puskesmasNama.trim().length >= 3) {
+        // Cek apakah puskesmas dengan nama ini sudah ada
+        const existingPuskesmas = await db.puskesmas.findFirst({
+          where: { nama: { equals: data.puskesmasNama.trim(), mode: "insensitive" } }
+        })
+
+        if (existingPuskesmas) {
+          puskesmasId = existingPuskesmas.id
+        } else {
+          // Buat puskesmas baru
+          const newPuskesmas = await db.puskesmas.create({
+            data: {
+              nama: data.puskesmasNama.trim(),
+              kodeWilayah: "AUTO",
+            }
+          })
+          puskesmasId = newPuskesmas.id
+        }
+      }
+
+      if (!puskesmasId) {
+        return NextResponse.json({ error: "Operator harus memiliki puskesmas. Pilih dari daftar atau masukkan nama baru." }, { status: 400 })
+      }
     }
 
     // Hash password
@@ -82,7 +111,10 @@ export async function POST(request: NextRequest) {
         password: hashedPassword,
         namaLengkap: data.namaLengkap.toUpperCase(),
         role: data.role,
-        puskesmasId: data.role === "OPERATOR" ? data.puskesmasId : null
+        puskesmasId
+      },
+      include: {
+        puskesmas: { select: { nama: true } }
       }
     })
 
@@ -95,7 +127,8 @@ export async function POST(request: NextRequest) {
       details: {
         username: newUser.username,
         namaLengkap: newUser.namaLengkap,
-        role: newUser.role
+        role: newUser.role,
+        puskesmas: newUser.puskesmas?.nama || null,
       },
       ipAddress: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || undefined,
       userAgent: request.headers.get("user-agent") || undefined
