@@ -41,7 +41,10 @@ export async function GET() {
       db.birthRecord.count({ 
         where: { 
           isDeleted: false, 
-          nikBayi: { not: null } 
+          AND: [
+            { nikBayi: { not: null } },
+            { nikBayi: { not: "" } }
+          ]
         } 
       }),
       // Daftar puskesmas

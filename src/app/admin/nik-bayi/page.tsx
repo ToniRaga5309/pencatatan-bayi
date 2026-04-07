@@ -23,7 +23,6 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import Link from "next/link"
 import { toast } from "sonner"
 import { formatDateIndonesia, getJenisKelaminLabel, getStatusLabel, maskNIK } from "@/lib/utils-common"
-import * as XLSX from "xlsx"
 
 interface BirthRecord {
   id: string
@@ -232,16 +231,23 @@ export default function NikBayiManagementPage() {
     }
   }
 
-  const downloadTemplate = () => {
-    // Create a template Excel file
-    const templateData = [
-      { "nikIbu": "5306014567890001", "namaBayi": "FRANSISKUS SERAN", "nikBayi": "5306010101010001" },
-      { "nikIbu": "5306025678900002", "namaBayi": "THERESIA BEO", "nikBayi": "" }
-    ]
-    const ws = XLSX.utils.json_to_sheet(templateData)
-    const wb = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(wb, ws, "NIK Bayi")
-    XLSX.writeFile(wb, "template-nik-bayi.xlsx")
+  const downloadTemplate = async () => {
+    try {
+      const response = await fetch("/api/admin/nik-bayi/download-template")
+      if (response.ok) {
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = "template-nik-bayi.xlsx"
+        a.click()
+        window.URL.revokeObjectURL(url)
+      } else {
+        toast.error("Gagal mengunduh template")
+      }
+    } catch {
+      toast.error("Terjadi kesalahan saat mengunduh template")
+    }
   }
 
   const toggleNikVisibility = (id: string) => {
