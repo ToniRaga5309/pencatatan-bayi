@@ -3,10 +3,14 @@ import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { createAuditLog } from "@/lib/audit"
+import { ensureSchemaSynced } from "@/lib/schema-sync"
 import * as XLSX from "xlsx"
 
 export async function GET(request: NextRequest) {
   try {
+    // Pastikan skema database sudah sinkron
+    await ensureSchemaSynced()
+
     const user = await getCurrentUser()
 
     if (!user || user.role !== "ADMIN") {
@@ -73,8 +77,8 @@ export async function GET(request: NextRequest) {
     // Generate buffer
     const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" })
 
-    // Audit log
-    await createAuditLog({
+    // Audit log (fire-and-forget)
+    createAuditLog({
       userId: user.id,
       action: "EXPORT",
       entity: "BirthRecord",
@@ -85,7 +89,7 @@ export async function GET(request: NextRequest) {
       },
       ipAddress: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || undefined,
       userAgent: request.headers.get("user-agent") || undefined
-    })
+    }).catch(() => {})
 
     // Return file
     return new NextResponse(buffer, {
@@ -96,6 +100,7 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     console.error("Error exporting register:", error)
-    return NextResponse.json({ error: "Terjadi kesalahan server" }, { status: 500 })
+    const message = error instanceof Error ? error.message : String(error)
+    return NextResponse.json({ error: "Terjadi kesalahan server", details: message }, { status: 500 })
   }
 }

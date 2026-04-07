@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { createAuditLog } from "@/lib/audit"
+import { ensureSchemaSynced } from "@/lib/schema-sync"
 import { z } from "zod"
 
 // Schema validasi untuk update nama
@@ -15,6 +16,9 @@ const updateProfileSchema = z.object({
 // GET: Ambil profil user saat ini
 export async function GET() {
   try {
+    // Pastikan skema database sudah sinkron
+    await ensureSchemaSynced()
+
     const user = await getCurrentUser()
 
     if (!user) {
@@ -82,7 +86,8 @@ export async function GET() {
     })
   } catch (error) {
     console.error("Error fetching profile:", error)
-    return NextResponse.json({ error: "Terjadi kesalahan server" }, { status: 500 })
+    const message = error instanceof Error ? error.message : String(error)
+    return NextResponse.json({ error: "Terjadi kesalahan server", details: message }, { status: 500 })
   }
 }
 
@@ -120,8 +125,8 @@ export async function PUT(request: NextRequest) {
       }
     })
 
-    // Catat audit log
-    await createAuditLog({
+    // Catat audit log (fire-and-forget)
+    createAuditLog({
       userId: user.id,
       action: "UPDATE",
       entity: "User",
@@ -133,7 +138,7 @@ export async function PUT(request: NextRequest) {
       },
       ipAddress: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || undefined,
       userAgent: request.headers.get("user-agent") || undefined,
-    })
+    }).catch(() => {})
 
     return NextResponse.json({
       success: true,
@@ -142,6 +147,7 @@ export async function PUT(request: NextRequest) {
     })
   } catch (error) {
     console.error("Error updating profile:", error)
-    return NextResponse.json({ error: "Terjadi kesalahan server" }, { status: 500 })
+    const message = error instanceof Error ? error.message : String(error)
+    return NextResponse.json({ error: "Terjadi kesalahan server", details: message }, { status: 500 })
   }
 }

@@ -2,9 +2,13 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
+import { ensureSchemaSynced } from "@/lib/schema-sync"
 
 export async function GET(request: NextRequest) {
   try {
+    // Pastikan skema database sudah sinkron
+    await ensureSchemaSynced()
+
     const user = await getCurrentUser()
 
     if (!user || user.role !== "ADMIN") {
@@ -121,7 +125,10 @@ export async function GET(request: NextRequest) {
       where: { ...baseWhere, status: "VERIFIED" }
     })
     const withNikRecords = await db.birthRecord.count({
-      where: { ...baseWhere, nikBayi: { not: null } }
+      where: { ...baseWhere, AND: [
+        { nikBayi: { not: null } },
+        { nikBayi: { not: "" } }
+      ]}
     })
 
     // Calculate the number of unique months with data in the period
@@ -149,6 +156,7 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     console.error("Error fetching analytics:", error)
-    return NextResponse.json({ error: "Terjadi kesalahan server" }, { status: 500 })
+    const message = error instanceof Error ? error.message : String(error)
+    return NextResponse.json({ error: "Terjadi kesalahan server", details: message }, { status: 500 })
   }
 }

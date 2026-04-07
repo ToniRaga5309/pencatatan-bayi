@@ -40,7 +40,7 @@ export async function PUT(
     }
 
     // Cek apakah record ada dan masih PENDING
-    const existing = await db.birthRecord.findUnique({
+    const existing = await db.birthRecord.findFirst({
       where: { id, isDeleted: false }
     })
 
