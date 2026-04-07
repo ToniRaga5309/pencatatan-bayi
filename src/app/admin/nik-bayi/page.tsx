@@ -88,9 +88,14 @@ export default function NikBayiManagementPage() {
 
   useEffect(() => {
     if (session?.user?.role === "ADMIN") {
-      fetchPuskesmas()
-      fetchRecords()
-      fetchWithoutNikCount()
+      const initialize = async () => {
+        // Sync schema first, then fetch data
+        try {
+          await fetch("/api/admin/sync-schema", { method: "POST" })
+        } catch { /* ignore */ }
+        await Promise.all([fetchPuskesmas(), fetchRecords(), fetchWithoutNikCount()])
+      }
+      initialize()
     }
   }, [session, page, nikStatus, puskesmasFilter])
 

@@ -240,12 +240,21 @@ export default function AdminDashboard() {
     }
   }, [status, session, router])
 
+  // Sync schema first, then fetch all data
   useEffect(() => {
     if (session?.user?.role === "ADMIN") {
-      fetchStats()
-      fetchRecords()
-      fetchChartData()
-      fetchPendingCount()
+      const initializeDashboard = async () => {
+        // Step 1: Sync database schema first (ensure all columns exist)
+        await syncSchema()
+        // Step 2: Then fetch all data
+        await Promise.all([
+          fetchStats(false),
+          fetchRecords(false),
+          fetchChartData(),
+          fetchPendingCount()
+        ])
+      }
+      initializeDashboard()
     }
   }, [session, page, puskesmasFilter, statusFilter])
 
@@ -259,7 +268,7 @@ export default function AdminDashboard() {
     const refreshAll = async () => {
       if (document.hidden) return
       setIsAutoRefreshing(true)
-      await Promise.all([fetchStats(), fetchRecords(), fetchPendingCount()])
+      await Promise.all([fetchStats(false), fetchRecords(false), fetchPendingCount()])
       setLastRefresh(formatTime())
       setIsAutoRefreshing(false)
     }
@@ -399,7 +408,7 @@ export default function AdminDashboard() {
     }
   }
 
-  const fetchStats = async (retryOnFailure = true) => {
+  const fetchStats = async (retryOnFailure = false) => {
     setIsStatsLoading(true)
     try {
       const response = await fetch("/api/admin/stats")
@@ -409,10 +418,9 @@ export default function AdminDashboard() {
         setFetchError(null)
       } else {
         const errorData = await response.json().catch(() => ({}))
-        const errorMsg = errorData.details || errorData.error || "Gagal memuat statistik"
+        const errorMsg = errorData.error || "Gagal memuat statistik"
         console.error("Stats fetch error:", errorMsg)
         if (retryOnFailure) {
-          console.log("Attempting schema sync...")
           const synced = await syncSchema()
           if (synced) {
             return fetchStats(false)
@@ -428,7 +436,7 @@ export default function AdminDashboard() {
     }
   }
 
-  const fetchRecords = async (retryOnFailure = true) => {
+  const fetchRecords = async (retryOnFailure = false) => {
     setIsLoading(true)
     try {
       const params = new URLSearchParams()
@@ -446,10 +454,9 @@ export default function AdminDashboard() {
         setFetchError(null)
       } else {
         const errorData = await response.json().catch(() => ({}))
-        const errorMsg = errorData.details || errorData.error || "Gagal memuat data"
+        const errorMsg = errorData.error || "Gagal memuat data"
         console.error("Records fetch error:", errorMsg)
         if (retryOnFailure) {
-          console.log("Attempting schema sync...")
           const synced = await syncSchema()
           if (synced) {
             return fetchRecords(false)
@@ -891,7 +898,7 @@ export default function AdminDashboard() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => { setFetchError(null); fetchStats(); fetchRecords() }}
+                onClick={async () => { setFetchError(null); await syncSchema(); fetchStats(true); fetchRecords(true) }}
                 disabled={isSyncing}
                 className="shrink-0 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/30"
               >

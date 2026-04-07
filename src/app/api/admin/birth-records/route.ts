@@ -81,8 +81,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error("Error fetching admin birth records:", error)
     return NextResponse.json({ 
-      error: "Terjadi kesalahan server",
-      details: error instanceof Error ? error.message : "Unknown error"
+      error: "Terjadi kesalahan server"
     }, { status: 500 })
   }
 }

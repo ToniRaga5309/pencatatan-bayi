@@ -46,6 +46,7 @@ export default function PuskesmasManagementPage() {
     telepon: ""
   })
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
+  const [isSyncing, setIsSyncing] = useState(false)
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -55,9 +56,25 @@ export default function PuskesmasManagementPage() {
     }
   }, [status, session, router])
 
+  const syncSchema = async (): Promise<boolean> => {
+    setIsSyncing(true)
+    try {
+      const response = await fetch("/api/admin/sync-schema", { method: "POST" })
+      return response.ok
+    } catch {
+      return false
+    } finally {
+      setIsSyncing(false)
+    }
+  }
+
   useEffect(() => {
     if (session?.user?.role === "ADMIN") {
-      fetchData()
+      const initialize = async () => {
+        await syncSchema()
+        fetchData()
+      }
+      initialize()
     }
   }, [session])
 
@@ -68,6 +85,9 @@ export default function PuskesmasManagementPage() {
       if (response.ok) {
         const data = await response.json()
         setPuskesmasList(data)
+      } else {
+        console.error("Puskesmas fetch error:", response.status)
+        toast.error("Gagal memuat data puskesmas. Coba refresh halaman.")
       }
     } catch (error) {
       console.error("Error fetching puskesmas:", error)
