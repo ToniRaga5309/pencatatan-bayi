@@ -123,16 +123,16 @@ export async function GET(request: Request) {
     
     await Promise.all(
       operatorData.map(async (op) => {
-        const puskesmas = puskesmas.find(p => p.nama === op.puskesmasNama)
-        if (!puskesmas) return null
+        const pk = puskesmas.find(p => p.nama === op.puskesmasNama)
+        if (!pk) return null
 
-        const password = `${puskesmas.nama.replace("Puskesmas ", "").toLowerCase()}123`
+        const password = `${pk.nama.replace("Puskesmas ", "").toLowerCase()}123`
         
         operatorAccounts.push({
           username: op.username,
           password,
           namaLengkap: op.namaLengkap,
-          puskesmas: puskesmas.nama
+          puskesmas: pk.nama
         })
         
         const hashedPassword = await bcrypt.hash(password, 10)
@@ -142,7 +142,7 @@ export async function GET(request: Request) {
             password: hashedPassword,
             namaLengkap: op.namaLengkap,
             role: "OPERATOR",
-            puskesmasId: puskesmas.id
+            puskesmasId: pk.id
           }
         })
       })

@@ -14,11 +14,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Tidak memiliki akses" }, { status: 403 })
     }
 
-    // Ambil data yang belum pernah diunduh
+    // Ambil data kelahiran terbaru
     const records = await db.birthRecord.findMany({
       where: { 
         isDeleted: false,
-        downloadedAt: null
+        status: "VERIFIED"
       },
       orderBy: { createdAt: "desc" },
       select: {
@@ -78,17 +78,6 @@ export async function GET(request: NextRequest) {
 
     // Generate buffer
     const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" })
-
-    // Update downloadedAt untuk semua record yang diunduh
-    const now = new Date()
-    await db.birthRecord.updateMany({
-      where: {
-        id: { in: records.map(r => r.id) }
-      },
-      data: {
-        downloadedAt: now
-      }
-    })
 
     // Audit log
     await createAuditLog({

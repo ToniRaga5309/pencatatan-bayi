@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
     const puskesmas = await db.puskesmas.create({
       data: {
         nama: data.nama,
-        kodeWilayah: data.kodeWilayah || null,
+        kodeWilayah: data.kodeWilayah || "",
         alamat: data.alamat || null,
         telepon: data.telepon || null,
       }
