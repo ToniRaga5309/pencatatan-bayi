@@ -1,114 +1,125 @@
-// API untuk mensinkronkan skema database dengan Prisma schema
-// Menambahkan kolom yang mungkin belum ada di database production (dari versi sebelumnya)
-import { NextRequest, NextResponse } from "next/server"
+// API untuk mensinkronkan skema database
+// Menggunakan direct pg connection (bukan Prisma) untuk menjamin kerja
+// bahkan ketika Prisma client bermasalah
+import { NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
-    // Opsi 1: Auth via session (admin user)
     const user = await getCurrentUser()
 
-    // Opsi 2: Auth via secret (untuk debugging/direct call)
-    let authorized = user?.role === "ADMIN"
-
-    if (!authorized) {
-      const body = await request.json().catch(() => ({}))
-      const { secret } = body
-      if (secret && secret === process.env.NEXTAUTH_SECRET) {
-        authorized = true
-      }
-    }
-
-    if (!authorized) {
+    if (!user || user.role !== "ADMIN") {
       return NextResponse.json({ error: "Tidak memiliki akses" }, { status: 403 })
     }
 
-    // Gunakan dynamic import untuk akses raw query
-    const { db } = await import("@/lib/db")
+    // Gunakan direct pg connection - bukan Prisma
+    const { Pool } = await import("pg")
+    const pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: process.env.DATABASE_URL?.includes("supabase") ? { rejectUnauthorized: false } : undefined,
+    })
 
     const results: Array<{ column: string; table: string; status: string; message: string }> = []
 
-    // Daftar kolom yang perlu dicek/ditambahkan
-    const columnsToSync = [
-      {
-        table: "birth_records",
-        column: "is_deleted",
-        type: "BOOLEAN NOT NULL DEFAULT false",
-      },
-      {
-        table: "birth_records",
-        column: "nik_bayi_updated_at",
-        type: "TIMESTAMP(3)",
-      },
-      {
-        table: "birth_records",
-        column: "updated_at",
-        type: "TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP",
-      },
-      {
-        table: "users",
-        column: "updated_at",
-        type: "TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP",
-      },
-      {
-        table: "puskesmas",
-        column: "updated_at",
-        type: "TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP",
-      },
-    ]
+    try {
+      // Daftar kolom yang perlu dicek/ditambahkan
+      const columnsToSync = [
+        { table: "birth_records", column: "is_deleted", type: "BOOLEAN NOT NULL DEFAULT false" },
+        { table: "birth_records", column: "nik_bayi_updated_at", type: "TIMESTAMP(3)" },
+        { table: "birth_records", column: "updated_at", type: "TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP" },
+        { table: "users", column: "updated_at", type: "TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP" },
+        { table: "puskesmas", column: "updated_at", type: "TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP" },
+        { table: "birth_records", column: "nik_bayi", type: "VARCHAR(16)" },
+        { table: "birth_records", column: "berat_badan", type: "DOUBLE PRECISION" },
+        { table: "birth_records", column: "panjang_badan", type: "DOUBLE PRECISION" },
+        { table: "birth_records", column: "alasan_penolakan", type: "TEXT" },
+        { table: "birth_records", column: "verified_by", type: "TEXT" },
+        { table: "birth_records", column: "verified_at", type: "TIMESTAMP(3)" },
+      ]
 
-    for (const col of columnsToSync) {
-      try {
-        // Cek apakah kolom sudah ada
-        const check = await db.$queryRawUnsafe(`
-          SELECT column_name FROM information_schema.columns
-          WHERE table_schema = 'public'
-          AND table_name = '${col.table}'
-          AND column_name = '${col.column}'
-        `)
-
-        if (Array.isArray(check) && check.length > 0) {
-          results.push({
-            column: col.column,
-            table: col.table,
-            status: "already_exists",
-            message: `Kolom ${col.table}.${col.column} sudah ada`,
-          })
-        } else {
-          // Tambahkan kolom yang belum ada
-          await db.$executeRawUnsafe(
-            `ALTER TABLE "${col.table}" ADD COLUMN IF NOT EXISTS "${col.column}" ${col.type}`
+      for (const col of columnsToSync) {
+        try {
+          const checkResult = await pool.query(
+            `SELECT column_name FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = $1 AND column_name = $2`,
+            [col.table, col.column]
           )
+
+          if (checkResult.rows.length > 0) {
+            results.push({
+              column: col.column,
+              table: col.table,
+              status: "already_exists",
+              message: `Kolom ${col.table}.${col.column} sudah ada`,
+            })
+          } else {
+            await pool.query(
+              `ALTER TABLE "${col.table}" ADD COLUMN IF NOT EXISTS "${col.column}" ${col.type}`
+            )
+            results.push({
+              column: col.column,
+              table: col.table,
+              status: "added",
+              message: `Kolom ${col.table}.${col.column} berhasil ditambahkan`,
+            })
+          }
+        } catch (err) {
           results.push({
             column: col.column,
             table: col.table,
-            status: "added",
-            message: `Kolom ${col.table}.${col.column} berhasil ditambahkan`,
+            status: "error",
+            message: `Gagal: ${err instanceof Error ? err.message : String(err)}`,
           })
         }
+      }
+
+      // Update is_deleted NULL values to false
+      try {
+        const updateResult = await pool.query(
+          `UPDATE birth_records SET is_deleted = false WHERE is_deleted IS NULL`
+        )
+        results.push({
+          column: "is_deleted",
+          table: "birth_records",
+          status: "updated",
+          message: `Updated NULL is_deleted values to false (${updateResult.rowCount} rows)`,
+        })
+      } catch {
+        // Ignore if column doesn't exist yet
+      }
+
+      // Ensure audit_logs table exists
+      try {
+        await pool.query(`
+          CREATE TABLE IF NOT EXISTS "audit_logs" (
+              "id" TEXT NOT NULL,
+              "user_id" TEXT NOT NULL,
+              "action" VARCHAR(20) NOT NULL,
+              "entity" VARCHAR(50) NOT NULL,
+              "entity_id" TEXT,
+              "details" TEXT,
+              "ip_address" VARCHAR(45),
+              "user_agent" VARCHAR(500),
+              "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              CONSTRAINT "audit_logs_pkey" PRIMARY KEY ("id")
+          )
+        `)
+        results.push({
+          column: "audit_logs",
+          table: "table",
+          status: "verified",
+          message: "Tabel audit_logs sudah ada/dibuat",
+        })
       } catch (err) {
         results.push({
-          column: col.column,
-          table: col.table,
+          column: "audit_logs",
+          table: "table",
           status: "error",
-          message: `Gagal: ${err instanceof Error ? err.message : String(err)}`,
+          message: `Gagal membuat audit_logs: ${err instanceof Error ? err.message : String(err)}`,
         })
       }
-    }
-
-    // Update kolom is_deleted untuk data yang sudah ada (set ke false jika NULL)
-    try {
-      const updateResult = await db.$executeRawUnsafe(`
-        UPDATE birth_records SET is_deleted = false WHERE is_deleted IS NULL
-      `)
-      results.push({
-        column: "is_deleted",
-        table: "birth_records",
-        status: "updated",
-        message: `Updated NULL is_deleted values to false (${updateResult} rows)`,
-      })
-    } catch {
-      // Ignore if not needed
+    } finally {
+      await pool.end()
     }
 
     const addedCount = results.filter(r => r.status === "added").length
