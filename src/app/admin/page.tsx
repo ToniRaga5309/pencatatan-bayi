@@ -274,7 +274,7 @@ export default function AdminDashboard() {
     }
     setLastRefresh(formatTime())
     refreshAll()
-    const interval = setInterval(refreshAll, 30000)
+    const interval = setInterval(refreshAll, 120000)
     const handleVisibility = () => { if (!document.hidden) refreshAll() }
     document.addEventListener('visibilitychange', handleVisibility)
     return () => { clearInterval(interval); document.removeEventListener('visibilitychange', handleVisibility) }

@@ -49,12 +49,15 @@ export async function PUT(
       return NextResponse.json({ error: "Tidak memiliki akses ke data ini" }, { status: 403 })
     }
 
-    if (existing.status !== "PENDING") {
+    if (existing.downloadedAt) {
       return NextResponse.json(
-        { error: "Hanya data dengan status Menunggu yang dapat diedit" },
+        { error: "Data yang sudah didownload oleh admin tidak dapat diedit" },
         { status: 400 }
       )
     }
+
+    // Jika sudah VERIFIED atau REJECTED, hanya boleh edit field tertentu
+    // Jika masih PENDING, boleh edit semua field yang allowed
 
     const body = await request.json()
     const validationResult = editRecordSchema.safeParse(body)
@@ -110,6 +113,75 @@ export async function PUT(
     })
   } catch (error) {
     console.error("Error updating birth record:", error)
+    return NextResponse.json({ error: "Terjadi kesalahan server" }, { status: 500 })
+  }
+}
+
+// DELETE: Hapus data kelahiran (soft delete) - hanya jika belum didownload admin
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params
+    const user = await getCurrentUser()
+
+    if (!user || (user.role !== "OPERATOR" && user.role !== "ADMIN")) {
+      return NextResponse.json({ error: "Tidak memiliki akses" }, { status: 403 })
+    }
+
+    if (user.role === "OPERATOR" && !user.puskesmasId) {
+      return NextResponse.json({ error: "Tidak memiliki akses" }, { status: 403 })
+    }
+
+    // Cek apakah record ada
+    const existing = await db.birthRecord.findUnique({
+      where: { id }
+    })
+
+    if (!existing || existing.isDeleted) {
+      return NextResponse.json({ error: "Data tidak ditemukan" }, { status: 404 })
+    }
+
+    // Operator hanya bisa hapus record dari puskesmas sendiri
+    if (user.role === "OPERATOR" && existing.puskesmasId !== user.puskesmasId) {
+      return NextResponse.json({ error: "Tidak memiliki akses ke data ini" }, { status: 403 })
+    }
+
+    // Tidak bisa hapus data yang sudah didownload admin
+    if (existing.downloadedAt) {
+      return NextResponse.json(
+        { error: "Data yang sudah didownload oleh admin tidak dapat dihapus" },
+        { status: 400 }
+      )
+    }
+
+    // Soft delete
+    await db.birthRecord.update({
+      where: { id },
+      data: { isDeleted: true }
+    })
+
+    // Audit log
+    await createAuditLog({
+      userId: user.id,
+      action: "DELETE",
+      entity: "BirthRecord",
+      entityId: id,
+      details: {
+        namaBayi: existing.namaBayi,
+        namaIbu: existing.namaIbu,
+      },
+      ipAddress: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || undefined,
+      userAgent: request.headers.get("user-agent") || undefined,
+    })
+
+    return NextResponse.json({
+      success: true,
+      message: "Data berhasil dihapus",
+    })
+  } catch (error) {
+    console.error("Error deleting birth record:", error)
     return NextResponse.json({ error: "Terjadi kesalahan server" }, { status: 500 })
   }
 }

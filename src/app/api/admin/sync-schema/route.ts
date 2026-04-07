@@ -35,6 +35,7 @@ export async function POST() {
         { table: "birth_records", column: "alasan_penolakan", type: "TEXT" },
         { table: "birth_records", column: "verified_by", type: "TEXT" },
         { table: "birth_records", column: "verified_at", type: "TIMESTAMP(3)" },
+        { table: "birth_records", column: "downloaded_at", type: "TIMESTAMP(3)" },
       ]
 
       for (const col of columnsToSync) {
