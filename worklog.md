@@ -81,3 +81,24 @@ Stage Summary:
 - When admin visits dashboard, it will automatically sync missing columns and reload data
 - Deployed to https://pencatatan-bayi.vercel.app (commit 4c9563c)
 
+---
+Task ID: 5
+Agent: Main Agent
+Task: Fix all remaining issues - schema sync, puskesmas, template, error display
+
+Work Log:
+- Rewrote sync-schema endpoint to use direct `pg` Pool connection (bypasses Prisma adapter entirely)
+- Added SSL support for Supabase connections in sync endpoint
+- All admin pages (dashboard, puskesmas, nik-bayi) now sync schema BEFORE fetching any data
+- Added xlsx to serverExternalPackages in next.config.ts for proper server-side template generation
+- Removed internal error details exposure from birth-records API (security fix)
+- Puskesmas page now shows error toast when API fails
+- Expanded column check list: is_deleted, nik_bayi_updated_at, updated_at, nik_bayi, berat_badan, panjang_badan, alasan_penolakan, verified_by, verified_at, audit_logs table
+
+Stage Summary:
+- Root cause confirmed: production DB missing is_deleted column → ALL queries fail
+- Previous sync-schema used Prisma raw queries which also went through broken adapter
+- New approach: direct pg connection guarantees column addition regardless of Prisma state
+- Sync happens FIRST before any data fetch on every admin page
+- Deployed to https://pencatatan-bayi.vercel.app (commit 52a2dfb)
+
