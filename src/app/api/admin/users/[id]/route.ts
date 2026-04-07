@@ -10,6 +10,7 @@ const updateUserSchema = z.object({
   namaLengkap: z.string().min(3).max(100).optional(),
   role: z.enum(["ADMIN", "OPERATOR", "BPJS"]).optional(),
   puskesmasId: z.string().optional().nullable(),
+  puskesmasNama: z.string().optional(), // Nama puskesmas baru (manual input)
   password: z.string().min(6).optional()
 })
 
@@ -38,29 +39,62 @@ export async function PUT(
     const data = validationResult.data
 
     // Cek user
-    const existingUser = await db.user.findUnique({ where: { id } })
+    const existingUser = await db.user.findUnique({ 
+      where: { id },
+      include: { puskesmas: true }
+    })
     if (!existingUser) {
       return NextResponse.json({ error: "User tidak ditemukan" }, { status: 404 })
     }
 
-    // Validasi puskesmas untuk operator
+    // Tentukan role dan puskesmasId
     const newRole = data.role || existingUser.role
-    const newPuskesmasId = data.puskesmasId !== undefined ? data.puskesmasId : existingUser.puskesmasId
-    if ((newRole === "OPERATOR") && !newPuskesmasId) {
-      return NextResponse.json({ error: "Operator harus memiliki puskesmas" }, { status: 400 })
+    
+    // Handle puskesmas assignment
+    let finalPuskesmasId: string | null = existingUser.puskesmasId
+
+    if (newRole === "OPERATOR") {
+      if (data.puskesmasId) {
+        // Gunakan puskesmas yang sudah ada dari dropdown
+        finalPuskesmasId = data.puskesmasId
+      } else if (data.puskesmasNama && data.puskesmasNama.trim().length >= 3) {
+        // Manual input - cek apakah sudah ada atau buat baru
+        const existingPuskesmas = await db.puskesmas.findFirst({
+          where: { nama: { equals: data.puskesmasNama.trim(), mode: "insensitive" } }
+        })
+        if (existingPuskesmas) {
+          finalPuskesmasId = existingPuskesmas.id
+        } else {
+          const newPuskesmas = await db.puskesmas.create({
+            data: {
+              nama: data.puskesmasNama.trim(),
+              kodeWilayah: "AUTO",
+            }
+          })
+          finalPuskesmasId = newPuskesmas.id
+        }
+      } else if (!existingUser.puskesmasId) {
+        return NextResponse.json({ error: "Operator harus memiliki puskesmas" }, { status: 400 })
+      }
+    } else {
+      // Non-operator roles don't need puskesmas
+      finalPuskesmasId = null
     }
 
     // Prepare update data
     const updateData: Record<string, unknown> = {}
     if (data.namaLengkap) updateData.namaLengkap = data.namaLengkap.toUpperCase()
     if (data.role) updateData.role = data.role
-    if (data.puskesmasId !== undefined) updateData.puskesmasId = newRole === "ADMIN" || newRole === "BPJS" ? null : data.puskesmasId
+    updateData.puskesmasId = finalPuskesmasId
     if (data.password) updateData.password = await bcrypt.hash(data.password, 10)
 
     // Update user
     const updatedUser = await db.user.update({
       where: { id },
-      data: updateData
+      data: updateData,
+      include: {
+        puskesmas: { select: { nama: true } }
+      }
     })
 
     // Audit log
@@ -71,7 +105,11 @@ export async function PUT(
       entityId: id,
       details: {
         username: existingUser.username,
-        changes: data
+        changes: {
+          namaLengkap: data.namaLengkap,
+          role: data.role,
+          puskesmas: updatedUser.puskesmas?.nama || null,
+        }
       },
       ipAddress: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || undefined,
       userAgent: request.headers.get("user-agent") || undefined

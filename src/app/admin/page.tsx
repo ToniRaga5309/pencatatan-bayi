@@ -203,6 +203,7 @@ export default function AdminDashboard() {
   const [pendingCount, setPendingCount] = useState(0)
   const [fetchError, setFetchError] = useState<string | null>(null)
   const [isSyncing, setIsSyncing] = useState(false)
+  const [schemaSynced, setSchemaSynced] = useState(false)
 
   // Password change dialog
   const [showPasswordDialog, setShowPasswordDialog] = useState(false)
@@ -240,27 +241,32 @@ export default function AdminDashboard() {
     }
   }, [status, session, router])
 
-  // Sync schema first, then fetch all data
+  // Sync schema only ONCE on initial mount
   useEffect(() => {
     if (session?.user?.role === "ADMIN") {
-      const initializeDashboard = async () => {
-        // Step 1: Sync database schema first (ensure all columns exist)
+      const initOnce = async () => {
         await syncSchema()
-        // Step 2: Then fetch all data
-        await Promise.all([
-          fetchStats(false),
-          fetchRecords(false),
-          fetchChartData(),
-          fetchPendingCount()
-        ])
+        setSchemaSynced(true)
       }
-      initializeDashboard()
+      initOnce()
     }
-  }, [session, page, puskesmasFilter, statusFilter])
+  }, [session])
 
-  // Auto-refresh every 30 seconds
+  // Fetch data (without syncSchema) - runs on page/filter changes
   useEffect(() => {
-    if (session?.user?.role !== "ADMIN") return
+    if (session?.user?.role === "ADMIN" && schemaSynced) {
+      Promise.all([
+        fetchStats(false),
+        fetchRecords(false),
+        fetchChartData(),
+        fetchPendingCount()
+      ])
+    }
+  }, [session, page, puskesmasFilter, statusFilter, schemaSynced])
+
+  // Auto-refresh every 5 minutes
+  useEffect(() => {
+    if (session?.user?.role !== "ADMIN" || !schemaSynced) return
     const formatTime = () => {
       const now = new Date()
       return now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
@@ -272,13 +278,11 @@ export default function AdminDashboard() {
       setLastRefresh(formatTime())
       setIsAutoRefreshing(false)
     }
-    setLastRefresh(formatTime())
-    refreshAll()
-    const interval = setInterval(refreshAll, 120000)
+    const interval = setInterval(refreshAll, 300000) // 5 minutes
     const handleVisibility = () => { if (!document.hidden) refreshAll() }
     document.addEventListener('visibilitychange', handleVisibility)
     return () => { clearInterval(interval); document.removeEventListener('visibilitychange', handleVisibility) }
-  }, [session])
+  }, [session, schemaSynced])
 
   const fetchPendingCount = async () => {
     try {

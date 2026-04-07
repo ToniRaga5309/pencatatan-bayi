@@ -60,8 +60,9 @@ export default function UsersManagementPage() {
     puskesmasId: "",
     puskesmasNama: ""
   })
-  const [puskesmasMode, setPuskesmasMode] = useState<"select" | "manual">("select")
+  const [puskesmasMode, setPuskesmasMode] = useState<"select" | "manual">("manual")
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
+  const [isSyncing, setIsSyncing] = useState(false)
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -71,9 +72,25 @@ export default function UsersManagementPage() {
     }
   }, [status, session, router])
 
+  const syncSchema = async (): Promise<boolean> => {
+    setIsSyncing(true)
+    try {
+      const response = await fetch("/api/admin/sync-schema", { method: "POST" })
+      return response.ok
+    } catch {
+      return false
+    } finally {
+      setIsSyncing(false)
+    }
+  }
+
   useEffect(() => {
     if (session?.user?.role === "ADMIN") {
-      fetchData()
+      const initialize = async () => {
+        await syncSchema()
+        fetchData()
+      }
+      initialize()
     }
   }, [session])
 
@@ -180,8 +197,13 @@ export default function UsersManagementPage() {
     if (!formData.namaLengkap || formData.namaLengkap.length < 3) {
       errors.namaLengkap = "Nama lengkap minimal 3 karakter"
     }
-    if (formData.role === "OPERATOR" && !formData.puskesmasId) {
-      errors.puskesmasId = "Pilih puskesmas untuk operator"
+    if (formData.role === "OPERATOR") {
+      if (puskesmasMode === "select" && !formData.puskesmasId) {
+        errors.puskesmasId = "Pilih puskesmas untuk operator"
+      }
+      if (puskesmasMode === "manual" && (!formData.puskesmasNama || formData.puskesmasNama.length < 3)) {
+        errors.puskesmasNama = "Nama puskesmas minimal 3 karakter"
+      }
     }
     if (formData.password && formData.password.length < 6) {
       errors.password = "Password minimal 6 karakter"
@@ -198,7 +220,8 @@ export default function UsersManagementPage() {
         body: JSON.stringify({
           namaLengkap: formData.namaLengkap,
           role: formData.role,
-          puskesmasId: formData.role === "OPERATOR" ? formData.puskesmasId : null,
+          puskesmasId: formData.role === "OPERATOR" && puskesmasMode === "select" ? formData.puskesmasId : undefined,
+          puskesmasNama: formData.role === "OPERATOR" && puskesmasMode === "manual" ? formData.puskesmasNama : undefined,
           password: formData.password || undefined
         })
       })
@@ -228,7 +251,7 @@ export default function UsersManagementPage() {
       puskesmasId: "",
       puskesmasNama: ""
     })
-    setPuskesmasMode("select")
+    setPuskesmasMode("manual")
     setFormErrors({})
     setSelectedUser(null)
   }

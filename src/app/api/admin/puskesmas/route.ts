@@ -1,4 +1,5 @@
 // API untuk CRUD puskesmas (Admin) - GET list + POST create
+// Puskesmas data disesuaikan dengan data operator yang ada
 import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
@@ -12,7 +13,7 @@ const createPuskesmasSchema = z.object({
   telepon: z.string().optional(),
 })
 
-// GET: List all puskesmas with counts
+// GET: List all puskesmas with operator and record counts
 export async function GET() {
   try {
     const user = await getCurrentUser()
@@ -28,11 +29,21 @@ export async function GET() {
         kodeWilayah: true,
         alamat: true,
         telepon: true,
+        createdAt: true,
         _count: {
           select: {
             birthRecords: { where: { isDeleted: false } },
-            users: true,
+            users: { where: { isActive: true } },
           }
+        },
+        users: {
+          select: {
+            id: true,
+            username: true,
+            namaLengkap: true,
+            isActive: true,
+          },
+          orderBy: { createdAt: "desc" }
         }
       },
       orderBy: { nama: "asc" }
@@ -66,9 +77,9 @@ export async function POST(request: NextRequest) {
 
     const data = validationResult.data
 
-    // Check if nama already exists
+    // Check if nama already exists (case insensitive)
     const existing = await db.puskesmas.findFirst({
-      where: { nama: data.nama }
+      where: { nama: { equals: data.nama, mode: "insensitive" } }
     })
 
     if (existing) {
