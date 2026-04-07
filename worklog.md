@@ -38,3 +38,24 @@ Stage Summary:
 - Fix: Downgraded adapter-pg to v6, updated seed password, fixed filter logic
 - All existing credentials preserved (admin_dukcapil/AdminNgada2024!, all operators, bpjs1)
 - Ready for redeployment
+
+---
+Task ID: 3
+Agent: Main Agent
+Task: Fix corrupted NIK template download & admin dashboard data not showing
+
+Work Log:
+- Investigated NIK template: was generated client-side using xlsx library in "use client" component
+- Root cause: xlsx (SheetJS) has Node.js dependencies that cause corrupted output in browser/Next.js client components
+- Created server-side API route /api/admin/nik-bayi/download-template to generate template
+- Updated frontend to call API instead of generating client-side
+- Removed unused xlsx import from client component
+- Fixed nikBayi filter in admin stats: empty string "" was being counted as having NIK
+- Fixed nikBayi filter in nik-bayi list: combined null + empty string properly
+- Fixed search + nikStatus filter conflict when both use OR conditions
+- Build verified, pushed, and deployed to Vercel
+
+Stage Summary:
+- NIK template now generated server-side - file should open correctly
+- Admin dashboard data should now display properly (Prisma adapter fix + filter fixes)
+- Deployed to https://pencatatan-bayi.vercel.app
