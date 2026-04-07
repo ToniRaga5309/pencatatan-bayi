@@ -201,6 +201,8 @@ export default function AdminDashboard() {
   const [chartData, setChartData] = useState<ChartData | null>(null)
   const [isChartLoading, setIsChartLoading] = useState(true)
   const [pendingCount, setPendingCount] = useState(0)
+  const [fetchError, setFetchError] = useState<string | null>(null)
+  const [isSyncing, setIsSyncing] = useState(false)
 
   // Password change dialog
   const [showPasswordDialog, setShowPasswordDialog] = useState(false)
@@ -378,22 +380,55 @@ export default function AdminDashboard() {
     return { label: "Baik", color: "bg-emerald-500", width: "70%" }
   }
 
-  const fetchStats = async () => {
+  const syncSchema = async (): Promise<boolean> => {
+    setIsSyncing(true)
+    try {
+      const response = await fetch("/api/admin/sync-schema", { method: "POST" })
+      if (response.ok) {
+        const data = await response.json()
+        console.log("Schema sync result:", data)
+        return true
+      }
+      console.error("Schema sync failed:", await response.text())
+      return false
+    } catch (error) {
+      console.error("Schema sync error:", error)
+      return false
+    } finally {
+      setIsSyncing(false)
+    }
+  }
+
+  const fetchStats = async (retryOnFailure = true) => {
     setIsStatsLoading(true)
     try {
       const response = await fetch("/api/admin/stats")
       if (response.ok) {
         const data = await response.json()
         setStats(data)
+        setFetchError(null)
+      } else {
+        const errorData = await response.json().catch(() => ({}))
+        const errorMsg = errorData.details || errorData.error || "Gagal memuat statistik"
+        console.error("Stats fetch error:", errorMsg)
+        if (retryOnFailure) {
+          console.log("Attempting schema sync...")
+          const synced = await syncSchema()
+          if (synced) {
+            return fetchStats(false)
+          }
+        }
+        setFetchError(errorMsg)
       }
     } catch (error) {
       console.error("Error fetching stats:", error)
+      setFetchError("Koneksi gagal. Silakan coba lagi.")
     } finally {
       setIsStatsLoading(false)
     }
   }
 
-  const fetchRecords = async () => {
+  const fetchRecords = async (retryOnFailure = true) => {
     setIsLoading(true)
     try {
       const params = new URLSearchParams()
@@ -408,9 +443,23 @@ export default function AdminDashboard() {
         const data = await response.json()
         setRecords(data.records)
         setTotalPages(data.pagination.totalPages)
+        setFetchError(null)
+      } else {
+        const errorData = await response.json().catch(() => ({}))
+        const errorMsg = errorData.details || errorData.error || "Gagal memuat data"
+        console.error("Records fetch error:", errorMsg)
+        if (retryOnFailure) {
+          console.log("Attempting schema sync...")
+          const synced = await syncSchema()
+          if (synced) {
+            return fetchRecords(false)
+          }
+        }
+        setFetchError(errorMsg)
       }
     } catch (error) {
       console.error("Error fetching records:", error)
+      setFetchError("Koneksi gagal. Silakan coba lagi.")
     } finally {
       setIsLoading(false)
     }
@@ -830,6 +879,45 @@ export default function AdminDashboard() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-6 flex-1">
+        {/* Error Banner */}
+        {fetchError && (
+          <div className="mb-6 rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-4">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 shrink-0" />
+              <div className="flex-1">
+                <p className="text-sm font-medium text-red-800 dark:text-red-300">Gagal memuat data</p>
+                <p className="text-xs text-red-600 dark:text-red-400 mt-1">{fetchError}</p>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => { setFetchError(null); fetchStats(); fetchRecords() }}
+                disabled={isSyncing}
+                className="shrink-0 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/30"
+              >
+                {isSyncing ? (
+                  <><Loader2 className="w-3 h-3 mr-1 animate-spin" />Sinkronisasi...</>
+                ) : (
+                  <><RefreshCw className="w-3 h-3 mr-1" />Coba Lagi</>
+                )}
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Syncing Indicator */}
+        {isSyncing && !fetchError && (
+          <div className="mb-6 rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 p-4">
+            <div className="flex items-center gap-3">
+              <Loader2 className="w-5 h-5 animate-spin text-amber-600 dark:text-amber-400" />
+              <div>
+                <p className="text-sm font-medium text-amber-800 dark:text-amber-300">Menyinkronkan database...</p>
+                <p className="text-xs text-amber-600 dark:text-amber-400 mt-0.5">Menambahkan kolom yang diperlukan, mohon tunggu sebentar.</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Quick Stats Summary Card */}
         <QuickStatsSummary stats={stats} pendingCount={pendingCount} />
 

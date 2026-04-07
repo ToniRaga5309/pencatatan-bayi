@@ -13,14 +13,9 @@ function createPrismaClient(): PrismaClient {
   const databaseUrl = process.env.DATABASE_URL || ""
 
   // Gunakan driver adapter untuk PostgreSQL (Vercel/Supabase production)
-  // Driver adapter mengelola connection pool secara efisien di lingkungan serverless
   if (databaseUrl.startsWith("postgresql://") || databaseUrl.startsWith("postgres://")) {
     const adapter = new PrismaPg({
       connectionString: databaseUrl,
-      // Timeout untuk koneksi di serverless environment
-      max: 5, // Maksimal 5 koneksi per instance
-      idleTimeoutMillis: 10000, // 10 detik idle timeout
-      connectionTimeoutMillis: 15000, // 15 detik connection timeout
     })
     return new PrismaClient({
       adapter,
@@ -28,7 +23,7 @@ function createPrismaClient(): PrismaClient {
     })
   }
 
-  // Standard client untuk development lokal (SQLite)
+  // Standard client untuk development lokal
   return new PrismaClient({
     log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
   })
