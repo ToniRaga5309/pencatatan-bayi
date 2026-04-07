@@ -27,7 +27,6 @@ export async function GET(request: NextRequest) {
         tempatLahir: true,
         jenisKelamin: true,
         status: true,
-        downloadedAt: true,
         createdAt: true,
         puskesmas: { select: { nama: true } },
         creator: { select: { namaLengkap: true } }
@@ -47,7 +46,6 @@ export async function GET(request: NextRequest) {
       "Puskesmas": record.puskesmas.nama,
       "Diinput Oleh": record.creator.namaLengkap,
       "Tanggal Input": new Date(record.createdAt).toLocaleDateString("id-ID"),
-      "Tanggal Download": record.downloadedAt ? new Date(record.downloadedAt).toLocaleDateString("id-ID") : "-"
     }))
 
     // Buat workbook

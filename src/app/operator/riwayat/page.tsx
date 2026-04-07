@@ -1,7 +1,7 @@
 "use client"
 
 // Halaman Riwayat Input Data Operator
-import { useState, useEffect, useRef } from "react"
+import { Suspense, useState, useEffect, useRef } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -46,17 +46,18 @@ interface ImportResult {
 }
 
 // SortableHeader component
-function SortableHeader({ label, sortField, currentSortField, sortOrder, onSort }: {
+function SortableHeader({ label, sortField, currentSortField, sortOrder, onSort, className }: {
   label: string
   sortField: string
   currentSortField: string
   sortOrder: string
   onSort: (field: string) => void
+  className?: string
 }) {
   const isActive = sortField === currentSortField
   return (
     <TableHead
-      className={`cursor-pointer select-none hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors ${isActive ? "text-emerald-700 dark:text-emerald-300" : ""}`}
+      className={`cursor-pointer select-none hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors ${isActive ? "text-emerald-700 dark:text-emerald-300" : ""} ${className || ""}`}
       onClick={() => onSort(sortField)}
     >
       <span className="inline-flex items-center gap-1">
@@ -70,6 +71,18 @@ function SortableHeader({ label, sortField, currentSortField, sortOrder, onSort 
 }
 
 export default function RiwayatPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    }>
+      <RiwayatPageContent />
+    </Suspense>
+  )
+}
+
+function RiwayatPageContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
