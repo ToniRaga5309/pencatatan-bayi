@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
+import { Prisma } from "@prisma/client"
 
 export async function GET(request: NextRequest) {
   try {
@@ -21,8 +22,8 @@ export async function GET(request: NextRequest) {
     const sortField = searchParams.get("sortField") || "createdAt"
     const sortOrder = searchParams.get("sortOrder") || "desc"
 
-    // Build where clause
-    const where: Record<string, unknown> = { 
+    // Build where clause with proper Prisma types
+    const where: Prisma.BirthRecordWhereInput = { 
       isDeleted: false
     }
 
@@ -43,22 +44,12 @@ export async function GET(request: NextRequest) {
       ]
     }
 
-    // Build orderBy - only allow safe fields
-    const allowedSortFields: Record<string, string> = {
-      namaBayi: "namaBayi",
-      nikIbu: "nikIbu",
-      namaIbu: "namaIbu",
-      tanggalLahir: "tanggalLahir",
-      status: "status",
-      createdAt: "createdAt",
-      updatedAt: "updatedAt",
-      jenisKelamin: "jenisKelamin",
-      tempatLahir: "tempatLahir",
-      nikBayi: "nikBayi",
-    }
-
-    const orderByField = allowedSortFields[sortField] || "createdAt"
-    const orderBy: Record<string, string> = { [orderByField]: sortOrder === "asc" ? "asc" : "desc" }
+    // Build orderBy with proper Prisma types
+    const allowedSortFields = ["namaBayi", "nikIbu", "namaIbu", "tanggalLahir", "status", "createdAt", "updatedAt", "jenisKelamin", "tempatLahir", "nikBayi"]
+    const orderDir: Prisma.SortOrder = sortOrder === "asc" ? "asc" : "desc"
+    const orderBy: Prisma.BirthRecordOrderByWithRelationInput = allowedSortFields.includes(sortField) 
+      ? { [sortField]: orderDir } 
+      : { createdAt: "desc" }
 
     const [records, total] = await Promise.all([
       db.birthRecord.findMany({
@@ -66,22 +57,7 @@ export async function GET(request: NextRequest) {
         skip,
         take: limit,
         orderBy,
-        select: {
-          id: true,
-          nikIbu: true,
-          namaIbu: true,
-          namaAyah: true,
-          namaBayi: true,
-          nikBayi: true,
-          nikBayiUpdatedAt: true,
-          tanggalLahir: true,
-          tempatLahir: true,
-          jenisKelamin: true,
-          beratBadan: true,
-          panjangBadan: true,
-          status: true,
-          createdAt: true,
-          updatedAt: true,
+        include: {
           puskesmas: { 
             select: { nama: true } 
           },
@@ -104,6 +80,9 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     console.error("Error fetching admin birth records:", error)
-    return NextResponse.json({ error: "Terjadi kesalahan server" }, { status: 500 })
+    return NextResponse.json({ 
+      error: "Terjadi kesalahan server",
+      details: error instanceof Error ? error.message : "Unknown error"
+    }, { status: 500 })
   }
 }
