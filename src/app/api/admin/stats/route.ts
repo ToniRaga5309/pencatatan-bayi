@@ -11,7 +11,7 @@ export async function GET() {
       return NextResponse.json({ error: "Tidak memiliki akses" }, { status: 403 })
     }
 
-    const [totalAll, totalPending, totalVerified, totalRejected, totalWithNik, puskesmasList] = await Promise.all([
+    const [totalAll, totalPending, totalVerified, totalRejected, totalWithNik, totalNewData, totalRegistered, totalPendingNew, puskesmasList] = await Promise.all([
       // Total semua data
       db.birthRecord.count({ 
         where: { isDeleted: false } 
@@ -47,6 +47,28 @@ export async function GET() {
           ]
         } 
       }),
+      // Total data baru (belum didownload)
+      db.birthRecord.count({ 
+        where: { 
+          isDeleted: false,
+          downloadedAt: null
+        } 
+      }),
+      // Total data register (sudah didownload)
+      db.birthRecord.count({ 
+        where: { 
+          isDeleted: false,
+          downloadedAt: { not: null }
+        } 
+      }),
+      // Total data pending yang belum didownload
+      db.birthRecord.count({ 
+        where: { 
+          isDeleted: false,
+          status: "PENDING",
+          downloadedAt: null
+        } 
+      }),
       // Daftar puskesmas
       db.puskesmas.findMany({
         select: { id: true, nama: true },
@@ -60,6 +82,9 @@ export async function GET() {
       totalVerified,
       totalRejected,
       totalWithNik,
+      totalNewData,
+      totalRegistered,
+      totalPendingNew,
       puskesmasList
     })
   } catch (error) {

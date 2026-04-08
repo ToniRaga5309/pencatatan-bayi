@@ -12,19 +12,21 @@ export async function GET() {
     }
 
     const [pendingCount, withoutNikCount] = await Promise.all([
-      // Total data PENDING
+      // Total data PENDING yang belum didownload
       db.birthRecord.count({
         where: {
           isDeleted: false,
           status: "PENDING",
+          downloadedAt: null,
         },
       }),
-      // Total data VERIFIED tanpa NIK Bayi
+      // Total data VERIFIED tanpa NIK Bayi yang belum didownload
       db.birthRecord.count({
         where: {
           isDeleted: false,
           status: "VERIFIED",
           nikBayi: null,
+          downloadedAt: null,
         },
       }),
     ])
