@@ -16,6 +16,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || ""
     const puskesmasId = searchParams.get("puskesmasId") || ""
     const status = searchParams.get("status") || ""
+    const show = searchParams.get("show") || "new"
     const page = parseInt(searchParams.get("page") || "1")
     const limit = parseInt(searchParams.get("limit") || "15")
     const skip = (page - 1) * limit
@@ -25,6 +26,11 @@ export async function GET(request: NextRequest) {
     // Build where clause with proper Prisma types
     const where: Prisma.BirthRecordWhereInput = { 
       isDeleted: false
+    }
+
+    // Filter by show: "new" = only undownloaded, "all" = all data
+    if (show !== "all") {
+      where.downloadedAt = null
     }
 
     if (puskesmasId && puskesmasId !== "all") {

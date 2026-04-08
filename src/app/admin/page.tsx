@@ -49,6 +49,9 @@ interface DashboardStats {
   totalVerified: number
   totalRejected: number
   totalWithNik: number
+  totalNewData: number
+  totalRegistered: number
+  totalPendingNew: number
   puskesmasList: Array<{ id: string; nama: string }>
 }
 
@@ -169,7 +172,7 @@ function QuickStatsSummary({ stats, pendingCount }: { stats: DashboardStats | nu
               {getIndonesianDate()}
             </p>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Total {stats?.totalAll ?? 0} data <span className="mx-1">|</span> {stats?.totalPending ?? 0} menunggu verifikasi
+              <span className="font-semibold text-emerald-600">{stats?.totalNewData ?? 0}</span> data baru &nbsp;|&nbsp; <span className="font-semibold text-slate-600">{stats?.totalRegistered ?? 0}</span> dalam register &nbsp;|&nbsp; Total {stats?.totalAll ?? 0} data
             </p>
           </div>
           {pendingCount > 0 && (
@@ -229,6 +232,14 @@ export default function AdminDashboard() {
   const [reportYear, setReportYear] = useState(new Date().getFullYear())
   const [isGeneratingReport, setIsGeneratingReport] = useState(false)
 
+  // Show filter: "new" = only undownloaded, "all" = all data
+  const [showFilter, setShowFilter] = useState<"new" | "all">("new")
+  // ACC All state
+  const [isVerifyingAll, setIsVerifyingAll] = useState(false)
+  // Download loading states
+  const [isDownloadingNew, setIsDownloadingNew] = useState(false)
+  const [isDownloadingRegister, setIsDownloadingRegister] = useState(false)
+
   // Auto-refresh
   const [lastRefresh, setLastRefresh] = useState("")
   const [isAutoRefreshing, setIsAutoRefreshing] = useState(false)
@@ -262,7 +273,7 @@ export default function AdminDashboard() {
         fetchPendingCount()
       ])
     }
-  }, [session, page, puskesmasFilter, statusFilter, schemaSynced])
+  }, [session, page, puskesmasFilter, statusFilter, showFilter, schemaSynced])
 
   // Auto-refresh every 5 minutes
   useEffect(() => {
@@ -447,6 +458,7 @@ export default function AdminDashboard() {
       if (search) params.append("search", search)
       if (puskesmasFilter && puskesmasFilter !== "all") params.append("puskesmasId", puskesmasFilter)
       if (statusFilter && statusFilter !== "all") params.append("status", statusFilter)
+      params.append("show", showFilter)
       params.append("page", page.toString())
       params.append("limit", "15")
 
@@ -639,6 +651,7 @@ export default function AdminDashboard() {
         toast.success(`Data "${record.namaBayi}" berhasil diverifikasi`)
         fetchRecords()
         fetchStats()
+        fetchPendingCount()
       } else {
         const data = await response.json()
         toast.error(data.error || "Gagal memverifikasi data")
@@ -647,6 +660,81 @@ export default function AdminDashboard() {
       toast.error("Terjadi kesalahan")
     } finally {
       setIsVerifying(false)
+    }
+  }
+
+  const handleVerifyAll = async () => {
+    if (!confirm(`ACC semua data baru yang pending? Data yang sudah ditolak tidak akan terpengaruh.`)) return
+    setIsVerifyingAll(true)
+    try {
+      const response = await fetch("/api/admin/birth-records/verify-all", {
+        method: "POST"
+      })
+      if (response.ok) {
+        const data = await response.json()
+        toast.success(`Berhasil memverifikasi ${data.count} data sekaligus`)
+        fetchRecords()
+        fetchStats()
+        fetchPendingCount()
+      } else {
+        const data = await response.json()
+        toast.error(data.error || "Gagal memverifikasi")
+      }
+    } catch {
+      toast.error("Terjadi kesalahan")
+    } finally {
+      setIsVerifyingAll(false)
+    }
+  }
+
+  const handleDownloadNew = async () => {
+    setIsDownloadingNew(true)
+    try {
+      const response = await fetch("/api/admin/download-new")
+      if (response.ok) {
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = `data-baru-kelahiran-${new Date().toISOString().split("T")[0]}.xlsx`
+        a.click()
+        window.URL.revokeObjectURL(url)
+        toast.success("Data baru berhasil diunduh")
+        fetchRecords()
+        fetchStats()
+        fetchPendingCount()
+      } else {
+        const data = await response.json()
+        toast.error(data.error || "Tidak ada data baru untuk diunduh")
+      }
+    } catch {
+      toast.error("Gagal mengunduh data baru")
+    } finally {
+      setIsDownloadingNew(false)
+    }
+  }
+
+  const handleDownloadRegister = async () => {
+    setIsDownloadingRegister(true)
+    try {
+      const response = await fetch("/api/admin/download-register")
+      if (response.ok) {
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = `register-kelahiran-${new Date().toISOString().split("T")[0]}.xlsx`
+        a.click()
+        window.URL.revokeObjectURL(url)
+        toast.success("Register berhasil diunduh")
+      } else {
+        const data = await response.json()
+        toast.error(data.error || "Register kosong")
+      }
+    } catch {
+      toast.error("Gagal mengunduh register")
+    } finally {
+      setIsDownloadingRegister(false)
     }
   }
 
@@ -1120,39 +1208,85 @@ export default function AdminDashboard() {
         {/* Data Table */}
         <Card className="rounded-xl shadow-sm">
           <CardHeader>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <Shield className="w-5 h-5" />
-                  Data Kelahiran
-                </CardTitle>
-                <CardDescription>Semua data kelahiran yang tercatat</CardDescription>
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    <Shield className="w-5 h-5" />
+                    Data Kelahiran
+                  </CardTitle>
+                  <CardDescription>
+                    {showFilter === "new" 
+                      ? `Data baru yang belum didownload (${stats?.totalNewData ?? 0})` 
+                      : `Semua data kelahiran (${stats?.totalAll ?? 0})`}
+                  </CardDescription>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {/* ACC Semua Button */}
+                  <Button 
+                    variant="default" 
+                    size="sm"
+                    className="bg-emerald-600 hover:bg-emerald-700"
+                    onClick={handleVerifyAll}
+                    disabled={isVerifyingAll || (stats?.totalPendingNew ?? 0) === 0}
+                  >
+                    {isVerifyingAll ? (
+                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Memproses...</>
+                    ) : (
+                      <><CheckCircle className="w-4 h-4 mr-2" />ACC Semua</>
+                    )}
+                  </Button>
+                  {/* Download Data Baru */}
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={handleDownloadNew}
+                    disabled={isDownloadingNew}
+                    className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-300 dark:hover:bg-emerald-900/20"
+                  >
+                    {isDownloadingNew ? (
+                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Mengunduh...</>
+                    ) : (
+                      <><Download className="w-4 h-4 mr-2" />Download Data Baru</>
+                    )}
+                  </Button>
+                  {/* Download Register */}
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={handleDownloadRegister}
+                    disabled={isDownloadingRegister}
+                  >
+                    {isDownloadingRegister ? (
+                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Mengunduh...</>
+                    ) : (
+                      <><FileText className="w-4 h-4 mr-2" />Download Register</>
+                    )}
+                  </Button>
+                </div>
               </div>
-              <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={async () => {
-                    try {
-                      const response = await fetch("/api/admin/export")
-                      if (response.ok) {
-                        const blob = await response.blob()
-                        const url = window.URL.createObjectURL(blob)
-                        const a = document.createElement("a")
-                        a.href = url
-                        a.download = `register-kelahiran-${new Date().toISOString().split("T")[0]}.xlsx`
-                        a.click()
-                        window.URL.revokeObjectURL(url)
-                        toast.success("Data berhasil diunduh")
-                      }
-                    } catch {
-                      toast.error("Gagal mengunduh data")
-                    }
-                  }}
+              {/* Show Filter Toggle */}
+              <div className="flex gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg w-fit">
+                <button
+                  onClick={() => { setShowFilter("new"); setPage(1) }}
+                  className={`px-3 py-1.5 text-sm rounded-md transition-all ${
+                    showFilter === "new" 
+                      ? "bg-white dark:bg-slate-700 text-emerald-700 dark:text-emerald-300 shadow-sm font-medium" 
+                      : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
+                  }`}
                 >
-                  <FileText className="w-4 h-4 mr-2" />
-                  <span className="hidden sm:inline">Export</span>
-                </Button>
+                  Data Baru
+                </button>
+                <button
+                  onClick={() => { setShowFilter("all"); setPage(1) }}
+                  className={`px-3 py-1.5 text-sm rounded-md transition-all ${
+                    showFilter === "all" 
+                      ? "bg-white dark:bg-slate-700 text-emerald-700 dark:text-emerald-300 shadow-sm font-medium" 
+                      : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
+                  }`}
+                >
+                  Semua Data
+                </button>
               </div>
             </div>
           </CardHeader>

@@ -1,0 +1,109 @@
+// Skema database untuk PRODUCTION (PostgreSQL / Supabase)
+// Gunakan file ini untuk deploy ke Vercel + Supabase
+// 
+// Cara pakai:
+// 1. Copy isi file ini ke prisma/schema.prisma
+// 2. Atau rename file ini menjadi schema.prisma saat deploy
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
+}
+
+// Tabel Puskesmas - menyimpan data puskesmas
+model Puskesmas {
+  id           String        @id @default(cuid())
+  nama         String        @db.VarChar(150)
+  kodeWilayah  String        @map("kode_wilayah") @db.VarChar(10)
+  alamat       String?       @db.Text
+  telepon      String?       @db.VarChar(20)
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+
+  users        User[]
+  birthRecords BirthRecord[]
+
+  @@map("puskesmas")
+}
+
+// Tabel User - menyimpan data pengguna (Operator & Admin)
+model User {
+  id              String        @id @default(cuid())
+  username        String        @unique @db.VarChar(50)
+  password        String        @db.VarChar(255)
+  namaLengkap     String        @map("nama_lengkap") @db.VarChar(100)
+  role            String        @db.VarChar(20)
+  isActive        Boolean       @default(true) @map("is_active")
+  puskesmasId     String?       @map("puskesmas_id")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  puskesmas       Puskesmas?    @relation(fields: [puskesmasId], references: [id], onDelete: SetNull)
+  auditLogs       AuditLog[]
+  createdRecords  BirthRecord[] @relation("CreatedByUser")
+  verifiedRecords BirthRecord[] @relation("VerifiedByUser")
+
+  @@index([username])
+  @@index([role])
+  @@map("users")
+}
+
+// Tabel BirthRecord - menyimpan data kelahiran bayi
+model BirthRecord {
+  id              String       @id @default(cuid())
+  nikIbu          String       @map("nik_ibu") @db.Char(16)
+  namaIbu         String       @map("nama_ibu") @db.VarChar(100)
+  namaAyah        String       @map("nama_ayah") @db.VarChar(100)
+  namaBayi        String       @map("nama_bayi") @db.VarChar(100)
+  tanggalLahir    DateTime     @map("tanggal_lahir")
+  tempatLahir     String       @map("tempat_lahir") @db.VarChar(150)
+  jenisKelamin    String       @map("jenis_kelamin") @db.VarChar(15)
+  beratBadan      Double?      @map("berat_badan")
+  panjangBadan    Double?      @map("panjang_badan")
+  status          String       @default("PENDING") @db.VarChar(20)
+  alasanPenolakan String?      @map("alasan_penolakan") @db.Text
+  isDeleted       Boolean      @default(false) @map("is_deleted")
+  puskesmasId     String       @map("puskesmas_id")
+  createdBy       String       @map("created_by")
+  verifiedBy      String?      @map("verified_by")
+  verifiedAt      DateTime?    @map("verified_at")
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+
+  puskesmas       Puskesmas    @relation(fields: [puskesmasId], references: [id], onDelete: Cascade)
+  creator         User         @relation("CreatedByUser", fields: [createdBy], references: [id], onDelete: Cascade)
+  verifier        User?        @relation("VerifiedByUser", fields: [verifiedBy], references: [id], onDelete: SetNull)
+  auditLogs       AuditLog[]   @relation("BirthRecordAudit")
+
+  @@index([puskesmasId])
+  @@index([status])
+  @@index([tanggalLahir])
+  @@index([createdAt])
+  @@map("birth_records")
+}
+
+// Tabel AuditLog - menyimpan log aktivitas pengguna
+model AuditLog {
+  id          String       @id @default(cuid())
+  userId      String       @map("user_id")
+  action      String       @db.VarChar(20)
+  entity      String       @db.VarChar(50)
+  entityId    String?      @map("entity_id")
+  details     String?      @db.Text
+  ipAddress   String?      @map("ip_address") @db.VarChar(45)
+  userAgent   String?      @map("user_agent") @db.VarChar(500)
+  createdAt   DateTime     @default(now()) @map("created_at")
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  birthRecord BirthRecord? @relation("BirthRecordAudit", fields: [entityId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
