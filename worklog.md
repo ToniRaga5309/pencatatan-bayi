@@ -117,3 +117,36 @@ Stage Summary:
 - Delete user feature fully functional with proper safety guards
 - 21 files modified, deployed to production (commit 0ece9a6)
 - Production URL: https://pencatatan-bayi.vercel.app
+---
+Task ID: 5
+Agent: Main Agent
+Task: Dual download system + ACC all + filter undownloaded data
+
+Work Log:
+- Created POST /api/admin/birth-records/verify-all endpoint for bulk verifying all pending undownloaded records
+- Created GET /api/admin/download-register endpoint for downloading historical register (downloaded data)
+- Updated GET /api/admin/birth-records to support ?show=new|all query parameter
+  - Default "new" filters to only undownloaded records (downloadedAt IS NULL)
+  - "all" shows all records including previously downloaded
+- Updated GET /api/admin/stats to include new counts:
+  - totalNewData: undownloaded records count
+  - totalRegistered: downloaded (register) records count
+  - totalPendingNew: pending AND undownloaded count
+- Updated GET /api/admin/pending-count to filter by undownloaded only
+- Redesigned admin dashboard table section:
+  - Added "ACC Semua" button (green, verifies all pending undownloaded at once)
+  - Added "Download Data Baru" button (downloads undownloaded, marks as downloaded)
+  - Added "Download Register" button (downloads historical register, read-only)
+  - Added toggle between "Data Baru" and "Semua Data" views
+  - Updated table description to show record counts per view
+  - Updated QuickStatsSummary to show new vs register counts
+- Fixed .vercel/project.json to point to correct pencatatan-bayi project
+
+Stage Summary:
+- Admin dashboard now clearly separates new data from downloaded register
+- Table defaults to showing only new undownloaded data
+- One-click "ACC Semua" for bulk verification of all pending data
+- Two distinct download buttons for different use cases
+- Register data is preserved and downloadable at any time
+- All changes deployed to production (commit 228f2de)
+- Production URL: https://pencatatan-bayi.vercel.app
