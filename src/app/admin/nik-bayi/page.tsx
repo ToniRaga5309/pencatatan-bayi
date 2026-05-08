@@ -16,7 +16,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import {
   ArrowLeft, Search, Loader2, Upload, FileSpreadsheet,
   Edit, ChevronLeft, ChevronRight, LogOut, CheckCircle,
-  XCircle, Baby, AlertTriangle, Download, Menu, UserCircle
+  XCircle, Baby, AlertTriangle, Download, Menu, UserCircle, Trash2
 } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
@@ -78,6 +78,11 @@ export default function NikBayiManagementPage() {
   const [showNikMap, setShowNikMap] = useState<Record<string, boolean>>({})
   const [withoutNikCount, setWithoutNikCount] = useState(0)
   const [schemaSynced, setSchemaSynced] = useState(false)
+
+  // Delete NIK dialog state
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [deleteRecord, setDeleteRecord] = useState<BirthRecord | null>(null)
+  const [isDeletingNik, setIsDeletingNik] = useState(false)
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -265,6 +270,34 @@ export default function NikBayiManagementPage() {
 
   const toggleNikVisibility = (id: string) => {
     setShowNikMap(prev => ({ ...prev, [id]: !prev[id] }))
+  }
+
+  const openDeleteDialog = (record: BirthRecord) => {
+    setDeleteRecord(record)
+    setShowDeleteDialog(true)
+  }
+
+  const handleDeleteNik = async () => {
+    if (!deleteRecord) return
+    setIsDeletingNik(true)
+    try {
+      const response = await fetch(`/api/admin/nik-bayi?recordId=${deleteRecord.id}`, {
+        method: "DELETE"
+      })
+      if (response.ok) {
+        const data = await response.json()
+        toast.success(data.message || "NIK Bayi berhasil dihapus")
+        setShowDeleteDialog(false)
+        fetchRecords()
+      } else {
+        const data = await response.json()
+        toast.error(data.error || "Gagal menghapus NIK Bayi")
+      }
+    } catch {
+      toast.error("Terjadi kesalahan")
+    } finally {
+      setIsDeletingNik(false)
+    }
   }
 
   if (status === "loading") {
@@ -530,13 +563,27 @@ export default function NikBayiManagementPage() {
                           </Badge>
                         </TableCell>
                         <TableCell className="text-right">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => openEditDialog(record)}
-                          >
-                            <Edit className="w-4 h-4" />
-                          </Button>
+                          <div className="flex items-center justify-end gap-1">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => openEditDialog(record)}
+                              title="Edit NIK Bayi"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                            {record.nikBayi && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => openDeleteDialog(record)}
+                                className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                                title="Hapus NIK Bayi"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            )}
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))
@@ -626,6 +673,49 @@ export default function NikBayiManagementPage() {
                 <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Menyimpan...</>
               ) : (
                 "Simpan"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete NIK Confirmation Dialog */}
+      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-red-600">
+              <Trash2 className="w-5 h-5" />
+              Hapus NIK Bayi
+            </DialogTitle>
+            <DialogDescription>
+              Tindakan ini akan menghapus NIK Bayi dari data kelahiran.
+            </DialogDescription>
+          </DialogHeader>
+          {deleteRecord && (
+            <div className="space-y-4">
+              <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                <p className="text-sm font-medium text-red-700 dark:text-red-300 mb-2">
+                  Apakah Anda yakin ingin menghapus NIK Bayi berikut?
+                </p>
+                <div className="space-y-1 text-sm">
+                  <p><span className="text-slate-500">Nama Bayi:</span> <span className="font-medium">{deleteRecord.namaBayi}</span></p>
+                  <p><span className="text-slate-500">NIK Ibu:</span> <span className="font-mono">{deleteRecord.nikIbu}</span></p>
+                  <p><span className="text-slate-500">NIK Bayi yang akan dihapus:</span> <span className="font-mono font-semibold text-red-600">{deleteRecord.nikBayi}</span></p>
+                </div>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>Batal</Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteNik}
+              disabled={isDeletingNik}
+            >
+              {isDeletingNik ? (
+                <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Menghapus...</>
+              ) : (
+                <><Trash2 className="w-4 h-4 mr-2" />Hapus NIK</>
               )}
             </Button>
           </DialogFooter>

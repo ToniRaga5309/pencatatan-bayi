@@ -187,3 +187,67 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Terjadi kesalahan server", details: message }, { status: 500 })
   }
 }
+
+// DELETE: Hapus NIK bayi dari sebuah record (set nikBayi & nikBayiUpdatedAt to null)
+export async function DELETE(request: NextRequest) {
+  try {
+    const user = await getCurrentUser()
+
+    if (!user || user.role !== "ADMIN") {
+      return NextResponse.json({ error: "Tidak memiliki akses" }, { status: 403 })
+    }
+
+    const { searchParams } = new URL(request.url)
+    const recordId = searchParams.get("recordId")
+
+    if (!recordId) {
+      return NextResponse.json({ error: "recordId wajib diisi" }, { status: 400 })
+    }
+
+    // Check record exists
+    const existingRecord = await db.birthRecord.findUnique({
+      where: { id: recordId }
+    })
+
+    if (!existingRecord) {
+      return NextResponse.json({ error: "Data kelahiran tidak ditemukan" }, { status: 404 })
+    }
+
+    if (!existingRecord.nikBayi) {
+      return NextResponse.json({ error: "Record ini belum memiliki NIK Bayi" }, { status: 400 })
+    }
+
+    // Hapus NIK bayi (set to null)
+    await db.birthRecord.update({
+      where: { id: recordId },
+      data: {
+        nikBayi: null,
+        nikBayiUpdatedAt: null
+      }
+    })
+
+    // Audit log (fire-and-forget)
+    createAuditLog({
+      userId: user.id,
+      action: "DELETE",
+      entity: "BirthRecord",
+      entityId: recordId,
+      details: {
+        action: "DELETE_NIK_BAYI",
+        namaBayi: existingRecord.namaBayi,
+        deletedNikBayi: existingRecord.nikBayi
+      },
+      ipAddress: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || undefined,
+      userAgent: request.headers.get("user-agent") || undefined
+    }).catch(() => {})
+
+    return NextResponse.json({
+      success: true,
+      message: `NIK Bayi untuk "${existingRecord.namaBayi}" berhasil dihapus`
+    })
+  } catch (error) {
+    console.error("Error deleting NIK bayi:", error)
+    const message = error instanceof Error ? error.message : String(error)
+    return NextResponse.json({ error: "Terjadi kesalahan server", details: message }, { status: 500 })
+  }
+}
