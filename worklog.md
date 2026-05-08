@@ -150,3 +150,31 @@ Stage Summary:
 - Register data is preserved and downloadable at any time
 - All changes deployed to production (commit 228f2de)
 - Production URL: https://pencatatan-bayi.vercel.app
+---
+Task ID: 6
+Agent: Main Agent
+Task: Tambah fitur hapus NIK bayi
+
+Work Log:
+- Added DELETE method to `/api/admin/nik-bayi/route.ts`
+  - Accepts `?recordId=xxx` query parameter
+  - Authorization check (admin only)
+  - Validates record exists and has NIK bayi
+  - Sets `nikBayi` and `nikBayiUpdatedAt` to null (soft delete)
+  - Audit logging (fire-and-forget)
+- Added delete button (Trash2 icon, red) next to Edit button in NIK Bayi management page
+  - Only shown when record has NIK bayi (hidden for records without NIK)
+  - Red hover styling for danger indication
+- Added confirmation dialog before deletion:
+  - Shows baby name, NIK Ibu, and NIK Bayi to be deleted
+  - Red-themed warning box
+  - "Hapus NIK" destructive button with loading state
+  - Toast notifications for success/error
+- Deployed to production via Vercel
+
+Stage Summary:
+- NIK Bayi can now be deleted from individual records
+- Only 2 files changed: API route + NIK Bayi page (minimal impact)
+- No other features or pages affected
+- Deployed to production (commit a4b26dc, GitHub token expired - push pending)
+- Production URL: https://pencatatan-bayi.vercel.app
