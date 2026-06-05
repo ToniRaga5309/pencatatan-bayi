@@ -79,11 +79,16 @@ export async function GET(request: NextRequest) {
     // Generate buffer
     const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" })
 
-    // Tandai semua record sebagai sudah didownload
+    // Tandai semua record sebagai sudah didownload DAN otomatis di-ACC (VERIFIED)
     const recordIds = records.map(r => r.id)
     await db.birthRecord.updateMany({
       where: { id: { in: recordIds } },
-      data: { downloadedAt: new Date() }
+      data: {
+        downloadedAt: new Date(),
+        status: "VERIFIED",
+        verifiedBy: user.id,
+        verifiedAt: new Date()
+      }
     })
 
     // Audit log (fire-and-forget)
