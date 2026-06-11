@@ -236,3 +236,27 @@ Stage Summary:
 - Operator bisa download semua data inputannya termasuk NIK bayi yang sudah diproses
 - Hanya 4 file yang diubah: input/page.tsx, riwayat/page.tsx, download/route.ts (baru)
 - Deployed ke pencatatan-bayi.vercel.app
+---
+Task ID: 9
+Agent: Main Agent
+Task: Fix dokumen tidak terlihat di admin + tombol upload ulang operator
+
+Work Log:
+- **Fix Bug Dokumen Tidak Terlihat di Admin:**
+  - Di admin detail dialog (`openDetailDialog`), file fetch membaca `data.files` (salah)
+  - API mengembalikan `{ success: true, data: files }` — seharusnya `data.data`
+  - Diperbaiki: `setDetailFiles(data.files || [])` → `setDetailFiles(data.data || [])`
+  - Sekarang admin bisa melihat dan download dokumen pendukung di dialog detail
+
+- **Fix Tombol Upload Ulang di Riwayat Operator:**
+  - Sebelumnya tombol upload hanya muncul saat `recordFiles[id] === 0` (0 file)
+  - Setelah upload file, tombol diganti ikon paperclip statis tanpa aksi — tidak bisa upload ulang
+  - Diperbaiki: tombol upload SELALU tampil, dengan styling berbeda (biru jika sudah ada file, abu-abu jika belum)
+  - Dialog upload menampilkan judul "Upload Ulang Dokumen" + peringatan amber jika file sudah ada
+  - Backend sudah mendukung replace (hapus lama, insert baru) — tidak perlu diubah
+
+Stage Summary:
+- Admin sekarang bisa melihat dokumen pendukung di detail data kelahiran
+- Operator bisa upload ulang dokumen (replace) kapan saja dari riwayat input
+- Hanya 2 file diubah: admin/page.tsx, riwayat/page.tsx
+- Deployed ke pencatatan-bayi.vercel.app

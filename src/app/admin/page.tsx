@@ -755,7 +755,7 @@ export default function AdminDashboard() {
       const res = await fetch(`/api/admin/birth-records/${record.id}/files`)
       if (res.ok) {
         const data = await res.json()
-        setDetailFiles(data.files || [])
+        setDetailFiles(data.data || [])
       }
     } catch { setDetailFiles([]) }
   }

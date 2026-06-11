@@ -131,6 +131,7 @@ function RiwayatPageContent() {
   const [fileKK, setFileKK] = useState<File | null>(null)
   const [isUploadingFile, setIsUploadingFile] = useState(false)
   const [recordFiles, setRecordFiles] = useState<Record<string, number>>({})
+  const [fileExistingCount, setFileExistingCount] = useState(0)
 
   const [isDownloading, setIsDownloading] = useState(false)
 
@@ -381,6 +382,7 @@ function RiwayatPageContent() {
     setFileRecordName(record.namaBayi)
     setFileSurat(null)
     setFileKK(null)
+    setFileExistingCount(recordFiles[record.id] || 0)
     setShowFileDialog(true)
   }
 
@@ -661,11 +663,9 @@ function RiwayatPageContent() {
                             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleViewDetail(record)}>
                               <Eye className="w-4 h-4" />
                             </Button>
-                            {recordFiles[record.id] === 0 && (
-                              <Button variant="ghost" size="icon" className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20" onClick={() => openFileDialog(record)} title="Upload Dokumen">
+                            <Button variant="ghost" size="icon" className={`h-8 w-8 ${recordFiles[record.id] > 0 ? "text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20" : "text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20"}`} onClick={() => openFileDialog(record)} title={recordFiles[record.id] > 0 ? "Upload Ulang Dokumen" : "Upload Dokumen"}>
                                 <Upload className="w-4 h-4" />
                               </Button>
-                            )}
                             {recordFiles[record.id] > 0 && (
                               <span className="inline-flex items-center justify-center h-8 w-8 text-emerald-600" title={`${recordFiles[record.id]} file terupload`}>
                                 <Paperclip className="w-4 h-4" />
@@ -730,13 +730,21 @@ function RiwayatPageContent() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Upload className="w-5 h-5 text-blue-600" />
-              Upload Dokumen Pendukung
+              {fileExistingCount > 0 ? "Upload Ulang Dokumen" : "Upload Dokumen Pendukung"}
             </DialogTitle>
             <DialogDescription>
               Upload dokumen untuk data &quot;{fileRecordName}&quot;
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
+            {fileExistingCount > 0 && (
+              <div className="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                <p className="text-xs text-amber-700 dark:text-amber-300">
+                  <AlertTriangle className="w-3.5 h-3.5 inline mr-1" />
+                  Sudah ada {fileExistingCount} file terupload. File dengan tipe yang sama akan diganti dengan yang baru.
+                </p>
+              </div>
+            )}
             <div>
               <Label className="text-xs text-slate-600">Surat Keterangan Lahir</Label>
               <Input type="file" accept="image/*,.pdf" onChange={(e) => setFileSurat(e.target.files?.[0] || null)} className="mt-1 text-sm" />
