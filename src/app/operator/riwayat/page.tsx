@@ -132,6 +132,8 @@ function RiwayatPageContent() {
   const [isUploadingFile, setIsUploadingFile] = useState(false)
   const [recordFiles, setRecordFiles] = useState<Record<string, number>>({})
 
+  const [isDownloading, setIsDownloading] = useState(false)
+
   // Redirect jika belum login
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -187,7 +189,7 @@ function RiwayatPageContent() {
         const res = await fetch(`/api/operator/birth-records/${id}/files`)
         if (res.ok) {
           const data = await res.json()
-          counts[id] = data.files?.length || 0
+          counts[id] = data.data?.length || 0
         }
       } catch { counts[id] = 0 }
     }))
@@ -344,6 +346,33 @@ function RiwayatPageContent() {
       }
     } catch {
       toast.error("Terjadi kesalahan")
+    }
+  }
+
+  const handleDownloadData = async () => {
+    setIsDownloading(true)
+    try {
+      const response = await fetch("/api/operator/birth-records/download")
+      if (response.ok) {
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        // Extract filename from Content-Disposition header
+        const disposition = response.headers.get("Content-Disposition")
+        const filenameMatch = disposition?.match(/filename="(.+)"/)
+        a.download = filenameMatch ? filenameMatch[1] : `data-kelahiran-${new Date().toISOString().split("T")[0]}.xlsx`
+        a.click()
+        window.URL.revokeObjectURL(url)
+        toast.success("Data berhasil diunduh")
+      } else {
+        const data = await response.json()
+        toast.error(data.error || "Gagal mengunduh data")
+      }
+    } catch {
+      toast.error("Terjadi kesalahan")
+    } finally {
+      setIsDownloading(false)
     }
   }
 
@@ -558,6 +587,10 @@ function RiwayatPageContent() {
                 <Button variant="outline" onClick={() => { setShowImportDialog(true); setUploadResult(null) }} className="btn-hover">
                   <Upload className="w-4 h-4 mr-2" />
                   <span className="hidden sm:inline">Import Excel</span>
+                </Button>
+                <Button variant="outline" onClick={handleDownloadData} disabled={isDownloading} className="btn-hover">
+                  {isDownloading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Download className="w-4 h-4 mr-2" />}
+                  <span className="hidden sm:inline">Download Data</span>
                 </Button>
               </div>
             </div>

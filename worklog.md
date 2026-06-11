@@ -205,3 +205,34 @@ Stage Summary:
 - Files stored as base64 in PostgreSQL (no external storage needed)
 - Minimal changes to existing code (only added new features, no modifications to existing logic)
 - Deployed to pencatatan-bayi.vercel.app
+---
+Task ID: 8
+Agent: Main Agent
+Task: Fix upload di menu input operator + fitur download data operator (termasuk NIK bayi)
+
+Work Log:
+- **Fix Upload di Menu Input Operator:**
+  - Sebelumnya file upload hanya muncul sesaat setelah save (lalu redirect), sehingga tidak terlihat
+  - Dipindahkan file upload section (surat keterangan lahir + kartu keluarga) langsung ke dalam form sebelum tombol submit
+  - Upload bersifat opsional - jika file dipilih, otomatis diupload setelah record berhasil disimpan
+  - File upload gagal tidak menggagalkan penyimpanan data (non-critical)
+  - Untuk "Simpan & Input Lagi", file input juga direset
+
+- **Fix Bug fetchFileCounts di Riwayat:**
+  - API GET files mengembalikan `{ success: true, data: files }`
+  - Client membaca `data.files?.length` (salah) → diperbaiki ke `data.data?.length` (benar)
+  - Sebelumnya selalu menampilkan 0 file, sehingga tombol upload selalu muncul
+
+- **Fitur Download Data Operator:**
+  - Dibuat API GET `/api/operator/birth-records/download` untuk operator download data milik puskesmas sendiri
+  - Data diexport ke Excel (XLSX) dengan kolom: No, Nama Bayi, NIK Bayi, Jenis Kelamin, Tanggal Lahir, Tempat Lahir, NIK Ibu, Nama Ibu, Nama Ayah, Berat Badan, Panjang Badan, Status, Puskesmas, Tanggal Input
+  - NIK Bayi yang sudah diproses admin akan muncul di kolom "NIK Bayi" (jika belum ada, tampilkan "-")
+  - Ditambahkan tombol "Download Data" di halaman riwayat input operator (sebelah tombol Import Excel)
+  - Audit logging untuk setiap download
+
+Stage Summary:
+- Upload dokumen pendukung sekarang terlihat dan berfungsi di menu input data operator
+- File count indicator di riwayat sekarang menunjukkan status yang benar (paperclip/upload button)
+- Operator bisa download semua data inputannya termasuk NIK bayi yang sudah diproses
+- Hanya 4 file yang diubah: input/page.tsx, riwayat/page.tsx, download/route.ts (baru)
+- Deployed ke pencatatan-bayi.vercel.app
