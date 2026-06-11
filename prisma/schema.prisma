@@ -43,6 +43,7 @@ model User {
   auditLogs       AuditLog[]
   createdRecords  BirthRecord[] @relation("CreatedByUser")
   verifiedRecords BirthRecord[] @relation("VerifiedByUser")
+  uploadedFiles   BirthRecordFile[] @relation("UploadedFiles")
 
   @@index([username])
   @@index([role])
@@ -77,12 +78,33 @@ model BirthRecord {
   puskesmas       Puskesmas    @relation(fields: [puskesmasId], references: [id], onDelete: Cascade)
   creator         User         @relation("CreatedByUser", fields: [createdBy], references: [id], onDelete: Cascade)
   verifier        User?        @relation("VerifiedByUser", fields: [verifiedBy], references: [id], onDelete: SetNull)
+  files           BirthRecordFile[]
 
   @@index([puskesmasId])
   @@index([status])
   @@index([tanggalLahir])
   @@index([createdAt])
   @@map("birth_records")
+}
+
+// Tabel BirthRecordFile - menyimpan file pendukung kelahiran
+model BirthRecordFile {
+  id            String    @id @default(cuid())
+  birthRecordId String    @map("birth_record_id")
+  fileType      String    @map("file_type") @db.VarChar(30) // SURAT_KELAHIRAN, KARTU_KELUARGA
+  fileName      String    @map("file_name") @db.VarChar(255)
+  fileMime      String    @map("file_mime") @db.VarChar(100)
+  fileSize      Int       @map("file_size") // bytes
+  fileData      String    @map("file_data") @db.Text // base64 encoded
+  uploadedBy    String    @map("uploaded_by")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  birthRecord   BirthRecord @relation(fields: [birthRecordId], references: [id], onDelete: Cascade)
+  uploader      User        @relation("UploadedFiles", fields: [uploadedBy], references: [id], onDelete: Cascade)
+
+  @@index([birthRecordId])
+  @@index([fileType])
+  @@map("birth_record_files")
 }
 
 // Tabel AuditLog - menyimpan log aktivitas pengguna

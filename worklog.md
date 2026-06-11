@@ -178,3 +178,30 @@ Stage Summary:
 - No other features or pages affected
 - Deployed to production (commit a4b26dc, GitHub token expired - push pending)
 - Production URL: https://pencatatan-bayi.vercel.app
+---
+Task ID: 7
+Agent: Main Agent
+Task: Tambah fitur upload file pendukung (surat keterangan lahir & kartu keluarga)
+
+Work Log:
+- Added `BirthRecordFile` model to Prisma schema (base64 storage in TEXT column)
+- Added `uploadedFiles` relation to User model
+- Updated schema-sync.ts to auto-create `birth_record_files` table with FKs and indexes
+- Created 3 new API routes (no existing files modified except UI pages):
+  - POST/GET/DELETE `/api/operator/birth-records/[id]/files` — upload, list, delete files
+  - GET `/api/admin/birth-records/[id]/files` — admin list files
+  - GET `/api/admin/birth-records/[id]/files/[fileId]/download` — admin download file
+- Updated operator input page: after saving, shows optional file upload section (surat kelahiran + KK)
+- Updated operator riwayat page: upload button (blue) for records without files, paperclip icon for records with files
+- Updated admin detail dialog: shows "Dokumen Pendukung" section with download buttons for each file
+- File validation: max 5MB, only image/* and application/pdf
+- Each fileType (SURAT_KELAHIRAN/KARTU_KELUARGA) replaces previous upload (one file per type)
+- Schema synced via production API, new table created in Supabase
+
+Stage Summary:
+- Operators can upload supporting documents (surat keterangan lahir & kartu keluarga)
+- Upload is optional and available on both input page and riwayat page
+- Admin can view and download uploaded files from detail dialog
+- Files stored as base64 in PostgreSQL (no external storage needed)
+- Minimal changes to existing code (only added new features, no modifications to existing logic)
+- Deployed to pencatatan-bayi.vercel.app

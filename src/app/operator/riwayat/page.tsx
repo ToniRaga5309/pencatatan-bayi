@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ArrowLeft, Search, Loader2, Eye, ChevronLeft, ChevronRight, CheckCircle, Clock, XCircle, Shield, FileText, Menu, LogOut, Plus, Printer, Upload, Download, AlertTriangle, UserCircle, Edit, Save, Trash2 } from "lucide-react"
+import { ArrowLeft, Search, Loader2, Eye, ChevronLeft, ChevronRight, CheckCircle, Clock, XCircle, Shield, FileText, Menu, LogOut, Plus, Printer, Upload, Download, AlertTriangle, UserCircle, Edit, Save, Trash2, Paperclip } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -123,6 +123,15 @@ function RiwayatPageContent() {
   const [deleteTarget, setDeleteTarget] = useState<BirthRecord | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
 
+  // File upload dialog
+  const [showFileDialog, setShowFileDialog] = useState(false)
+  const [fileRecordId, setFileRecordId] = useState("")
+  const [fileRecordName, setFileRecordName] = useState("")
+  const [fileSurat, setFileSurat] = useState<File | null>(null)
+  const [fileKK, setFileKK] = useState<File | null>(null)
+  const [isUploadingFile, setIsUploadingFile] = useState(false)
+  const [recordFiles, setRecordFiles] = useState<Record<string, number>>({})
+
   // Redirect jika belum login
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -161,12 +170,28 @@ function RiwayatPageContent() {
         const data = await response.json()
         setRecords(data.records)
         setTotalPages(data.pagination.totalPages)
+        // Fetch file counts for each record
+        fetchFileCounts(data.records.map((r: BirthRecord) => r.id))
       }
     } catch (error) {
       console.error("Error fetching records:", error)
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const fetchFileCounts = async (ids: string[]) => {
+    const counts: Record<string, number> = {}
+    await Promise.all(ids.map(async (id) => {
+      try {
+        const res = await fetch(`/api/operator/birth-records/${id}/files`)
+        if (res.ok) {
+          const data = await res.json()
+          counts[id] = data.files?.length || 0
+        }
+      } catch { counts[id] = 0 }
+    }))
+    setRecordFiles(counts)
   }
 
   const handleSearch = () => {
@@ -319,6 +344,43 @@ function RiwayatPageContent() {
       }
     } catch {
       toast.error("Terjadi kesalahan")
+    }
+  }
+
+  const openFileDialog = (record: BirthRecord) => {
+    setFileRecordId(record.id)
+    setFileRecordName(record.namaBayi)
+    setFileSurat(null)
+    setFileKK(null)
+    setShowFileDialog(true)
+  }
+
+  const handleFileUpload = async () => {
+    if (!fileSurat && !fileKK) {
+      toast.error("Pilih minimal satu file")
+      return
+    }
+    setIsUploadingFile(true)
+    try {
+      const fd = new FormData()
+      if (fileSurat) fd.append("suratKelahiran", fileSurat)
+      if (fileKK) fd.append("kartuKeluarga", fileKK)
+      const response = await fetch(`/api/operator/birth-records/${fileRecordId}/files`, {
+        method: "POST",
+        body: fd
+      })
+      if (response.ok) {
+        toast.success("File pendukung berhasil diupload")
+        setShowFileDialog(false)
+        fetchRecords()
+      } else {
+        const data = await response.json()
+        toast.error(data.error || "Gagal mengupload file")
+      }
+    } catch {
+      toast.error("Terjadi kesalahan")
+    } finally {
+      setIsUploadingFile(false)
     }
   }
 
@@ -566,6 +628,16 @@ function RiwayatPageContent() {
                             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleViewDetail(record)}>
                               <Eye className="w-4 h-4" />
                             </Button>
+                            {recordFiles[record.id] === 0 && (
+                              <Button variant="ghost" size="icon" className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20" onClick={() => openFileDialog(record)} title="Upload Dokumen">
+                                <Upload className="w-4 h-4" />
+                              </Button>
+                            )}
+                            {recordFiles[record.id] > 0 && (
+                              <span className="inline-flex items-center justify-center h-8 w-8 text-emerald-600" title={`${recordFiles[record.id]} file terupload`}>
+                                <Paperclip className="w-4 h-4" />
+                              </span>
+                            )}
                             {!record.downloadedAt && record.status === "PENDING" && (
                               <Button variant="ghost" size="icon" className="h-8 w-8 text-amber-600 hover:text-amber-700 hover:bg-amber-50 dark:hover:bg-amber-900/20" onClick={() => openEditDialog(record)} title="Edit">
                                 <Edit className="w-4 h-4" />
@@ -618,6 +690,38 @@ function RiwayatPageContent() {
           <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">&copy; {new Date().getFullYear()} Kabupaten Ngada &middot; v1.0.0</p>
         </div>
       </footer>
+
+      {/* File Upload Dialog */}
+      <Dialog open={showFileDialog} onOpenChange={setShowFileDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Upload className="w-5 h-5 text-blue-600" />
+              Upload Dokumen Pendukung
+            </DialogTitle>
+            <DialogDescription>
+              Upload dokumen untuk data &quot;{fileRecordName}&quot;
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label className="text-xs text-slate-600">Surat Keterangan Lahir</Label>
+              <Input type="file" accept="image/*,.pdf" onChange={(e) => setFileSurat(e.target.files?.[0] || null)} className="mt-1 text-sm" />
+            </div>
+            <div>
+              <Label className="text-xs text-slate-600">Kartu Keluarga</Label>
+              <Input type="file" accept="image/*,.pdf" onChange={(e) => setFileKK(e.target.files?.[0] || null)} className="mt-1 text-sm" />
+            </div>
+            <p className="text-xs text-slate-500">Format: JPG, PNG, PDF (maks 5MB per file)</p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowFileDialog(false)}>Batal</Button>
+            <Button onClick={handleFileUpload} disabled={isUploadingFile || (!fileSurat && !fileKK)} className="bg-blue-600 hover:bg-blue-700">
+              {isUploadingFile ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Mengupload...</> : <><Upload className="w-4 h-4 mr-2" />Upload</>}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Import Excel Dialog */}
       <Dialog open={showImportDialog} onOpenChange={(open) => { setShowImportDialog(open); if (!open) setUploadResult(null) }}>

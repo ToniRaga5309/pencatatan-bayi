@@ -172,6 +172,59 @@ async function doSync(): Promise<boolean> {
         // Ignore
       }
 
+      // 6. Ensure birth_record_files table exists
+      try {
+        await pool.query(`
+          CREATE TABLE IF NOT EXISTS "birth_record_files" (
+              "id" TEXT NOT NULL,
+              "birth_record_id" TEXT NOT NULL,
+              "file_type" VARCHAR(30) NOT NULL,
+              "file_name" VARCHAR(255) NOT NULL,
+              "file_mime" VARCHAR(100) NOT NULL,
+              "file_size" INTEGER NOT NULL,
+              "file_data" TEXT NOT NULL,
+              "uploaded_by" TEXT NOT NULL,
+              "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              CONSTRAINT "birth_record_files_pkey" PRIMARY KEY ("id")
+          )
+        `)
+      } catch {
+        // Ignore
+      }
+      // FK: birth_record_files.birth_record_id -> birth_records.id
+      try {
+        await pool.query(`
+          DO $$ BEGIN
+            IF NOT EXISTS (
+              SELECT 1 FROM pg_constraint WHERE conname = 'birth_record_files_birth_record_id_fkey'
+            ) THEN
+              ALTER TABLE "birth_record_files" ADD CONSTRAINT "birth_record_files_birth_record_id_fkey" 
+              FOREIGN KEY ("birth_record_id") REFERENCES "birth_records"("id") ON DELETE CASCADE;
+            END IF;
+          END $$
+        `)
+      } catch {
+        // Ignore
+      }
+      // FK: birth_record_files.uploaded_by -> users.id
+      try {
+        await pool.query(`
+          DO $$ BEGIN
+            IF NOT EXISTS (
+              SELECT 1 FROM pg_constraint WHERE conname = 'birth_record_files_uploaded_by_fkey'
+            ) THEN
+              ALTER TABLE "birth_record_files" ADD CONSTRAINT "birth_record_files_uploaded_by_fkey" 
+              FOREIGN KEY ("uploaded_by") REFERENCES "users"("id") ON DELETE CASCADE;
+            END IF;
+          END $$
+        `)
+      } catch {
+        // Ignore
+      }
+      // Indexes for birth_record_files
+      try { await pool.query(`CREATE INDEX IF NOT EXISTS "birth_record_files_birth_record_id_idx" ON "birth_record_files"("birth_record_id")`) } catch {}
+      try { await pool.query(`CREATE INDEX IF NOT EXISTS "birth_record_files_file_type_idx" ON "birth_record_files"("file_type")`) } catch {}
+
       console.log("[schema-sync] Schema sync completed successfully")
       return true
     } finally {

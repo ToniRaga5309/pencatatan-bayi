@@ -19,7 +19,7 @@ import {
   Baby, Download, Users, Loader2,
   Search, Eye, ChevronLeft, ChevronRight, ChevronFirst, ChevronLast, RefreshCw,
   FileText, LogOut, CheckCircle, Clock, XCircle,
-  Shield, IdCard, Menu, ClipboardList, Lock, BarChart3, UserCircle, TrendingUp, Building, Calendar, AlertCircle, Printer, Settings
+  Shield, IdCard, Menu, ClipboardList, Lock, BarChart3, UserCircle, TrendingUp, Building, Calendar, AlertCircle, Printer, Settings, Paperclip
 } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts"
@@ -231,6 +231,9 @@ export default function AdminDashboard() {
   const [reportMonth, setReportMonth] = useState(new Date().getMonth() + 1)
   const [reportYear, setReportYear] = useState(new Date().getFullYear())
   const [isGeneratingReport, setIsGeneratingReport] = useState(false)
+
+  // Detail files state
+  const [detailFiles, setDetailFiles] = useState<Array<{id:string; fileType:string; fileName:string; fileSize:number}>>([])
 
   // Show filter: "new" = only undownloaded, "all" = all data
   const [showFilter, setShowFilter] = useState<"new" | "all">("new")
@@ -742,6 +745,29 @@ export default function AdminDashboard() {
     setSelectedRecord(record)
     setRejectReason("")
     setShowRejectDialog(true)
+  }
+
+  const openDetailDialog = async (record: BirthRecord) => {
+    setSelectedRecord(record)
+    setShowDetail(true)
+    // Fetch files for this record
+    try {
+      const res = await fetch(`/api/admin/birth-records/${record.id}/files`)
+      if (res.ok) {
+        const data = await res.json()
+        setDetailFiles(data.files || [])
+      }
+    } catch { setDetailFiles([]) }
+  }
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes < 1024) return bytes + ' B'
+    if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB'
+    return (bytes/(1024*1024)).toFixed(1) + ' MB'
+  }
+
+  const downloadFile = (fileId: string, fileName: string) => {
+    window.open(`/api/admin/birth-records/${selectedRecord?.id}/files/${fileId}/download`, '_blank')
   }
 
   const handleReject = async () => {
@@ -1423,7 +1449,7 @@ export default function AdminDashboard() {
                               variant="ghost" 
                               size="icon"
                               className="h-8 w-8"
-                              onClick={() => { setSelectedRecord(record); setShowDetail(true) }}
+                              onClick={() => openDetailDialog(record) }
                               title="Lihat Detail"
                             >
                               <Eye className="w-4 h-4" />
@@ -1585,6 +1611,40 @@ export default function AdminDashboard() {
               <div className="col-span-2">
                 <Label className="text-slate-500">Diinput Pada</Label>
                 <p className="font-medium">{formatDateIndonesia(selectedRecord.createdAt)}</p>
+              </div>
+              {/* Dokumen Pendukung */}
+              <div className="col-span-2 border-t pt-4 mt-2">
+                <Label className="text-slate-500 flex items-center gap-1.5">
+                  <Paperclip className="w-3.5 h-3.5" />
+                  Dokumen Pendukung
+                </Label>
+                {detailFiles.length > 0 ? (
+                  <div className="mt-2 space-y-2">
+                    {detailFiles.map((file) => (
+                      <div key={file.id} className="flex items-center justify-between p-2 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <FileText className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium truncate">{file.fileName}</p>
+                            <p className="text-xs text-slate-400">
+                              {file.fileType === "SURAT_KELAHIRAN" ? "Surat Keterangan Lahir" : "Kartu Keluarga"} • {formatFileSize(file.fileSize)}
+                            </p>
+                          </div>
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="flex-shrink-0"
+                          onClick={() => downloadFile(file.id, file.fileName)}
+                        >
+                          <Download className="w-3 h-3 mr-1" />Unduh
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-slate-400 mt-1">Tidak ada dokumen pendukung</p>
+                )}
               </div>
             </div>
           )}

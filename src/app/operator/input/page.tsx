@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { ArrowLeft, Loader2, Save, Plus, AlertCircle, CheckCircle, Menu, LogOut, UserCircle } from "lucide-react"
+import { ArrowLeft, Loader2, Save, Plus, AlertCircle, CheckCircle, Menu, LogOut, UserCircle, Upload, FileText, Paperclip } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -35,6 +35,13 @@ export default function InputDataPage() {
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  // File upload state
+  const [savedRecordId, setSavedRecordId] = useState("")
+  const [showFileUpload, setShowFileUpload] = useState(false)
+  const [suratKelahiran, setSuratKelahiran] = useState<File | null>(null)
+  const [kartuKeluarga, setKartuKeluarga] = useState<File | null>(null)
+  const [isUploadingFile, setIsUploadingFile] = useState(false)
 
   // Redirect jika belum login
   if (status === "unauthenticated") {
@@ -115,6 +122,8 @@ export default function InputDataPage() {
       if (response.ok) {
         toast.success("Data berhasil disimpan")
         setSavedBabyName(formData.namaBayi.toUpperCase())
+        setSavedRecordId(result.data?.id || "")
+        setShowFileUpload(true)
         
         if (continueInput) {
           setFormData({
@@ -127,6 +136,10 @@ export default function InputDataPage() {
             jenisKelamin: ""
           })
           setErrors({})
+          setSuratKelahiran(null)
+          setKartuKeluarga(null)
+          setShowFileUpload(false)
+          setSavedRecordId("")
           setShowSuccess(true)
           setTimeout(() => setShowSuccess(false), 3000)
         } else {
@@ -174,6 +187,43 @@ export default function InputDataPage() {
         return newErrors
       })
     }
+  }
+
+  const handleUploadFiles = async () => {
+    if (!savedRecordId) return
+    if (!suratKelahiran && !kartuKeluarga) {
+      toast.error("Pilih minimal satu file untuk diupload")
+      return
+    }
+    setIsUploadingFile(true)
+    try {
+      const fd = new FormData()
+      if (suratKelahiran) fd.append("suratKelahiran", suratKelahiran)
+      if (kartuKeluarga) fd.append("kartuKeluarga", kartuKeluarga)
+      const response = await fetch(`/api/operator/birth-records/${savedRecordId}/files`, {
+        method: "POST",
+        body: fd
+      })
+      if (response.ok) {
+        toast.success("File pendukung berhasil diupload")
+        setShowFileUpload(false)
+        setSuratKelahiran(null)
+        setKartuKeluarga(null)
+      } else {
+        const data = await response.json()
+        toast.error(data.error || "Gagal mengupload file")
+      }
+    } catch {
+      toast.error("Terjadi kesalahan saat upload")
+    } finally {
+      setIsUploadingFile(false)
+    }
+  }
+
+  const skipFileUpload = () => {
+    setShowFileUpload(false)
+    setSuratKelahiran(null)
+    setKartuKeluarga(null)
   }
 
   if (status === "loading") {
@@ -414,6 +464,50 @@ export default function InputDataPage() {
                   Data yang disimpan akan masuk ke status &quot;Menunggu&quot; dan memerlukan verifikasi dari Admin Dukcapil.
                 </AlertDescription>
               </Alert>
+
+              {/* File Upload Section - shown after successful save */}
+              {showFileUpload && savedRecordId && !saveAndContinue && (
+                <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Paperclip className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    <h4 className="font-medium text-sm text-blue-700 dark:text-blue-300">Upload Dokumen Pendukung <span className="font-normal text-blue-500">(opsional)</span></h4>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-xs text-slate-600">Surat Keterangan Lahir</Label>
+                      <Input
+                        type="file"
+                        accept="image/*,.pdf"
+                        onChange={(e) => setSuratKelahiran(e.target.files?.[0] || null)}
+                        className="mt-1 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-slate-600">Kartu Keluarga</Label>
+                      <Input
+                        type="file"
+                        accept="image/*,.pdf"
+                        onChange={(e) => setKartuKeluarga(e.target.files?.[0] || null)}
+                        className="mt-1 text-sm"
+                      />
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-500">Format: JPG, PNG, PDF (maks 5MB per file)</p>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      onClick={handleUploadFiles}
+                      disabled={isUploadingFile || (!suratKelahiran && !kartuKeluarga)}
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
+                      {isUploadingFile ? <><Loader2 className="w-3 h-3 mr-1 animate-spin" />Mengupload...</> : <><Upload className="w-3 h-3 mr-1" />Upload</>}
+                    </Button>
+                    <Button size="sm" variant="outline" onClick={skipFileUpload}>
+                      Lewati
+                    </Button>
+                  </div>
+                </div>
+              )}
 
               {/* Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 pt-4">
