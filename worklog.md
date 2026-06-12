@@ -260,3 +260,31 @@ Stage Summary:
 - Operator bisa upload ulang dokumen (replace) kapan saja dari riwayat input
 - Hanya 2 file diubah: admin/page.tsx, riwayat/page.tsx
 - Deployed ke pencatatan-bayi.vercel.app
+---
+Task ID: 10
+Agent: Main Agent
+Task: Tambah menu terpisah admin untuk melihat dokumen pendukung operator
+
+Work Log:
+- **Buat API GET `/api/admin/files`:**
+  - List semua file pendukung dari semua puskesmas dengan pagination
+  - Support filter: puskesmasId, fileType, search
+  - Menggunakan Prisma `AND` conditions untuk kombinasi filter yang benar
+
+- **Buat halaman `/admin/dokumen/page.tsx`:**
+  - Halaman terpisah khusus melihat dokumen pendukung yang diupload operator
+  - Tabel: No, Tipe File (badge), Nama File + ukuran, Nama Bayi, NIK Ibu, Puskesmas, Diupload Oleh, Tanggal Upload, Aksi (Unduh)
+  - Filter: search, tipe file, puskesmas
+  - Pagination 20 item per halaman, responsive
+
+- **Tambah menu di admin dashboard:**
+  - Desktop: tombol biru "Dokumen" (Paperclip icon)
+  - Mobile: item "Dokumen Pendukung"
+  - Hanya menambah 2 blok Link, tidak mengubah nav lain
+
+Stage Summary:
+- Admin memiliki halaman terpisah `/admin/dokumen` untuk dokumen pendukung
+- Tidak mengubah alur sistem yang sudah ada
+- File baru: api/admin/files/route.ts, admin/dokumen/page.tsx
+- File diubah: admin/page.tsx (hanya 2 menu item)
+- Deployed ke pencatatan-bayi.vercel.app

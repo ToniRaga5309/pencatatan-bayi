@@ -898,6 +898,12 @@ export default function AdminDashboard() {
                 Kelola User
               </Link>
             </Button>
+            <Button variant="outline" size="sm" asChild className="btn-hover bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-300 dark:hover:bg-blue-900/30">
+              <Link href="/admin/dokumen">
+                <Paperclip className="w-4 h-4 mr-2" />
+                <span className="hidden md:inline">Dokumen</span>
+              </Link>
+            </Button>
             <Button variant="outline" size="sm" className="btn-hover bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-300 dark:hover:bg-emerald-900/30" onClick={() => setShowReportDialog(true)}>
               <Printer className="w-4 h-4 mr-2" />
               <span className="hidden md:inline">Laporan</span>
@@ -973,6 +979,12 @@ export default function AdminDashboard() {
                   <Link href="/admin/users">
                     <Users className="w-4 h-4 mr-2" />
                     Kelola User
+                  </Link>
+                </Button>
+                <Button variant="ghost" size="sm" asChild className="justify-start text-blue-600 dark:text-blue-400">
+                  <Link href="/admin/dokumen">
+                    <Paperclip className="w-4 h-4 mr-2" />
+                    Dokumen Pendukung
                   </Link>
                 </Button>
                 <Button variant="ghost" size="sm" className="justify-start text-emerald-700 dark:text-emerald-300" onClick={() => setShowReportDialog(true)}>
