@@ -288,3 +288,32 @@ Stage Summary:
 - File baru: api/admin/files/route.ts, admin/dokumen/page.tsx
 - File diubah: admin/page.tsx (hanya 2 menu item)
 - Deployed ke pencatatan-bayi.vercel.app
+---
+Task ID: 11
+Agent: Main Agent
+Task: Fix server error on admin menu after adding noHp/emailOrtu columns
+
+Work Log:
+- User reported server error on admin menu after adding No. HP and Email orang tua fields
+- Root cause: Previous session added `noHp` and `emailOrtu` to Prisma schema and API/form code, but:
+  1. Did NOT add `no_hp` and `email_ortu` to `columnsToSync` in schema-sync.ts
+  2. Did NOT add them to `nullableColumns` in schema-sync.ts
+  3. Had removed `ensureSchemaSynced()` from all GET routes for performance
+- Result: Prisma client tried to SELECT columns that don't exist in Supabase → query failed → 500 error
+- Fix applied:
+  1. Added `no_hp` VARCHAR(20) and `email_ortu` VARCHAR(100) to `columnsToSync` in schema-sync.ts
+  2. Added both to `nullableColumns` in schema-sync.ts
+  3. Added `ensureSchemaSynced()` back to 4 admin GET endpoints that are called in parallel when admin page loads:
+     - /api/admin/stats/route.ts
+     - /api/admin/birth-records/route.ts (GET)
+     - /api/admin/charts/route.ts
+     - /api/admin/pending-count/route.ts
+  4. The dedup mechanism ensures only ONE actual sync runs (shared promise), cached for 10 min
+- Deployed to production (pencatatan-bayi.vercel.app)
+
+Stage Summary:
+- Root cause: Missing columns in database + missing schema-sync entries + no sync on GET routes
+- Fix: Added columns to schema-sync + re-enabled sync on admin GET entry points
+- Files changed: schema-sync.ts, stats/route.ts, birth-records/route.ts, charts/route.ts, pending-count/route.ts
+- First admin page visit will trigger schema sync (adds columns), then all queries work
+- No changes to operator input form, no changes to existing business logic

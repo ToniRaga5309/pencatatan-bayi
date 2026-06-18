@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
+import { ensureSchemaSynced } from "@/lib/schema-sync"
 
 export async function GET() {
   try {
@@ -10,6 +11,9 @@ export async function GET() {
     if (!user || user.role !== "ADMIN") {
       return NextResponse.json({ error: "Tidak memiliki akses" }, { status: 403 })
     }
+
+    // Pastikan skema database sudah sinkron sebelum query (cached 10 min)
+    await ensureSchemaSynced()
 
     const currentYear = new Date().getFullYear()
 

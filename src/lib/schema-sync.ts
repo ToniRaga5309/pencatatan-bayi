@@ -21,6 +21,8 @@ const columnsToSync = [
   { table: "birth_records", column: "verified_by", type: "TEXT" },
   { table: "birth_records", column: "verified_at", type: "TIMESTAMP(3)" },
   { table: "birth_records", column: "downloaded_at", type: "TIMESTAMP(3)" },
+  { table: "birth_records", column: "no_hp", type: "VARCHAR(20)" },
+  { table: "birth_records", column: "email_ortu", type: "VARCHAR(100)" },
   { table: "puskesmas", column: "telepon", type: "VARCHAR(20)" },
   { table: "puskesmas", column: "alamat", type: "TEXT" },
 ]
@@ -37,6 +39,8 @@ const nullableColumns = [
   { table: "birth_records", column: "downloaded_at" },
   { table: "puskesmas", column: "alamat" },
   { table: "puskesmas", column: "telepon" },
+  { table: "birth_records", column: "no_hp" },
+  { table: "birth_records", column: "email_ortu" },
   { table: "users", column: "puskesmas_id" },
 ]
 
