@@ -65,6 +65,8 @@ model BirthRecord {
   jenisKelamin    String       @map("jenis_kelamin") @db.VarChar(15)
   beratBadan      Double?      @map("berat_badan")
   panjangBadan    Double?      @map("panjang_badan")
+  noHp            String?      @map("no_hp") @db.VarChar(20)
+  emailOrtu       String?      @map("email_ortu") @db.VarChar(100)
   status          String       @default("PENDING") @db.VarChar(20)
   alasanPenolakan String?      @map("alasan_penolakan") @db.Text
   isDeleted       Boolean      @default(false) @map("is_deleted")

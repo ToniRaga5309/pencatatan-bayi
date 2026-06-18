@@ -31,7 +31,9 @@ export default function InputDataPage() {
     namaBayi: "",
     tanggalLahir: "",
     tempatLahir: "",
-    jenisKelamin: ""
+    jenisKelamin: "",
+    noHp: "",
+    emailOrtu: ""
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -110,7 +112,9 @@ export default function InputDataPage() {
           namaBayi: formData.namaBayi,
           tanggalLahir: formData.tanggalLahir,
           tempatLahir: formData.tempatLahir,
-          jenisKelamin: formData.jenisKelamin
+          jenisKelamin: formData.jenisKelamin,
+          noHp: formData.noHp,
+          emailOrtu: formData.emailOrtu
         })
       })
 
@@ -145,7 +149,9 @@ export default function InputDataPage() {
             namaBayi: "",
             tanggalLahir: "",
             tempatLahir: "",
-            jenisKelamin: ""
+            jenisKelamin: "",
+            noHp: "",
+            emailOrtu: ""
           })
           setErrors({})
           setSuratKelahiran(null)
@@ -421,6 +427,48 @@ export default function InputDataPage() {
                 </Select>
                 {errors.jenisKelamin && (
                   <p className="text-sm text-red-500">{errors.jenisKelamin}</p>
+                )}
+              </div>
+
+              {/* No. HP Orang Tua (opsional) */}
+              <div className="space-y-2">
+                <Label htmlFor="noHp">
+                  No. HP Orang Tua <span className="text-slate-400 text-xs">(opsional)</span>
+                </Label>
+                <Input
+                  id="noHp"
+                  type="tel"
+                  inputMode="numeric"
+                  placeholder="Contoh: 081234567890"
+                  value={formData.noHp}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/[^\d+]/g, "")
+                    handleInputChange("noHp", val)
+                  }}
+                  className={errors.noHp ? "border-red-500 focus-visible:ring-red-500" : "input-enhanced focus-visible:ring-emerald-500 focus-visible:border-emerald-500"}
+                />
+                {errors.noHp ? (
+                  <p className="text-sm text-red-500">{errors.noHp}</p>
+                ) : (
+                  <p className="text-xs text-slate-500">Format: 08xx atau +62xx (10-15 digit)</p>
+                )}
+              </div>
+
+              {/* Email Orang Tua (opsional) */}
+              <div className="space-y-2">
+                <Label htmlFor="emailOrtu">
+                  Email Orang Tua <span className="text-slate-400 text-xs">(opsional)</span>
+                </Label>
+                <Input
+                  id="emailOrtu"
+                  type="email"
+                  placeholder="Contoh: orangtua@email.com"
+                  value={formData.emailOrtu}
+                  onChange={(e) => handleInputChange("emailOrtu", e.target.value)}
+                  className={errors.emailOrtu ? "border-red-500 focus-visible:ring-red-500" : "input-enhanced focus-visible:ring-emerald-500 focus-visible:border-emerald-500"}
+                />
+                {errors.emailOrtu && (
+                  <p className="text-sm text-red-500">{errors.emailOrtu}</p>
                 )}
               </div>
 

@@ -34,7 +34,15 @@ const birthRecordSchema = z.object({
     .max(100, "Tempat lahir maksimal 100 karakter"),
   jenisKelamin: z.enum(["LAKI_LAKI", "PEREMPUAN"], {
     message: "Pilih jenis kelamin yang valid"
-  })
+  }),
+  noHp: z.string()
+    .regex(/^(\+62|62|0)\d{8,13}$/, "Format No. HP tidak valid")
+    .optional()
+    .or(z.literal("")),
+  emailOrtu: z.string()
+    .email("Format email tidak valid")
+    .optional()
+    .or(z.literal(""))
 })
 
 // GET: Ambil semua data kelahiran operator (with sorting)
@@ -185,6 +193,8 @@ export async function POST(request: NextRequest) {
         tanggalLahir: new Date(data.tanggalLahir),
         tempatLahir: data.tempatLahir.toUpperCase(),
         jenisKelamin: data.jenisKelamin,
+        noHp: data.noHp || null,
+        emailOrtu: data.emailOrtu || null,
         status: "PENDING",
         puskesmasId: user.puskesmasId,
         createdBy: user.id
