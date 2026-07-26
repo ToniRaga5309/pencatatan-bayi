@@ -44,6 +44,7 @@ model User {
   createdRecords  BirthRecord[] @relation("CreatedByUser")
   verifiedRecords BirthRecord[] @relation("VerifiedByUser")
   uploadedFiles   BirthRecordFile[] @relation("UploadedFiles")
+  pengaduan       Pengaduan[]
 
   @@index([username])
   @@index([role])
@@ -127,4 +128,28 @@ model AuditLog {
   @@index([action])
   @@index([createdAt])
   @@map("audit_logs")
+}
+
+// Tabel Pengaduan - menyimpan pengaduan/keluhan dari operator ke admin
+model Pengaduan {
+  id          String    @id @default(cuid())
+  userId      String    @map("user_id") // operator yang membuat pengaduan
+  subjek      String    @db.VarChar(200)
+  pesan       String    @db.Text
+  kategori    String    @db.VarChar(30) // SISTEM, DATA, PROSES, LAINNYA
+  prioritas   String    @default("SEDANG") @db.VarChar(15) // RENDAH, SEDANG, TINGGI
+  status      String    @default("TERBUKA") @db.VarChar(20) // TERBUKA, DIPROSES, SELESAI, DITUTUP
+  balasan     String?   @db.Text // balasan admin
+  balasanOleh String?   @map("balasan_oleh") // admin yang membalas
+  balasanPada DateTime? @map("balasan_pada")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@index([kategori])
+  @@index([createdAt])
+  @@map("pengaduan")
 }

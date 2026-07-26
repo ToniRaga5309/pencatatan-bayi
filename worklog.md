@@ -317,3 +317,54 @@ Stage Summary:
 - Files changed: schema-sync.ts, stats/route.ts, birth-records/route.ts, charts/route.ts, pending-count/route.ts
 - First admin page visit will trigger schema sync (adds columns), then all queries work
 - No changes to operator input form, no changes to existing business logic
+---
+Task ID: 12
+Agent: Main Agent
+Task: Tambah fitur pengaduan untuk operator
+
+Work Log:
+- User request: tambah opsi pengaduan oleh operator
+- Ditambahkan model Pengaduan ke prisma/schema.prisma:
+  - Fields: id, userId, subjek, pesan, kategori (SISTEM/DATA/PROSES/LAINNYA), prioritas (RENDAH/SEDANG/TINGGI), status (TERBUKA/DIPROSES/SELESAI/DITUTUP), balasan, balasanOleh, balasanPada, timestamps
+  - Relation ke User (onDelete: Cascade)
+- Ditambahkan tabel pengaduan creation di schema-sync.ts:
+  - CREATE TABLE IF NOT EXISTS pengaduan
+  - FK pengaduan_user_id_fkey -> users.id
+  - 4 indexes (user_id, status, kategori, created_at)
+- Dibuat 4 API routes baru:
+  - GET/POST /api/operator/pengaduan (list + create)
+  - GET/DELETE /api/operator/pengaduan/[id] (detail + delete, hanya bisa hapus jika TERBUKA)
+  - GET /api/admin/pengaduan (list all + filter search/status/kategori/prioritas + statusCounts)
+  - GET/PATCH /api/admin/pengaduan/[id] (detail + reply/update status)
+- Dibuat halaman /operator/pengaduan:
+  - Stats summary (Total, Terbuka, Diproses, Selesai)
+  - Filter status + kategori
+  - "Buat Pengaduan" button → dialog form (subjek, kategori, prioritas, pesan)
+  - List pengaduan dengan badge status/kategori/prioritas berwarna
+  - Balasan admin ditampilkan di highlighted box
+  - Expand/collapse untuk pesan panjang
+  - Delete dengan konfirmasi (hanya jika status TERBUKA)
+  - Pagination
+- Dibuat halaman /admin/pengaduan:
+  - Stats summary (Terbuka, Diproses, Selesai, Total)
+  - Filter search + status + kategori + prioritas
+  - List pengaduan dengan info operator (nama, puskesmas)
+  - Tombol "Balas" → dialog reply (edit balasan + ubah status)
+  - Quick status buttons (Tandai Diproses, Tandai Selesai, Tutup)
+  - Pagination
+- Ditambahkan navigasi:
+  - Operator dashboard: Quick Action card "Pengaduan" (amber gradient) + mobile menu item
+  - Admin dashboard: tombol "Pengaduan" (amber) di desktop nav + mobile menu item "Pengaduan Operator"
+- Deployed ke production (pencatatan-bayi.vercel.app)
+- Verified: halaman /operator/pengaduan dan /admin/pengaduan accessible (redirect ke login jika belum auth)
+- Verified: API /api/admin/pengaduan respond 403 (unauthorized) tanpa error server
+
+Stage Summary:
+- Fitur pengaduan lengkap: operator bisa buat/lihat/hapus pengaduan, admin bisa lihat/balas/ubah status
+- 4 kategori pengaduan: Sistem, Data, Proses Verifikasi, Lainnya
+- 3 level prioritas: Rendah, Sedang, Tinggi
+- 4 status: Terbuka, Diproses, Selesai, Ditutup
+- Audit logging untuk create/delete/update pengaduan
+- Tidak mengubah alur sistem yang sudah ada (hanya menambah file baru + 2 menu item)
+- Files baru: 4 API routes, 2 page (operator + admin pengaduan)
+- Files diubah: prisma/schema.prisma, schema-sync.ts, operator/page.tsx (3 quick actions + mobile menu), admin/page.tsx (2 menu items)

@@ -229,6 +229,49 @@ async function doSync(): Promise<boolean> {
       try { await pool.query(`CREATE INDEX IF NOT EXISTS "birth_record_files_birth_record_id_idx" ON "birth_record_files"("birth_record_id")`) } catch {}
       try { await pool.query(`CREATE INDEX IF NOT EXISTS "birth_record_files_file_type_idx" ON "birth_record_files"("file_type")`) } catch {}
 
+      // 7. Ensure pengaduan table exists
+      try {
+        await pool.query(`
+          CREATE TABLE IF NOT EXISTS "pengaduan" (
+              "id" TEXT NOT NULL,
+              "user_id" TEXT NOT NULL,
+              "subjek" VARCHAR(200) NOT NULL,
+              "pesan" TEXT NOT NULL,
+              "kategori" VARCHAR(30) NOT NULL,
+              "prioritas" VARCHAR(15) NOT NULL DEFAULT 'SEDANG',
+              "status" VARCHAR(20) NOT NULL DEFAULT 'TERBUKA',
+              "balasan" TEXT,
+              "balasan_oleh" TEXT,
+              "balasan_pada" TIMESTAMP(3),
+              "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              CONSTRAINT "pengaduan_pkey" PRIMARY KEY ("id")
+          )
+        `)
+      } catch {
+        // Ignore - table might already exist
+      }
+      // FK: pengaduan.user_id -> users.id
+      try {
+        await pool.query(`
+          DO $$ BEGIN
+            IF NOT EXISTS (
+              SELECT 1 FROM pg_constraint WHERE conname = 'pengaduan_user_id_fkey'
+            ) THEN
+              ALTER TABLE "pengaduan" ADD CONSTRAINT "pengaduan_user_id_fkey"
+              FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE;
+            END IF;
+          $$
+        `)
+      } catch {
+        // Ignore
+      }
+      // Indexes for pengaduan
+      try { await pool.query(`CREATE INDEX IF NOT EXISTS "pengaduan_user_id_idx" ON "pengaduan"("user_id")`) } catch {}
+      try { await pool.query(`CREATE INDEX IF NOT EXISTS "pengaduan_status_idx" ON "pengaduan"("status")`) } catch {}
+      try { await pool.query(`CREATE INDEX IF NOT EXISTS "pengaduan_kategori_idx" ON "pengaduan"("kategori")`) } catch {}
+      try { await pool.query(`CREATE INDEX IF NOT EXISTS "pengaduan_created_at_idx" ON "pengaduan"("created_at")`) } catch {}
+
       console.log("[schema-sync] Schema sync completed successfully")
       return true
     } finally {

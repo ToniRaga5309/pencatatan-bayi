@@ -19,7 +19,7 @@ import {
   Baby, Download, Users, Loader2,
   Search, Eye, ChevronLeft, ChevronRight, ChevronFirst, ChevronLast, RefreshCw,
   FileText, LogOut, CheckCircle, Clock, XCircle,
-  Shield, IdCard, Menu, ClipboardList, Lock, BarChart3, UserCircle, TrendingUp, Building, Calendar, AlertCircle, Printer, Settings, Paperclip
+  Shield, IdCard, Menu, ClipboardList, Lock, BarChart3, UserCircle, TrendingUp, Building, Calendar, AlertCircle, Printer, Settings, Paperclip, MessageSquare
 } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts"
@@ -904,6 +904,12 @@ export default function AdminDashboard() {
                 <span className="hidden md:inline">Dokumen</span>
               </Link>
             </Button>
+            <Button variant="outline" size="sm" asChild className="btn-hover bg-amber-50 border-amber-200 text-amber-700 hover:bg-amber-100 dark:bg-amber-900/20 dark:border-amber-800 dark:text-amber-300 dark:hover:bg-amber-900/30">
+              <Link href="/admin/pengaduan">
+                <MessageSquare className="w-4 h-4 mr-2" />
+                <span className="hidden md:inline">Pengaduan</span>
+              </Link>
+            </Button>
             <Button variant="outline" size="sm" className="btn-hover bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-300 dark:hover:bg-emerald-900/30" onClick={() => setShowReportDialog(true)}>
               <Printer className="w-4 h-4 mr-2" />
               <span className="hidden md:inline">Laporan</span>
@@ -985,6 +991,12 @@ export default function AdminDashboard() {
                   <Link href="/admin/dokumen">
                     <Paperclip className="w-4 h-4 mr-2" />
                     Dokumen Pendukung
+                  </Link>
+                </Button>
+                <Button variant="ghost" size="sm" asChild className="justify-start text-amber-600 dark:text-amber-400">
+                  <Link href="/admin/pengaduan">
+                    <MessageSquare className="w-4 h-4 mr-2" />
+                    Pengaduan Operator
                   </Link>
                 </Button>
                 <Button variant="ghost" size="sm" className="justify-start text-emerald-700 dark:text-emerald-300" onClick={() => setShowReportDialog(true)}>

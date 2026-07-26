@@ -11,7 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import {
   Baby, CheckCircle, Plus, FileText, Loader2, LogOut, Database,
-  Clock, IdCard, Menu, XCircle, ChevronRight, Lock, BarChart3, UserCircle
+  Clock, IdCard, Menu, XCircle, ChevronRight, Lock, BarChart3, UserCircle, MessageSquare
 } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -203,6 +203,12 @@ export default function OperatorDashboard() {
                 <p className="text-xs text-slate-400 px-2">{session.user.puskesmasNama}</p>
                 <hr className="my-2" />
                 <Button variant="ghost" size="sm" asChild className="justify-start">
+                  <Link href="/operator/pengaduan">
+                    <MessageSquare className="w-4 h-4 mr-2" />
+                    Pengaduan
+                  </Link>
+                </Button>
+                <Button variant="ghost" size="sm" asChild className="justify-start">
                   <Link href="/profile">
                     <UserCircle className="w-4 h-4 mr-2" />
                     Profil Saya
@@ -332,7 +338,7 @@ export default function OperatorDashboard() {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <Link href="/operator/input" className="block">
             <Card className="card-hover card-action-hover cursor-pointer h-full border-2 border-transparent hover:border-emerald-300 dark:hover:border-emerald-600 rounded-xl group">
               <CardContent className="p-6 flex items-center gap-4">
@@ -359,6 +365,21 @@ export default function OperatorDashboard() {
                   <p className="text-sm text-slate-500 dark:text-slate-400">Lihat data yang sudah diinput</p>
                 </div>
                 <ChevronRight className="w-5 h-5 text-slate-400 group-hover:translate-x-1 group-hover:text-teal-500 transition-all" />
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/operator/pengaduan" className="block">
+            <Card className="card-hover card-action-hover cursor-pointer h-full border-2 border-transparent hover:border-amber-300 dark:hover:border-amber-600 rounded-xl group">
+              <CardContent className="p-6 flex items-center gap-4">
+                <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
+                  <MessageSquare className="w-7 h-7 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors">Pengaduan</h3>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Sampaikan kendala atau pertanyaan</p>
+                </div>
+                <ChevronRight className="w-5 h-5 text-slate-400 group-hover:translate-x-1 group-hover:text-amber-500 transition-all" />
               </CardContent>
             </Card>
           </Link>
