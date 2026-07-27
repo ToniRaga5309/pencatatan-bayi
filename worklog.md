@@ -368,3 +368,44 @@ Stage Summary:
 - Tidak mengubah alur sistem yang sudah ada (hanya menambah file baru + 2 menu item)
 - Files baru: 4 API routes, 2 page (operator + admin pengaduan)
 - Files diubah: prisma/schema.prisma, schema-sync.ts, operator/page.tsx (3 quick actions + mobile menu), admin/page.tsx (2 menu items)
+
+---
+Task ID: 13
+Agent: Main Agent
+Task: Buat Buku Saku Pedoman Penggunaan Website (PDF)
+
+Work Log:
+- User request: "bisakah kamu membuatkan saya buku saku pedoman penggunaan website ini"
+- Membaca worklog.md (Task 1-12) untuk memahami seluruh fitur sistem: 3 role (Admin Dukcapil, Operator Puskesmas, BPJS), fitur input data, upload dokumen, NIK bayi, pengaduan, download, audit log, analitik
+- Mengeksplorasi struktur halaman: 17 page.tsx (landing, login, admin x8, operator x4, bpjs, profile, dashboard) + 40+ API routes
+- Invoke skill PDF → routing ke Creative Flow brief (handbook/guide, text-heavy + design)
+- Membaca configs/fonts.md, briefs/creative-flow.md, typesetting/overflow.md
+- Menulis HTML buku saku lengkap (62 KB) dengan struktur:
+  - Cover (gradient emerald/teal, dekorasi lingkaran, dot grid, Playfair Display + Inter)
+  - Daftar Isi
+  - Bab 1: Pengenalan Sistem (latar belakang, tujuan, manfaat, stat row)
+  - Bab 2: Peran Pengguna (3 role cards: Admin/Operator/BPJS dengan duties)
+  - Bab 3: Login & Pengaturan Dasar (login, lupa sandi, ganti sandi, dark mode, logout)
+  - Bab 4: Panduan Operator (dashboard, input data dengan field list 9 field, upload dokumen, riwayat dengan status table, import Excel, download, pengaduan)
+  - Bab 5: Panduan Admin (dashboard, verifikasi ACC/tolak, ACC semua, download data baru vs register, NIK bayi, dokumen, pengaduan, kelola user, puskesmas, audit log, analitik)
+  - Bab 6: Panduan BPJS (dashboard, filter, export)
+  - Bab 7: FAQ (8 pertanyaan umum)
+  - Bab 8: Keamanan & Privasi (prinsip dasar, data pribadi, audit trail, lapor insiden + komitmen bersama)
+  - Ending page (gradient, kontak, penutup)
+- Validasi HTML via poster_validate.py check-html → PASS (2 warning non-blocking)
+- Render PDF via html2pdf-next.js --nopaged (Chromium native @page, 720x1020px)
+- QA via pdf_qa.py: iterasi 1 = 7 passed/18 warning (page 15 fill 38%, em-dash line-start)
+- Fix: tambah callout "Komitmen Bersama" + card "Ringkasan Praktik Aman" di akhir Bab 8; ganti em-dash dengan semicolon di FAQ
+- Re-render → 10 passed/15 warning (semua margin-symmetry artifact dari konten tak penuh-lebar, non-blocking)
+- Set metadata via pdf.py meta.set (Title, Author, Subject, Creator, Keywords)
+- Verifikasi visual via VLM CLI: cover "sangat baik", content page "siap cetak", page 15 "65-70% fill, rapi", ending "desain sangat baik"
+
+Stage Summary:
+- Deliverables: 
+  - /home/z/my-project/download/Buku-Saku-Pedoman-Penggunaan.pdf (647 KB, 16 halaman, ~3.272 kata)
+  - /home/z/my-project/download/buku-saku-pedoman.html (62 KB, HTML source editable)
+- Format: 720x1020px (ratio ~A4), vector PDF (text selectable, sharp at zoom)
+- Tema visual: gradient emerald/teal (match website), Playfair Display (judul) + Inter (body)
+- 8 bab + cover + daftar isi + ending, mencakup semua 3 role dan seluruh fitur sistem
+- QA: 10 checks passed, metadata lengkap, full-bleed cover, no blank pages, fonts embedded, no overflow, fill ratio adequate
+- Tidak mengubah kode aplikasi sama sekali (hanya membuat dokumen di folder download/)

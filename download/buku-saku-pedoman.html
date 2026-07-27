@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Buku Saku Pedoman Penggunaan — Sistem Pencatatan Bayi Baru Lahir</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+@page {
+    size: 720px 1020px;
+    margin: 0;
+}
+
+:root {
+    --c-emerald: #047857;
+    --c-emerald-dark: #065f46;
+    --c-emerald-light: #d1fae5;
+    --c-teal: #0d9488;
+    --c-teal-light: #ccfbf1;
+    --c-amber: #b45309;
+    --c-amber-bg: #fef3c7;
+    --c-slate-900: #0f172a;
+    --c-slate-700: #334155;
+    --c-slate-500: #64748b;
+    --c-slate-300: #cbd5e1;
+    --c-slate-200: #e2e8f0;
+    --c-slate-100: #f1f5f9;
+    --c-slate-50: #f8fafc;
+    --c-white: #ffffff;
+    --c-rose: #be123c;
+    --c-rose-bg: #ffe4e6;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 720px;
+    background: var(--c-white);
+    color: var(--c-slate-900);
+    font-family: 'Inter', 'Noto Sans SC', sans-serif;
+    font-size: 14.5px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+}
+
+@media screen {
+    html {
+        height: auto;
+        display: flex;
+        justify-content: center;
+        background: #475569;
+    }
+    body {
+        margin: 24px auto;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+}
+
+/* ============ COVER PAGE ============ */
+.cover {
+    width: 720px;
+    height: 1020px;
+    background: linear-gradient(150deg, #065f46 0%, #047857 35%, #0d9488 75%, #0f766e 100%);
+    color: var(--c-white);
+    position: relative;
+    overflow: hidden;
+    break-after: page;
+    padding: 70px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cover .deco-circle-1 {
+    position: absolute;
+    top: -120px;
+    right: -100px;
+    width: 360px;
+    height: 360px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+}
+.cover .deco-circle-2 {
+    position: absolute;
+    top: 180px;
+    left: -90px;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+}
+.cover .deco-circle-3 {
+    position: absolute;
+    bottom: -80px;
+    right: 80px;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+}
+.cover .dot-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.06;
+    background-image: radial-gradient(circle, #ffffff 1.2px, transparent 1.2px);
+    background-size: 26px 26px;
+}
+.cover .deco-line {
+    position: absolute;
+    bottom: 200px;
+    right: -50px;
+    width: 320px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    transform: rotate(-25deg);
+}
+
+.cover-top {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.cover-badge {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.22);
+    backdrop-filter: blur(8px);
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+.cover-icon-wrap {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.cover-icon-wrap svg { width: 34px; height: 34px; }
+
+.cover-mid {
+    position: relative;
+    z-index: 2;
+}
+.cover-eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #a7f3d0;
+    margin-bottom: 22px;
+}
+.cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 900;
+    line-height: 1.04;
+    margin: 0 0 22px 0;
+    letter-spacing: -1px;
+}
+.cover-title .accent {
+    color: #fde68a;
+    font-style: italic;
+}
+.cover-subtitle {
+    font-size: 17px;
+    line-height: 1.55;
+    color: #d1fae5;
+    font-weight: 400;
+    max-width: 480px;
+    margin-bottom: 28px;
+}
+.cover-divider {
+    width: 80px;
+    height: 4px;
+    background: #fde68a;
+    border-radius: 2px;
+}
+
+.cover-bottom {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.cover-org {
+    font-size: 13px;
+    line-height: 1.6;
+}
+.cover-org .org-strong {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+.cover-edition {
+    text-align: right;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #a7f3d0;
+    line-height: 1.7;
+}
+.cover-edition .year {
+    font-size: 28px;
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: 1px;
+    font-family: 'Playfair Display', serif;
+}
+
+/* ============ MAIN CONTENT ============ */
+.main-content {
+    padding: 56px 60px 44px 60px;
+}
+
+/* Chapter header */
+.chapter-header {
+    break-after: avoid;
+    break-inside: avoid;
+    margin-top: 28px;
+    margin-bottom: 20px;
+}
+.chapter-header:first-child { margin-top: 0; }
+
+.chapter-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--c-emerald);
+    background: var(--c-emerald-light);
+    padding: 5px 12px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+.chapter-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    font-weight: 900;
+    color: var(--c-slate-900);
+    line-height: 1.15;
+    margin: 0 0 10px 0;
+    letter-spacing: -0.5px;
+}
+.chapter-divider {
+    width: 48px;
+    height: 3px;
+    background: var(--c-emerald);
+    border-radius: 2px;
+    margin-bottom: 4px;
+}
+
+/* Subsection */
+.subsection {
+    break-inside: avoid;
+    margin-top: 20px;
+}
+.subsection-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--c-emerald-dark);
+    margin: 0 0 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.subsection-title .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--c-emerald);
+    color: var(--c-white);
+    font-size: 13px;
+    font-weight: 800;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Body text */
+.body-text {
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: var(--c-slate-700);
+    margin: 0 0 10px 0;
+    text-align: justify;
+}
+
+/* Lead paragraph */
+.lead {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--c-slate-900);
+    font-weight: 500;
+    margin: 0 0 18px 0;
+    padding-left: 16px;
+    border-left: 3px solid var(--c-emerald);
+}
+
+/* Cards */
+.card {
+    break-inside: avoid;
+    background: var(--c-slate-50);
+    border: 1px solid var(--c-slate-200);
+    border-left: 4px solid var(--c-emerald);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+}
+.card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--c-slate-900);
+    margin: 0 0 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.card-text {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--c-slate-700);
+    margin: 0;
+}
+
+/* Step list */
+.steps {
+    break-inside: avoid;
+    margin: 8px 0 12px 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+}
+.steps li {
+    counter-increment: step;
+    position: relative;
+    padding: 8px 8px 8px 38px;
+    margin-bottom: 6px;
+    font-size: 13.8px;
+    line-height: 1.6;
+    color: var(--c-slate-700);
+    break-inside: avoid;
+}
+.steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--c-emerald);
+    color: var(--c-white);
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.steps li strong {
+    color: var(--c-slate-900);
+    font-weight: 700;
+}
+
+/* Role cards */
+.role-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin: 12px 0;
+}
+.role-card {
+    break-inside: avoid;
+    border-radius: 12px;
+    padding: 18px 20px;
+    border: 1px solid var(--c-slate-200);
+    background: var(--c-white);
+    position: relative;
+    overflow: hidden;
+}
+.role-card.admin { border-left: 5px solid var(--c-emerald); background: linear-gradient(135deg, #ecfdf5 0%, #ffffff 60%); }
+.role-card.operator { border-left: 5px solid var(--c-teal); background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 60%); }
+.role-card.bpjs { border-left: 5px solid #7c3aed; background: linear-gradient(135deg, #f5f3ff 0%, #ffffff 60%); }
+
+.role-card-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+.role-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.role-icon svg { width: 22px; height: 22px; }
+.role-card.admin .role-icon { background: var(--c-emerald-light); color: var(--c-emerald-dark); }
+.role-card.operator .role-icon { background: var(--c-teal-light); color: var(--c-teal); }
+.role-card.bpjs .role-icon { background: #ede9fe; color: #6d28d9; }
+
+.role-name {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--c-slate-900);
+    margin: 0;
+}
+.role-tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--c-slate-500);
+}
+.role-desc {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--c-slate-700);
+    margin: 6px 0 10px 0;
+}
+.role-duties {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--c-slate-700);
+    margin: 0;
+    padding-left: 16px;
+}
+.role-duties li { margin-bottom: 3px; }
+
+/* Callout */
+.callout {
+    break-inside: avoid;
+    border-radius: 10px;
+    padding: 14px 16px 14px 18px;
+    margin: 12px 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+.callout-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin-top: 1px;
+}
+.callout-icon svg { width: 22px; height: 22px; }
+.callout-body { flex: 1; }
+.callout-title {
+    font-weight: 700;
+    margin-bottom: 3px;
+    font-size: 13.5px;
+}
+.callout.tip {
+    background: var(--c-emerald-light);
+    border-left: 4px solid var(--c-emerald);
+    color: var(--c-emerald-dark);
+}
+.callout.warn {
+    background: var(--c-amber-bg);
+    border-left: 4px solid var(--c-amber);
+    color: #78350f;
+}
+.callout.info {
+    background: #e0f2fe;
+    border-left: 4px solid #0284c7;
+    color: #075985;
+}
+.callout.danger {
+    background: var(--c-rose-bg);
+    border-left: 4px solid var(--c-rose);
+    color: #881337;
+}
+
+/* TOC */
+.toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0;
+}
+.toc-list li {
+    break-inside: avoid;
+    display: flex;
+    align-items: baseline;
+    padding: 9px 0;
+    border-bottom: 1px dashed var(--c-slate-200);
+    font-size: 14px;
+}
+.toc-num {
+    font-weight: 700;
+    color: var(--c-emerald);
+    width: 38px;
+    flex-shrink: 0;
+    font-size: 13px;
+}
+.toc-title {
+    flex: 1;
+    color: var(--c-slate-900);
+    font-weight: 500;
+}
+.toc-dots {
+    flex: 0 1 auto;
+    border-bottom: 1.5px dotted var(--c-slate-300);
+    margin: 0 8px;
+    min-width: 20px;
+    align-self: stretch;
+    margin-bottom: 4px;
+}
+.toc-page {
+    color: var(--c-slate-500);
+    font-weight: 600;
+    font-size: 13px;
+}
+
+/* Feature table */
+.feature-table {
+    break-inside: avoid;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 14px 0;
+    font-size: 13px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--c-slate-200);
+}
+.feature-table th {
+    background: var(--c-emerald-dark);
+    color: var(--c-white);
+    text-align: left;
+    padding: 9px 12px;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.3px;
+}
+.feature-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--c-slate-200);
+    color: var(--c-slate-700);
+    vertical-align: top;
+}
+.feature-table tr:last-child td { border-bottom: none; }
+.feature-table tr:nth-child(even) td { background: var(--c-slate-50); }
+.feature-table td:first-child { font-weight: 600; color: var(--c-slate-900); }
+
+/* Field list */
+.field-list {
+    break-inside: avoid;
+    border: 1px solid var(--c-slate-200);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+.field-row {
+    display: flex;
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--c-slate-200);
+    font-size: 13px;
+    align-items: baseline;
+}
+.field-row:last-child { border-bottom: none; }
+.field-row:nth-child(even) { background: var(--c-slate-50); }
+.field-name {
+    width: 38%;
+    font-weight: 700;
+    color: var(--c-slate-900);
+    flex-shrink: 0;
+}
+.field-name .opt {
+    font-weight: 400;
+    color: var(--c-slate-500);
+    font-style: italic;
+    font-size: 12px;
+}
+.field-desc {
+    flex: 1;
+    color: var(--c-slate-700);
+    line-height: 1.5;
+}
+
+/* Stat / highlight row */
+.stat-row {
+    break-inside: avoid;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin: 12px 0;
+}
+.stat-box {
+    background: linear-gradient(135deg, #ecfdf5 0%, #f0fdfa 100%);
+    border: 1px solid #a7f3d0;
+    border-radius: 10px;
+    padding: 14px 12px;
+    text-align: center;
+}
+.stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--c-emerald-dark);
+    line-height: 1;
+    margin-bottom: 4px;
+}
+.stat-label {
+    font-size: 11px;
+    color: var(--c-slate-700);
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+/* FAQ */
+.faq-item {
+    break-inside: avoid;
+    margin-bottom: 12px;
+    padding: 12px 14px;
+    background: var(--c-slate-50);
+    border-radius: 8px;
+    border: 1px solid var(--c-slate-200);
+}
+.faq-q {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--c-emerald-dark);
+    margin: 0 0 5px 0;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+}
+.faq-q .q-mark {
+    color: var(--c-emerald);
+    font-weight: 900;
+    flex-shrink: 0;
+}
+.faq-a {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--c-slate-700);
+    margin: 0;
+    padding-left: 18px;
+}
+
+/* Page number footer */
+.page-footer {
+    position: fixed;
+    bottom: 0;
+}
+
+/* Ending page */
+.ending {
+    width: 720px;
+    height: 1020px;
+    break-before: page;
+    background: linear-gradient(160deg, #065f46 0%, #047857 50%, #0d9488 100%);
+    color: var(--c-white);
+    position: relative;
+    overflow: hidden;
+    padding: 80px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.ending .deco-1 {
+    position: absolute;
+    top: -100px;
+    left: -100px;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+}
+.ending .deco-2 {
+    position: absolute;
+    bottom: -120px;
+    right: -80px;
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+}
+.ending .dot-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.05;
+    background-image: radial-gradient(circle, #ffffff 1.2px, transparent 1.2px);
+    background-size: 26px 26px;
+}
+.ending-icon {
+    width: 84px;
+    height: 84px;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 2;
+}
+.ending-icon svg { width: 44px; height: 44px; }
+.ending-eyebrow {
+    position: relative;
+    z-index: 2;
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #a7f3d0;
+    margin-bottom: 16px;
+}
+.ending-title {
+    position: relative;
+    z-index: 2;
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1.15;
+    margin: 0 0 20px 0;
+    max-width: 480px;
+}
+.ending-text {
+    position: relative;
+    z-index: 2;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #d1fae5;
+    max-width: 440px;
+    margin-bottom: 36px;
+}
+.ending-divider {
+    position: relative;
+    z-index: 2;
+    width: 60px;
+    height: 3px;
+    background: #fde68a;
+    border-radius: 2px;
+    margin-bottom: 30px;
+}
+.ending-contact {
+    position: relative;
+    z-index: 2;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 14px;
+    padding: 22px 28px;
+    max-width: 440px;
+    text-align: left;
+}
+.ending-contact-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    font-size: 13.5px;
+}
+.ending-contact-row svg { width: 18px; height: 18px; flex-shrink: 0; color: #fde68a; }
+.ending-contact-row strong { font-weight: 700; }
+.ending-footer {
+    position: absolute;
+    bottom: 28px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    z-index: 2;
+}
+
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<div class="cover">
+    <div class="deco-circle-1"></div>
+    <div class="deco-circle-2"></div>
+    <div class="deco-circle-3"></div>
+    <div class="dot-grid"></div>
+    <div class="deco-line"></div>
+
+    <div class="cover-top">
+        <div class="cover-badge">Edisi 2025</div>
+        <div class="cover-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 12h.01M15 12h.01M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/>
+                <path d="M19 6.3a9 9 0 0 1 1.8 3.9 3 3 0 0 0 0 5.6 9 9 0 0 1-1.8 3.9 3 3 0 0 1-4.2 4.2 9 9 0 0 1-3.9 1.8 3 3 0 0 0-5.6 0 9 9 0 0 1-3.9-1.8 3 3 0 0 1-4.2-4.2 9 9 0 0 1-1.8-3.9 3 3 0 0 0 0-5.6A9 9 0 0 1 4.3 5a3 3 0 0 1 4.2-4.2 9 9 0 0 1 3.9-1.8 3 3 0 0 0 5.6 0 9 9 0 0 1 3.9 1.8 3 3 0 0 1 4.2 4.2Z"/>
+            </svg>
+        </div>
+    </div>
+
+    <div class="cover-mid">
+        <div class="cover-eyebrow">Pedoman Penggunaan</div>
+        <h1 class="cover-title">Buku Saku<br><span class="accent">Sistem Pencatatan</span><br>Bayi Baru Lahir</h1>
+        <p class="cover-subtitle">Panduan praktis bagi Admin Dukcapil, Operator Puskesmas, dan BPJS Kesehatan dalam mengoperasikan sistem pencatatan data bayi baru lahir secara digital.</p>
+        <div class="cover-divider"></div>
+    </div>
+
+    <div class="cover-bottom">
+        <div class="cover-org">
+            <div class="org-strong">Pemerintah Kabupaten Ngada</div>
+            <div>Dinas Kependudukan dan Pencatatan Sipil<br>Puskesmas &amp; BPJS Kesehatan</div>
+            <div style="margin-top:8px; font-size:11px; letter-spacing:1px; color:#a7f3d0;">PROVINSI NUSA TENGGARA TIMUR</div>
+        </div>
+        <div class="cover-edition">
+            <div>Versi 1.0</div>
+            <div class="year">2025</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============ MAIN CONTENT ============ -->
+<div class="main-content">
+
+<!-- ===== BAB 0: DAFTAR ISI ===== -->
+<div class="chapter-header">
+    <div class="chapter-tag">Navigasi</div>
+    <h2 class="chapter-title">Daftar Isi</h2>
+    <div class="chapter-divider"></div>
+</div>
+
+<p class="body-text">Buku saku ini disusun untuk memandu setiap pengguna sistem &mdash; baik Admin Dukcapil, Operator Puskesmas, maupun BPJS Kesehatan &mdash; dalam mengoperasikan aplikasi Sistem Pencatatan Bayi Baru Lahir Kabupaten Ngada. Setiap bab membahas satu peran atau satu topik secara mendalam, dilengkapi dengan langkah-langkah praktis dan catatan penting.</p>
+
+<ul class="toc-list">
+    <li><span class="toc-num">01</span><span class="toc-title">Pengenalan Sistem</span><span class="toc-dots"></span><span class="toc-page">4</span></li>
+    <li><span class="toc-num">02</span><span class="toc-title">Peran Pengguna &amp; Hak Akses</span><span class="toc-dots"></span><span class="toc-page">5</span></li>
+    <li><span class="toc-num">03</span><span class="toc-title">Memulai: Login &amp; Pengaturan Dasar</span><span class="toc-dots"></span><span class="toc-page">7</span></li>
+    <li><span class="toc-num">04</span><span class="toc-title">Panduan Operator Puskesmas</span><span class="toc-dots"></span><span class="toc-page">9</span></li>
+    <li><span class="toc-num">05</span><span class="toc-title">Panduan Admin Dukcapil</span><span class="toc-dots"></span><span class="toc-page">14</span></li>
+    <li><span class="toc-num">06</span><span class="toc-title">Panduan BPJS Kesehatan</span><span class="toc-dots"></span><span class="toc-page">19</span></li>
+    <li><span class="toc-num">07</span><span class="toc-title">FAQ &amp; Pemecahan Masalah</span><span class="toc-dots"></span><span class="toc-page">21</span></li>
+    <li><span class="toc-num">08</span><span class="toc-title">Keamanan &amp; Privasi Data</span><span class="toc-dots"></span><span class="toc-page">23</span></li>
+</ul>
+
+<!-- ===== BAB 1: PENGENALAN ===== -->
+<div class="chapter-header">
+    <div class="chapter-tag">Bab 01</div>
+    <h2 class="chapter-title">Pengenalan Sistem</h2>
+    <div class="chapter-divider"></div>
+</div>
+
+<p class="lead">Sistem Pencatatan Bayi Baru Lahir adalah aplikasi digital terpadu yang menghubungkan Puskesmas, Dinas Kependudukan dan Pencatatan Sipil (Dukcapil), serta BPJS Kesehatan dalam satu alur pencatatan data kelahiran yang cepat, akurat, dan aman.</p>
+
+<h3 class="subsection-title"><span class="num">1.1</span>Latar Belakang</h3>
+<p class="body-text">Sebelum sistem ini berjalan, pencatatan data bayi baru lahir dilakukan secara manual di setiap Puskesmas, kemudian dikirim ke Dukcapil untuk diproses menjadi NIK bayi, dan baru kemudian diteruskan ke BPJS. Proses ini rentan terhadap kesalahan penulisan, data ganda, keterlambatan, dan kesulitan pelacakan status. Sistem digital ini hadir untuk menjawab seluruh permasalahan tersebut melalui satu platform terpusat berbasis web yang dapat diakses kapan saja, di mana saja, asalkan terhubung ke internet.</p>
+
+<h3 class="subsection-title"><span class="num">1.2</span>Tujuan Sistem</h3>
+<div class="card">
+    <p class="card-text">Sistem ini bertujuan untuk mempercepat alur pencatatan bayi baru lahir mulai dari input data di Puskesmas, verifikasi dan penerbitan NIK di Dukcapil, hingga akses data oleh BPJS Kesehatan. Seluruh proses tercatat, terlacak, dan dapat diaudit sehingga setiap data memiliki riwayat yang jelas dan pertanggungjawaban yang akuntabel.</p>
+</div>
+
+<h3 class="subsection-title"><span class="num">1.3</span>Manfaat Utama</h3>
+<div class="stat-row">
+    <div class="stat-box">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Peran Pengguna Terpadu</div>
+    </div>
+    <div class="stat-box">
+        <div class="stat-num">24/7</div>
+        <div class="stat-label">Akses Online</div>
+    </div>
+    <div class="stat-box">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Tercatat &amp; Auditable</div>
+    </div>
+</div>
+<ul class="steps">
+    <li><strong>Kecepatan pelayanan:</strong> Data yang diinput Operator langsung tersampaikan ke Admin Dukcapil untuk diverifikasi, tanpa menunggu dokumen fisik.</li>
+    <li><strong>Akurasi data:</strong> Validasi otomatis pada NIK, tanggal lahir, dan field wajib mencegah kesalahan input umum seperti NIK kurang dari 16 digit.</li>
+    <li><strong>Transparansi status:</strong> Operator dapat memantau apakah data sudah diverifikasi, ditolak, atau sudah memiliki NIK bayi.</li>
+    <li><strong>Audit lengkap:</strong> Setiap aksi penting (input, verifikasi, penolakan, penghapusan, download) tercatat di log aktivitas.</li>
+    <li><strong>Akses BPJS real-time:</strong> BPJS dapat mengakses data bayi yang sudah memiliki NIK tanpa perlu pertukaran berkas fisik.</li>
+</ul>
+
+<div class="callout info">
+    <div class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
+    <div class="callout-body">
+        <div class="callout-title">Akses Website</div>
+        Website dapat diakses melalui peramban modern (Chrome, Edge, Firefox, Safari) pada komputer, tablet, maupun ponsel. Tidak memerlukan instalasi aplikasi tambahan.
+    </div>
+</div>
+
+<!-- ===== BAB 2: PERAN ===== -->
+<div class="chapter-header">
+    <div class="chapter-tag">Bab 02</div>
+    <h2 class="chapter-title">Peran Pengguna &amp; Hak Akses</h2>
+    <div class="chapter-divider"></div>
+</div>
+
+<p class="body-text">Sistem ini mengenal tiga peran pengguna utama, masing-masing memiliki ruang lingkup dan hak akses yang berbeda. Pemahaman atas peran ini penting agar setiap pengguna hanya beroperasi pada fitur yang menjadi kewenangannya.</p>
+
+<div class="role-grid">
+
+    <div class="role-card admin">
+        <div class="role-card-head">
+            <div class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <div>
+                <div class="role-tag">Peran 1</div>
+                <h4 class="role-name">Admin Dukcapil</h4>
+            </div>
+        </div>
+        <p class="role-desc">Petugas Dinas Kependudukan dan Pencatatan Sipil yang bertanggung jawab memverifikasi data kelahiran dan menerbitkan NIK bayi.</p>
+        <ul class="role-duties">
+            <li>Verifikasi (ACC) atau menolak data dari Operator</li>
+            <li>Input dan kelola NIK Bayi</li>
+            <li>Download data baru &amp; register historis</li>
+            <li>Kelola user, puskesmas, dan dokumen pendukung</li>
+            <li>Menanggapi pengaduan dari Operator</li>
+            <li>Memantau audit log dan analitik</li>
+        </ul>
+    </div>
+
+    <div class="role-card operator">
+        <div class="role-card-head">
+            <div class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2a2 2 0 0 0-2 2v5H4a2 2 0 0 0-2 2v2c0 1.1.9 2 2 2h5v5c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2v-5h5a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2h-5V4a2 2 0 0 0-2-2h-2z"/></svg></div>
+            <div>
+                <div class="role-tag">Peran 2</div>
+                <h4 class="role-name">Operator Puskesmas</h4>
+            </div>
+        </div>
+        <p class="role-desc">Petugas di setiap Puskesmas yang berhadapan langsung dengan orang tua bayi dan bertugas menginput data kelahiran ke dalam sistem.</p>
+        <ul class="role-duties">
+            <li>Input data bayi baru lahir (tunggal maupun massal via Excel)</li>
+            <li>Upload dokumen pendukung (surat keterangan lahir &amp; KK)</li>
+            <li>Melihat riwayat input dan status verifikasi</li>
+            <li>Download data milik puskesmas sendiri</li>
+            <li>Mengajukan pengaduan terkait sistem/data/proses</li>
+            <li>Mengubah kata sandi akun sendiri</li>
+        </ul>
+    </div>
+
+    <div class="role-card bpjs">
+        <div class="role-card-head">
+            <div class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+            <div>
+                <div class="role-tag">Peran 3</div>
+                <h4 class="role-name">BPJS Kesehatan</h4>
+            </div>
+        </div>
+        <p class="role-desc">Petuga BPJS Kesehatan yang memerlukan akses terhadap data bayi yang sudah memiliki NIK untuk keperluan pendaftaran peserta dan klaim.</p>
+        <ul class="role-duties">
+            <li>Melihat data bayi yang sudah terverifikasi &amp; memiliki NIK</li>
+            <li>Memfilter data berdasarkan tanggal, puskesmas, atau nama</li>
+            <li>Mengunduh (export) data ke format Excel</li>
+            <li>Memantau statistik data bayi terdaftar</li>
+        </ul>
+    </div>
+
+</div>
+
+<div class="callout warn">
+    <div class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>
+    <div class="callout-body">
+        <div class="callout-title">Penting tentang Hak Akses</div>
+        Setiap akun hanya dapat mengakses fitur sesuai perannya. Akun Operator tidak dapat melihat data puskesmas lain. Akun BPJS hanya dapat melihat data yang sudah diverifikasi dan memiliki NIK. Jangan membagikan kredensial akun kepada pihak yang tidak berwenang.
+    </div>
+</div>
+
+<!-- ===== BAB 3: LOGIN ===== -->
+<div class="chapter-header">
+    <div class="chapter-tag">Bab 03</div>
+    <h2 class="chapter-title">Memulai: Login &amp; Pengaturan Dasar</h2>
+    <div class="chapter-divider"></div>
+</div>
+
+<p class="body-text">Bagian ini menjelaskan langkah pertama yang harus dilakukan setiap pengguna: masuk ke sistem, memahami tampilan dasar, mengganti kata sandi, serta beralih antara mode terang dan gelap.</p>
+
+<h3 class="subsection-title"><span class="num">3.1</span>Cara Masuk (Login)</h3>
+<ul class="steps">
+    <li>Buka peramban dan kunjungi alamat website sistem pencatatan bayi.</li>
+    <li>Pada halaman utama, klik tombol <strong>"Masuk"</strong> di pojok kanan atas.</li>
+    <li>Masukkan <strong>Username</strong> dan <strong>Password</strong> yang diberikan oleh Admin.</li>
+    <li>Centang <strong>"Ingat saya"</strong> jika menggunakan perangkat pribadi agar tidak perlu login berulang.</li>
+    <li>Klik tombol <strong>"Masuk"</strong>. Jika kredensial benar, Anda akan diarahkan otomatis ke dashboard sesuai peran.</li>
+</ul>
+
+<div class="callout tip">
+    <div class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/><path d="M9 21h6"/></svg></div>
+    <div class="callout-body">
+        <div class="callout-title">Tips Keamanan Login</div>
+        Gunakan fitur "Ingat saya" hanya pada perangkat pribadi. Pada komator kantor yang dipakai bersama, biarkan tidak dicentang agar sesi otomatis berakhir.
+    </div>
+</div>
+
+<h3 class="subsection-title"><span class="num">3.2</span>Lupa Kata Sandi</h3>
+<p class="body-text">Jika lupa kata sandi, pengguna tidak dapat melakukan reset mandiri melalui email. Hubungi <strong>Admin Dukcapil</strong> untuk melakukan reset kata sandi akun Anda. Admin akan memberikan kata sandi sementara yang sebaiknya segera diganti setelah login berhasil.</p>
+
+<h3 class="subsection-title"><span class="num">3.3</span>Mengganti Kata Sandi</h3>
+<p class="body-text">Disarankan mengganti kata sandi secara berkala, minimal setiap 3 bulan, atau segera setelah mendapat kata sandi sementara dari Admin.</p>
+<ul class="steps">
+    <li>Pada dashboard, klik ikon <strong>profil</strong> di pojok kanan atas.</li>
+    <li>Pilih menu <strong>"Ganti Password"</strong>.</li>
+    <li>Masukkan <strong>kata sandi saat ini</strong>, lalu <strong>kata sandi baru</strong> (minimal 8 karakter), dan <strong>konfirmasi kata sandi baru</strong>.</li>
+    <li>Klik <strong>"Simpan"</strong>. Jika berhasil, notifikasi sukses akan muncul.</li>
+</ul>
+
+<div class="callout warn">
+    <div class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+    <div class="callout-body">
+        <div class="callout-title">Syarat Kata Sandi Kuat</div>
+        Minimal 8 karakter, disarankan kombinasi huruf besar, huruf kecil, angka, dan simbol. Hindari menggunakan tanggal lahir, nama, atau "12345678".
+    </div>
+</div>
+
+<h3 class="subsection-title"><span class="num">3.4</span>Mode Terang &amp; Mode Gelap</h3>
+<p class="body-text">Sistem mendukung dua mode tampilan: <strong>mode terang</strong> (default, cocok untuk siang hari) dan <strong>mode gelap</strong> (cocok untuk ruangan redup atau malam hari, mengurangi kelelahan mata). Untuk beralih, klik ikon <strong>matahari/bulan</strong> di pojok kanan atas navigasi. Pilihan mode akan diingat oleh peramban untuk kunjungan berikutnya.</p>
+
+<h3 class="subsection-title"><span class="num">3.5</span>Keluar (Logout)</h3>
+<p class="body-text">Untuk mengakhiri sesi, klik nama pengguna di pojok kanan atas lalu pilih <strong>"Keluar"</strong>. Selalu logout setelah selesai, terutama pada perangkat umum, agar data tidak dapat diakses oleh orang lain.</p>
+
+<!-- ===== BAB 4: OPERATOR ===== -->
+<div class="chapter-header">
+    <div class="chapter-tag">Bab 04</div>
+    <h2 class="chapter-title">Panduan Operator Puskesmas</h2>
+    <div class="chapter-divider"></div>
+</div>
+
+<p class="lead">Operator Puskesmas adalah ujung tombak pencatatan data bayi. Akurasi dan kelengkapan data yang diinput menentukan kelancaran proses verifikasi oleh Admin Dukcapil.</p>
+
+<h3 class="subsection-title"><span class="num">4.1</span>Dashboard Operator</h3>
+<p class="body-text">Setelah login, Operator akan diarahkan ke dashboard yang menampilkan ringkasan aktivitas: jumlah input bulan ini, total data sepanjang waktu, data sudah diverifikasi, data masih menunggu, dan data yang sudah memiliki NIK. Terdapat pula grafik bulanan untuk memantau tren input data. Pada bagian atas dashboard terdapat tombol akses cepat ke menu Input Data, Riwayat, dan Pengaduan.</p>
+
+<h3 class="subsection-title"><span class="num">4.2</span>Input Data Bayi Baru Lahir</h3>
+<p class="body-text">Ini adalah aktivitas utama Operator. Data harus diisi dengan teliti berdasarkan dokumen sumber (KTP ibu, surat keterangan lahir dari tenaga kesehatan, dan kartu keluarga).</p>
+
+<div class="field-list">
+    <div class="field-row"><div class="field-name">NIK Ibu <span class="opt">(wajib)</span></div><div class="field-desc">16 digit angka, sesuai KTP ibu. Validasi otomatis menolak jika bukan 16 digit.</div></div>
+    <div class="field-row"><div class="field-name">Nama Ibu <span class="opt">(wajib)</span></div><div class="field-desc">Minimal 3 karakter, sesuai KTP.</div></div>
+    <div class="field-row"><div class="field-name">Nama Ayah <span class="opt">(opsional)</span></div><div class="field-desc">Bila diisi, minimal 3 karakter. Dapat dikosongkan jika data tidak tersedia.</div></div>
+    <div class="field-row"><div class="field-name">Nama Bayi <span class="opt">(wajib)</span></div><div class="field-desc">Minimal 3 karakter. Jika bayi belum diberi nama, gunakan inisial sementara.</div></div>
+    <div class="field-row"><div class="field-name">Tanggal Lahir <span class="opt">(wajib)</span></div><div class="field-desc">Tidak boleh lebih dari tanggal hari ini.</div></div>
+    <div class="field-row"><div class="field-name">Tempat Lahir <span class="opt">(wajib)</span></div><div class="field-desc">Nama kota/kabupaten/tempat persalinan.</div></div>
+    <div class="field-row"><div class="field-name">Jenis Kelamin <span class="opt">(wajib)</span></div><div class="field-desc">Laki-laki atau Perempuan.</div></div>
+    <div class="field-row"><div class="field-name">No. HP Orang Tua <span class="opt">(opsional)</span></div><div class="field-desc">Nomor kontak aktif untuk verifikasi/tindak lanjut.</div></div>
+    <div class="field-row"><div class="field-name">Email Orang Tua <span class="opt">(opsional)</span></div><div class="field-desc">Alamat email untuk komunikasi resmi.</div></div>
+</div>
+
+<p class="body-text"><strong>Langkah input:</strong></p>
+<ul class="steps">
+    <li>Klik menu <strong>"Input Data"</strong> atau tombol akses cepat di dashboard.</li>
+    <li>Isi seluruh field wajib dengan data yang valid. Field opsional dapat dikosongkan.</li>
+    <li>(Opsional) Lampirkan <strong>surat keterangan lahir</strong> dan/atau <strong>kartu keluarga</strong> di bagian bawah form.</li>
+    <li>Klik <strong>"Simpan"</strong> untuk menyimpan dan kembali ke dashboard, atau <strong>"Simpan &amp; Input Lagi"</strong> untuk menyimpan lalu mengisi data bayi berikutnya.</li>
+    <li>Notifikasi sukses akan muncul beserta nama bayi yang tersimpan.</li>
+</ul>
+
+<div class="callout tip">
+    <div class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+    <div class="callout-body">
+        <div class="callout-title">Fitur "Simpan &amp; Input Lagi"</div>
+        Sangat membantu saat mencentang banyak bayi lahir dalam satu hari. Setelah simpan, form otomatis dikosongkan kecuali NIK &amp; nama ibu jika berasal dari orang tua yang sama.
+    </div>
+</div>
+
+<h3 class="subsection-title"><span class="num">4.3</span>Upload Dokumen Pendukung</h3>
+<p class="body-text">Dokumen pendukung (surat keterangan lahir dan kartu keluarga) bersifat <strong>opsional</strong> namun sangat dianjurkan agar Admin dapat memverifikasi data dengan cepat. Upload dapat dilakukan langsung saat input data, atau belakangan melalui halaman Riwayat.</p>
+<ul class="steps">
+    <li>Format file yang diperbolehkan: <strong>gambar (JPG, PNG)</strong> atau <strong>PDF</strong>.</li>
+    <li>Ukuran maksimal setiap file: <strong>5 MB</strong>.</li>
+    <li>Satu jenis dokumen hanya boleh satu file. Upload ulang akan menggantikan file sebelumnya.</li>
+    <li>Pada halaman Riwayat, klik tombol <strong>upload</strong> (biru) untuk menambah/mengganti dokumen.</li>
+</ul>
+
+<h3 class="subsection-title"><span class="num">4.4</span>Riwayat Input</h3>
+<p class="body-text">Halaman <strong>Riwayat</strong> menampilkan seluruh data yang pernah diinput oleh Operator, lengkap dengan status verifikasi (menunggu, terverifikasi, ditolak) dan indikator keberadaan dokumen pendukung (ikon paperclip). Operator dapat mengedit data yang masih berstatus <em>menunggu</em>, serta mengupload ulang dokumen kapan saja.</p>
+
+<table class="feature-table">
+    <thead>
+        <tr><th>Status</th><th>Arti</th><th>Tindakan Operator</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Menunggu</td><td>Data belum diverifikasi Admin</td><td>Dapat diedit &amp; dihapus</td></tr>
+        <tr><td>Terverifikasi</td><td>Data disetujui Admin, menunggu NIK</td><td>Tidak dapat diedit</td></tr>
+        <tr><td>Ditolak</td><td>Data ditolak Admin (lihat alasan)</td><td>Periksa alasan, perbaiki, input ulang</td></tr>
+    </tbody>
+</table>
+
+<h3 class="subsection-title"><span class="num">4.5</span>Import Data Massal via Excel</h3>
+<p class="body-text">Untuk input banyak data sekaligus (misalnya backlog harian/mingguan), Operator dapat menggunakan fitur <strong>Import Excel</strong>. Format file harus mengikuti template yang disediakan sistem.</p>
+<ul class="steps">
+    <li>Buka halaman <strong>Riwayat</strong>, klik tombol <strong>"Import Excel"</strong>.</li>
+    <li>Unduh <strong>template</strong> terlebih dahulu agar format kolom sesuai.</li>
+    <li>Isi data pada template menggunakan Microsoft Excel atau aplikasi sejenis.</li>
+    <li>Simpan file dalam format <strong>.xlsx</strong>, lalu unggah kembali melalui tombol import.</li>
+    <li>Sistem akan memvalidasi setiap baris. Baris yang valid tersimpan, baris yang gagal ditampilkan dengan alasan.</li>
+</ul>
+
+<div class="callout warn">
+    <div class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></div>
+    <div class="callout-body">
+        <div class="callout-title">Periksa Format NIK</div>
+        Pastikan NIK Ibu berupa 16 digit angka dan sel formatting cell Excel diset sebagai "Text" agar angka NIK tidak terpotong atau berubah menjadi notasi ilmiah (E+15).
+    </div>
+</div>
+
+<h3 class="subsection-title"><span class="num">4.6</span>Download Data Puskesmas</h3>
+<p class="body-text">Operator dapat mengunduh seluruh data milik puskesmasnya dalam format Excel. Tombol <strong>"Download Data"</strong> tersedia di halaman Riwayat. File yang diunduh mencakup kolom: nama bayi, NIK bayi (jika sudah ada), jenis kelamin, tanggal lahir, NIK ibu, nama ibu, nama ayah, berat/panjang badan, status, dan tanggal input. Aktivitas download tercatat di audit log.</p>
+
+<h3 class="subsection-title"><span class="num">4.7</span>Mengajukan Pengaduan</h3>
+<p class="body-text">Jika menemui kendala &mdash; misalnya sistem error, data ditolak tanpa alasan jelas, atau proses verifikasi terlalu lama &mdash; Operator dapat mengajukan pengaduan langsung melalui sistem. Fitur ini menggantikan komunikasi informal via WhatsApp dengan jalur resmi yang tercatat.</p>
+<ul class="steps">
+    <li>Klik menu <strong>"Pengaduan"</strong> di dashboard.</li>
+    <li>Klik <strong>"Buat Pengaduan"</strong>.</li>
+    <li>Pilih <strong>kategori</strong> (Sistem, Data, Proses Verifikasi, atau Lainnya), <strong>prioritas</strong> (Rendah, Sedang, Tinggi), dan tulis <strong>subjek</strong> serta <strong>pesan</strong> yang jelas.</li>
+    <li>Klik <strong>"Kirim"</strong>. Pengaduan akan terlihat oleh Admin Dukcapil.</li>
+    <li>Balasan dari Admin akan muncul di kartu pengaduan yang sama. Operator akan mendapat notifikasi saat dibalas.</li>
+</ul>
+
+<p class="body-text">Operator hanya dapat menghapus pengaduan yang masih berstatus <em>Terbuka</em> (belum ditanggapi Admin). Setelah Admin memproses, pengaduan tidak dapat dihapus agar riwayat penanganan tetap utuh.</p>
+
+<!-- ===== BAB 5: ADMIN ===== -->
+<div class="chapter-header">
+    <div class="chapter-tag">Bab 05</div>
+    <h2 class="chapter-title">Panduan Admin Dukcapil</h2>
+    <div class="chapter-divider"></div>
+</div>
+
+<p class="lead">Admin Dukcapil adalah pengendali utama alur data. Setiap keputusan verifikasi, penerbitan NIK, dan pengelolaan pengguna berada di tangan Admin.</p>
+
+<h3 class="subsection-title"><span class="num">5.1</span>Dashboard Admin</h3>
+<p class="body-text">Dashboard Admin menampilkan statistik agregat: total seluruh data, data baru (belum pernah diunduh), data register (riwayat yang sudah diunduh), data menunggu verifikasi, data terverifikasi, dan data ditolak. Tersedia pula grafik tren bulanan dan distribusi per puskesmas. Pada bagian tabel, Admin dapat beralih antara tampilan <strong>"Data Baru"</strong> (default, hanya yang belum diunduh) dan <strong>"Semua Data"</strong>.</p>
+
+<h3 class="subsection-title"><span class="num">5.2</span>Verifikasi Data (ACC / Tolak)</h3>
+<p class="body-text">Verifikasi adalah langkah kunci yang menentukan data dapat diproses lebih lanjut untuk penerbitan NIK. Lakukan verifikasi setelah memastikan data sudah lengkap dan dokumen pendukung (jika ada) sesuai.</p>
+
+<ul class="steps">
+    <li>Buka dashboard, pastikan sedang pada tampilan <strong>"Data Baru"</strong>.</li>
+    <li>Cari data yang berstatus <em>Menunggu</em>. Gunakan kotak pencarian atau filter puskesmas bila perlu.</li>
+    <li>Klik ikon <strong>mata</strong> untuk melihat detail data dan dokumen pendukung.</li>
+    <li>Untuk menyetujui, klik tombol <strong>"ACC"</strong> (hijau). Status berubah menjadi <em>Terverifikasi</em>.</li>
+    <li>Untuk menolak, klik tombol <strong>"Tolak"</strong> (merah), lalu isi <strong>alasan penolakan</strong>. Operator akan melihat alasan ini di halaman riwayatnya.</li>
+</ul>
+
+<div class="callout tip">
+    <div class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></div>
+    <div class="callout-body">
+        <div class="callout-title">"ACC Semua" untuk Verifikasi Massal</div>
+        Bila ada banyak data yang sudah yakin benar, gunakan tombol <strong>"ACC Semua"</strong> untuk memverifikasi seluruh data menunggu sekaligus. Hanya gunakan setelah spot-check beberapa sampel data.
+    </div>
+</div>
+
+<h3 class="subsection-title"><span class="num">5.3</span>Download Data Baru &amp; Register</h3>
+<p class="body-text">Admin memiliki dua jenis download yang berbeda fungsi:</p>
+
+<div class="card">
+    <p class="card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Download Data Baru</p>
+    <p class="card-text">Mengunduh seluruh data yang belum pernah diunduh sebelumnya. Setelah diunduh, data ditandai sebagai <em>register</em> dan tidak muncul lagi di tampilan "Data Baru". Gunakan untuk arsip periodik (harian/mingguan).</p>
+</div>
+
+<div class="card">
+    <p class="card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Download Register</p>
+    <p class="card-text">Mengunduh ulang seluruh data yang sudah masuk register historis (pernah diunduh sebelumnya). Bersifat read-only, tidak mengubah status data. Cocok untuk rekapitulasi bulanan/tahunan.</p>
+</div>
+
+<h3 class="subsection-title"><span class="num">5.4</span>Input &amp; Kelola NIK Bayi</h3>
+<p class="body-text">Setelah data terverifikasi, Admin perlu memasukkan NIK Bayi yang diterbitkan. NIK Bayi inilah yang menjadi rujukan bagi BPJS dan pihak lain yang berkepentingan.</p>
+<ul class="steps">
+    <li>Buka menu <strong>"NIK Bayi"</strong> di navigasi admin.</li>
+    <li>Pilih data bayi berstatus <em>Terverifikasi</em> yang belum memiliki NIK.</li>
+    <li>Masukkan <strong>16 digit NIK Bayi</strong> sesuai dokumen resmi.</li>
+    <li>Klik <strong>"Simpan NIK"</strong>. Status data berubah menjadi <em>Punya NIK</em>.</li>
+</ul>
+<p class="body-text">Jika terjadi kesalahan input NIK, Admin dapat <strong>menghapus</strong> NIK Bayi melalui tombol hapus (ikon tempat sampah merah) pada halaman NIK Bayi. Penghapusan hanya mengosongkan NIK, tidak menghapus data kelahiran itu sendiri.</p>
+
+<h3 class="subsection-title"><span class="num">5.5</span>Halaman Dokumen Pendukung</h3>
+<p class="body-text">Menu terpisah <strong>"Dokumen"</strong> memungkinkan Admin melihat seluruh dokumen pendukung yang diunggah oleh Operator dari semua puskesmas. Tersedia filter berdasarkan puskesmas dan tipe file, serta tombol unduh per dokumen. Halaman ini berguna untuk audit dokumen secara terpusat tanpa harus membuka tiap record satu per satu.</p>
+
+<h3 class="subsection-title"><span class="num">5.6</span>Menanggapi Pengaduan Operator</h3>
+<p class="body-text">Menu <strong>"Pengaduan"</strong> menampilkan seluruh pengaduan dari Operator, lengkap dengan info pengirim (nama &amp; puskesmas), kategori, prioritas, dan status. Admin dapat membalas, mengubah status, dan menutup pengaduan.</p>
+<ul class="steps">
+    <li>Buka menu <strong>"Pengaduan"</strong>.</li>
+    <li>Pilih pengaduan berstatus <em>Terbuka</em> atau <em>Diproses</em>.</li>
+    <li>Klik <strong>"Balas"</strong>, tulis tanggapan di kolom balasan.</li>
+    <li>Ubah status sesuai progres: <strong>Diproses</strong> (sedang ditangani) atau <strong>Selesai</strong> (sudah dituntaskan).</li>
+    <li>Klik <strong>"Simpan"</strong>. Operator akan melihat balasan di pengaduannya.</li>
+</ul>
+<p class="body-text">Tersedia pula tombol cepat <strong>"Tandai Diproses"</strong>, <strong>"Tandai Selesai"</strong>, dan <strong>"Tutup"</strong> untuk perubahan status tanpa perlu membuka dialog balasan.</p>
+
+<h3 class="subsection-title"><span class="num">5.7</span>Kelola User</h3>
+<p class="body-text">Menu <strong>"Pengguna"</strong> digunakan untuk menambah, mengedit, menonaktifkan, atau menghapus akun pengguna (Operator dan BPJS). Hanya Admin yang dapat mengelola akun.</p>
+<ul class="steps">
+    <li>Klik menu <strong>"Pengguna"</strong> di navigasi admin.</li>
+    <li>Untuk menambah user baru, klik <strong>"Tambah User"</strong>.</li>
+    <li>Pilih <strong>peran</strong> (Operator/BPJS), isi username, nama lengkap, email, kata sandi, dan untuk Operator pilih/masukkan puskesmas.</li>
+    <li>Klik <strong>"Simpan"</strong>. User baru dapat langsung login.</li>
+    <li>Untuk menonaktifkan sementara, gunakan tombol toggle status. Untuk menghapus permanen, gunakan ikon tempat sampah (dengan konfirmasi).</li>
+</ul>
+
+<div class="callout danger">
+    <div class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div>
+    <div class="callout-body">
+        <div class="callout-title">Hati-hati Menghapus Akun</div>
+        Menghapus akun Operator akan melepaskan kaitan data yang pernah diinputnya (data tetap ada, namun terlihat "tanpa pencatat"). Utamakan menonaktifkan akun daripada menghapus, kecuali untuk akun salah input/duplikat.
+    </div>
+</div>
+
+<h3 class="subsection-title"><span class="num">5.8</span>Kelola Puskesmas</h3>
+<p class="body-text">Menu <strong>"Puskesmas"</strong> digunakan untuk mengelola daftar puskesmas yang terdaftar di sistem: menambah puskesmas baru, mengedit nama/telepon/alamat, serta menonaktifkan puskesmas yang sudah tidak aktif. Data puskesmas dipakai saat membuat akun Operator dan pada laporan distribusi data.</p>
+
+<h3 class="subsection-title"><span class="num">5.9</span>Audit Log</h3>
+<p class="body-text">Menu <strong>"Log Aktivitas"</strong> mencatat seluruh aksi penting di sistem: login, input data, verifikasi, penolakan, penghapusan, download, penambahan NIK, hingga perubahan status user. Log dapat difilter berdasarkan tipe aksi, pengguna, dan rentang tanggal. Audit log sangat penting untuk pelacakan masalah dan pertanggungjawaban.</p>
+
+<h3 class="subsection-title"><span class="num">5.10</span>Analitik</h3>
+<p class="body-text">Menu <strong>"Analitik"</strong> menyajikan visualisasi data lebih mendalam dibanding dashboard: tren bulanan, distribusi per puskesmas, perbandingan jenis kelamin, usia input (selisih tanggal lahir dengan tanggal input), serta rasio data dengan/dokumen tanpa dokumen. Halaman ini membantu pimpinan mengambil keputusan berbasis data.</p>
+
+<!-- ===== BAB 6: BPJS ===== -->
+<div class="chapter-header">
+    <div class="chapter-tag">Bab 06</div>
+    <h2 class="chapter-title">Panduan BPJS Kesehatan</h2>
+    <div class="chapter-divider"></div>
+</div>
+
+<p class="lead">BPJS Kesehatan mengakses data bayi yang sudah memiliki NIK untuk keperluan pendaftaran peserta dan penjaminan klaim. Akses bersifat read-only &mdash; BPJS tidak dapat mengubah data.</p>
+
+<h3 class="subsection-title"><span class="num">6.1</span>Dashboard BPJS</h3>
+<p class="body-text">Dashboard BPJS menampilkan ringkasan data bayi terdaftar: total data dengan NIK, data bulan berjalan, serta distribusi per puskesmas. Tabel utama memuat daftar bayi lengkap dengan NIK, nama, NIK ibu, tanggal lahir, dan puskesmas asal. Hanya data yang sudah <em>terverifikasi dan memiliki NIK</em> yang muncul di sini.</p>
+
+<h3 class="subsection-title"><span class="num">6.2</span>Mencari &amp; Memfilter Data</h3>
+<p class="body-text">Untuk menemukan data tertentu dengan cepat, gunakan kombinasi:</p>
+<ul class="steps">
+    <li><strong>Kotak pencarian:</strong> ketik nama bayi, NIK bayi, atau NIK ibu.</li>
+    <li><strong>Filter puskesmas:</strong> pilih puskesmas tertentu dari daftar dropdown.</li>
+    <li><strong>Filter rentang tanggal:</strong> batasi berdasarkan tanggal lahir atau tanggal input.</li>
+    <li>Klik tombol reset untuk menghapus seluruh filter sekaligus.</li>
+</ul>
+
+<h3 class="subsection-title"><span class="num">6.3</span>Export Data ke Excel</h3>
+<p class="body-text">Untuk membawa data ke sistem internal BPJS, gunakan fitur <strong>Export</strong>:</p>
+<ul class="steps">
+    <li>Terapkan filter yang diinginkan (opsional &mdash; tanpa filter = export semua).</li>
+    <li>Klik tombol <strong>"Export"</strong> di pojok kanan atas tabel.</li>
+    <li>Tunggu proses export selesai, file Excel (.xlsx) akan terunduh otomatis.</li>
+    <li>File berisi kolom: NIK Bayi, Nama Bayi, Jenis Kelamin, Tanggal Lahir, NIK Ibu, Nama Ibu, Puskesmas, dan Tanggal Input.</li>
+</ul>
+
+<div class="callout info">
+    <div class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+    <div class="callout-body">
+        <div class="callout-title">Frekuensi Sinkronisasi</div>
+        Data yang baru saja diberi NIK oleh Admin akan otomatis muncul di dashboard BPJS tanpa perlu refresh manual. Namun jika tidak terlihat, lakukan refresh halaman (tekan F5) untuk memastikan data termutakhir.
+    </div>
+</div>
+
+<!-- ===== BAB 7: FAQ ===== -->
+<div class="chapter-header">
+    <div class="chapter-tag">Bab 07</div>
+    <h2 class="chapter-title">FAQ &amp; Pemecahan Masalah</h2>
+    <div class="chapter-divider"></div>
+</div>
+
+<p class="body-text">Berikut adalah pertanyaan yang sering muncul beserta jawabannya. Jika masalah tidak tertera di sini, ajukan pengaduan melalui menu Pengaduan (untuk Operator) atau hubungi Admin Dukcapil langsung.</p>
+
+<div class="faq-item">
+    <div class="faq-q"><span class="q-mark">Q.</span>Tidak bisa login meskipun yakin username &amp; password benar.</div>
+    <p class="faq-a">Pastikan tidak ada spasi sebelum/sesudah username. Periksa tombol Caps Lock. Jika tetap gagal, kemungkinan akun dinonaktifkan oleh Admin atau kata sandi sudah di-reset. Hubungi Admin Dukcapil untuk pengecekan.</p>
+</div>
+
+<div class="faq-item">
+    <div class="faq-q"><span class="q-mark">Q.</span>Data yang sudah diinput tidak muncul di daftar.</div>
+    <p class="faq-a">Periksa apakah data berstatus <em>ditolak</em>. Data yang ditolak tidak muncul di tampilan default &mdash; gunakan filter status "Semua" untuk melihatnya. Perbaiki sesuai alasan penolakan, lalu input ulang sebagai data baru.</p>
+</div>
+
+<div class="faq-item">
+    <div class="faq-q"><span class="q-mark">Q.</span>Upload dokumen pendukung selalu gagal.</div>
+    <p class="faq-a">Periksa ukuran file (maksimal 5 MB) dan format (hanya JPG, PNG, atau PDF). Kompres atau konversi file bila perlu. Koneksi internet yang lambat juga dapat menyebabkan kegagalan; coba di jaringan yang lebih stabil.</p>
+</div>
+
+<div class="faq-item">
+    <div class="faq-q"><span class="q-mark">Q.</span>NIK Ibu selalu ditolak saat input.</div>
+    <p class="faq-a">Sistem hanya menerima NIK dengan tepat 16 digit angka. Pastikan tidak ada huruf, spasi, atau tanda hubung. Pada Excel import, set format kolom NIK menjadi "Text" agar tidak berubah menjadi notasi ilmiah.</p>
+</div>
+
+<div class="faq-item">
+    <div class="faq-q"><span class="q-mark">Q.</span>Apakah data yang sudah terverifikasi bisa diedit?</div>
+    <p class="faq-a">Tidak. Setelah status menjadi <em>Terverifikasi</em>, data terkunci untuk menjaga integritas. Jika ada kesalahan pada data terverifikasi, ajukan pengaduan ke Admin Dukcapil dengan rincian perbaikan yang diperlukan.</p>
+</div>
+
+<div class="faq-item">
+    <div class="faq-q"><span class="q-mark">Q.</span>Bagaimana cara melihat data puskesmas lain?</div>
+    <p class="faq-a">Operator hanya dapat melihat data milik puskesmasnya sendiri. Untuk melihat data lintas puskesmas, hubungi Admin Dukcapil yang memiliki akses penuh, atau ajukan permintaan data resmi.</p>
+</div>
+
+<div class="faq-item">
+    <div class="faq-q"><span class="q-mark">Q.</span>Website lambat saat dibuka.</div>
+    <p class="faq-a">Periksa koneksi internet. Tutup tab peramban yang tidak perlu. Bersihkan cache peramban secara berkala. Jika tetap lambat, kemungkinan ada pemeliharaan server; pantau pengumuman dari Admin.</p>
+</div>
+
+<div class="faq-item">
+    <div class="faq-q"><span class="q-mark">Q.</span>Apakah bisa menggunakan ponsel?</div>
+    <p class="faq-a">Bisa. Website bersifat responsif dan dapat diakses dari ponsel pintar. Untuk input data banyak, disarankan menggunakan komputer/tablet agar lebih cepat dan akurat.</p>
+</div>
+
+<!-- ===== BAB 8: KEAMANAN ===== -->
+<div class="chapter-header">
+    <div class="chapter-tag">Bab 08</div>
+    <h2 class="chapter-title">Keamanan &amp; Privasi Data</h2>
+    <div class="chapter-divider"></div>
+</div>
+
+<p class="body-text">Data yang diolah dalam sistem ini termasuk data pribadi yang sensitif (NIK, nama, tanggal lahir, data keluarga). Seluruh pengguna wajib memahami dan mematuhi prinsip keamanan berikut untuk melindungi data publik.</p>
+
+<h3 class="subsection-title"><span class="num">8.1</span>Prinsip Dasar</h3>
+<ul class="steps">
+    <li><strong>Kerahasiaan akun:</strong> Jangan membagikan username &amp; password kepada siapa pun, termasuk rekan kerja.</li>
+    <li><strong>Ganti password berkala:</strong> Minimal setiap 3 bulan, atau segera jika dicurigai bocor.</li>
+    <li><strong>Logout setelah selesai:</strong> Terutama pada perangkat umum/kantor.</li>
+    <li><strong>Akses sesuai peran:</strong> Jangan mencoba mengakses fitur di luar kewenangan.</li>
+    <li><strong>Tidak mengunduh data tanpa keperluan:</strong> Setiap download tercatat di audit log.</li>
+</ul>
+
+<h3 class="subsection-title"><span class="num">8.2</span>Penanganan Data Pribadi</h3>
+<div class="callout danger">
+    <div class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+    <div class="callout-body">
+        <div class="callout-title">Data Sensitif &mdash; Tangani dengan Hati-hati</div>
+        NIK adalah identitas resmi. Jangan memfoto layar berisi data NIK untuk dibagikan via chat pribadi. Jika perlu berbagi data antar-instansi, gunakan jalur resmi (surat, email dinas) bukan aplikasi pesan instan.
+    </div>
+</div>
+
+<h3 class="subsection-title"><span class="num">8.3</span>Audit Trail</h3>
+<p class="body-text">Setiap aksi penting di sistem tercatat otomatis: siapa, melakukan apa, pada record mana, dan kapan. Catatan ini bersifat permanen dan tidak dapat dihapus oleh pengguna. Admin dapat memantau audit log untuk mendeteksi aktivitas mencurigakan, dan log ini juga menjadi bukti pertanggungjawaban jika terjadi sengketa data.</p>
+
+<h3 class="subsection-title"><span class="num">8.4</span>Lapor Insiden Keamanan</h3>
+<p class="body-text">Jika menemukan hal-hal berikut, segera lapor ke Admin Dukcapil:</p>
+<ul class="steps">
+    <li>Akun bisa login tanpa kata sandi yang benar.</li>
+    <li>Melihat data yang seharusnya tidak dapat diakses oleh peran Anda.</li>
+    <li>Menerima dugaan upaya phishing terkait akun sistem.</li>
+    <li>Perangkat yang dipakai login hilang atau dicuri.</li>
+    <li>Menemukan bug yang membocorkan data di layar.</li>
+</ul>
+
+<div class="callout tip">
+    <div class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div>
+    <div class="callout-body">
+        <div class="callout-title">Komitmen Bersama</div>
+        Keamanan data adalah tanggung jawab bersama. Sistem menyediakan alat dan pencatatan, namun kedisiplinan setiap pengguna dalam menjaga kredensial, logout, dan melaporkan insiden menjadi pertahanan paling efektif. Dengan praktik yang baik, data ribuan bayi Kabupaten Ngada akan tetap aman dan pelayanan publik berjalan dengan kualitas terbaik.
+    </div>
+</div>
+
+<div class="card" style="background: linear-gradient(135deg, #ecfdf5 0%, #f0fdfa 100%); border-color: #a7f3d0;">
+    <p class="card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Ringkasan Praktik Aman</p>
+    <p class="card-text">Ganti kata sandi berkala &bull; Logout setelah selesai &bull; Jangan bagikan kredensial &bull; Akses sesuai peran &bull; Unduh data hanya jika perlu &bull; Laporkan insiden segera. Enam langkah sederhana ini melindungi data seluruh warga yang tercatat dalam sistem.</p>
+</div>
+
+</div>
+<!-- /main-content -->
+
+<!-- ============ ENDING PAGE ============ -->
+<div class="ending">
+    <div class="deco-1"></div>
+    <div class="deco-2"></div>
+    <div class="dot-grid"></div>
+
+    <div class="ending-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 12l2 2 4-4"/>
+            <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c2.39 0 4.68.94 6.36 2.64"/>
+        </svg>
+    </div>
+
+    <div class="ending-eyebrow">Penutup</div>
+    <h2 class="ending-title">Terima Kasih atas Dedikasi Anda</h2>
+    <p class="ending-text">Pencatatan bayi baru lahir yang akurat adalah fondasi penting bagi pelayanan publik &mdash; dari penerbitan akta, jaminan kesehatan, hingga perencanaan program. Setiap data yang Anda input dengan teliti berdampak langsung pada kualitas hidup warga Kabupaten Ngada.</p>
+
+    <div class="ending-divider"></div>
+
+    <div class="ending-contact">
+        <div class="ending-contact-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
+            <div><strong>Bantuan Teknis:</strong> Admin Dukcapil Kabupaten Ngada</div>
+        </div>
+        <div class="ending-contact-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <div><strong>Hotline:</strong> Hubungi kantor Dukcapil setempat</div>
+        </div>
+        <div class="ending-contact-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div><strong>Lokasi:</strong> Kabupaten Ngada, Provinsi NTT</div>
+        </div>
+    </div>
+
+    <div class="ending-footer">
+        &copy; 2025 Pemerintah Kabupaten Ngada &mdash; Dinas Kependudukan dan Pencatatan Sipil &mdash; Buku Saku Edisi 1.0
+    </div>
+</div>
+
+</body>
+</html>
