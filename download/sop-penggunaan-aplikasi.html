@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>SOP Penggunaan Aplikasi Sistem Pencatatan Bayi Baru Lahir - Dukcapil Kabupaten Ngada</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Merriweather:wght@400;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+@page {
+    size: 210mm 297mm;
+    margin: 0;
+}
+
+:root {
+    --c-primary: #1e3a2f;
+    --c-primary-mid: #2d5a45;
+    --c-primary-light: #e8f5ee;
+    --c-accent: #c9a227;
+    --c-accent-bg: #fdf8e8;
+    --c-slate-900: #1a1a1a;
+    --c-slate-800: #292524;
+    --c-slate-700: #44403c;
+    --c-slate-600: #57534e;
+    --c-slate-500: #78716c;
+    --c-slate-400: #a8a29e;
+    --c-slate-300: #d6d3d1;
+    --c-slate-200: #e7e5e4;
+    --c-slate-100: #f5f5f4;
+    --c-slate-50: #fafaf9;
+    --c-white: #ffffff;
+    --c-rose: #9f1239;
+    --c-rose-bg: #fff1f2;
+    --c-blue: #1e40af;
+    --c-blue-bg: #eff6ff;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 210mm;
+    background: var(--c-white);
+    color: var(--c-slate-900);
+    font-family: 'Inter', sans-serif;
+    font-size: 12pt;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+}
+
+@media screen {
+    html {
+        height: auto;
+        display: flex;
+        justify-content: center;
+        background: #d6d3d1;
+    }
+    body {
+        margin: 24px auto;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+}
+
+/* ====== COVER ====== */
+.cover {
+    width: 210mm;
+    height: 297mm;
+    background: var(--c-white);
+    position: relative;
+    overflow: hidden;
+    break-after: page;
+    display: flex;
+    flex-direction: column;
+}
+
+.cover-top-bar {
+    height: 14px;
+    background: linear-gradient(90deg, var(--c-primary) 0%, var(--c-primary-mid) 100%);
+}
+
+.cover-garuda-area {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 0 24px 0;
+}
+
+.cover-emblem {
+    width: 72px;
+    height: 72px;
+    border: 2.5px solid var(--c-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cover-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 60px;
+}
+
+.cover-institution {
+    font-size: 10pt;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--c-slate-600);
+    margin-bottom: 4px;
+}
+
+.cover-dept {
+    font-size: 11pt;
+    font-weight: 700;
+    color: var(--c-slate-800);
+    margin-bottom: 36px;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.cover-doc-type {
+    font-family: 'Merriweather', serif;
+    font-size: 12pt;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--c-primary);
+    margin-bottom: 8px;
+}
+
+.cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24pt;
+    font-weight: 900;
+    color: var(--c-slate-900);
+    text-align: center;
+    line-height: 1.25;
+    margin: 0 0 12px 0;
+    max-width: 440px;
+}
+
+.cover-title .app-name {
+    color: var(--c-primary);
+}
+
+.cover-subtitle {
+    font-size: 11pt;
+    color: var(--c-slate-600);
+    text-align: center;
+    margin-bottom: 44px;
+}
+
+.cover-line {
+    width: 80px;
+    height: 2.5px;
+    background: var(--c-accent);
+    border-radius: 1px;
+    margin-bottom: 44px;
+}
+
+.cover-identity {
+    width: 340px;
+    border: 1.5px solid var(--c-slate-300);
+    border-radius: 6px;
+    padding: 16px 20px;
+    font-size: 10.5pt;
+}
+
+.cover-id-row {
+    display: flex;
+    padding: 3px 0;
+}
+
+.cover-id-label {
+    width: 120px;
+    font-weight: 700;
+    color: var(--c-slate-800);
+    flex-shrink: 0;
+}
+
+.cover-id-value {
+    color: var(--c-slate-700);
+}
+
+.cover-bottom-bar {
+    height: 24px;
+    background: linear-gradient(90deg, var(--c-primary) 0%, var(--c-primary-mid) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cover-bottom-bar span {
+    font-size: 7.5pt;
+    color: rgba(255,255,255,0.85);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+/* ====== MAIN CONTENT ====== */
+.main-content {
+    padding: 50px 65px 40px 65px;
+}
+
+/* Chapter headers - formal SOP style */
+.chapter {
+    break-after: avoid;
+    break-inside: avoid;
+    margin-top: 24px;
+    margin-bottom: 16px;
+}
+.chapter:first-child { margin-top: 0; }
+
+.chapter-label {
+    font-size: 9pt;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--c-slate-500);
+    margin-bottom: 4px;
+}
+
+.chapter-title {
+    font-family: 'Merriweather', serif;
+    font-size: 16pt;
+    font-weight: 900;
+    color: var(--c-primary);
+    margin: 0 0 6px 0;
+    line-height: 1.3;
+}
+
+.chapter-rule {
+    width: 100%;
+    height: 1.5px;
+    background: var(--c-primary);
+    margin-bottom: 16px;
+}
+
+/* Subsections */
+.sub {
+    break-inside: avoid;
+    margin-top: 16px;
+}
+
+.sub-title {
+    font-size: 12pt;
+    font-weight: 800;
+    color: var(--c-primary);
+    margin: 0 0 8px 0;
+}
+
+.sub-sub-title {
+    font-size: 11pt;
+    font-weight: 700;
+    color: var(--c-slate-800);
+    margin: 12px 0 6px 0;
+}
+
+/* Body text - formal numbered paragraphs */
+.p {
+    font-size: 11.5pt;
+    line-height: 1.75;
+    color: var(--c-slate-800);
+    margin: 0 0 8px 0;
+    text-align: justify;
+    text-indent: 28px;
+}
+.p-no-indent {
+    text-indent: 0;
+}
+.p-bold {
+    font-weight: 700;
+    color: var(--c-slate-900);
+}
+
+/* Numbered paragraphs */
+.num-p {
+    font-size: 11.5pt;
+    line-height: 1.75;
+    color: var(--c-slate-800);
+    margin: 0 0 6px 0;
+    text-align: justify;
+    padding-left: 8px;
+    text-indent: -8px;
+}
+
+/* Sub-list (lower alpha) */
+.sub-list {
+    margin: 2px 0 6px 28px;
+    padding: 0;
+    list-style: none;
+    counter-reset: sublist;
+}
+.sub-list li {
+    counter-increment: sublist;
+    position: relative;
+    padding-left: 22px;
+    margin-bottom: 3px;
+    font-size: 11pt;
+    line-height: 1.7;
+    color: var(--c-slate-800);
+    break-inside: avoid;
+}
+.sub-list li::before {
+    content: counter(sublist, lower-alpha) ")";
+    position: absolute;
+    left: 0;
+    font-weight: 600;
+    color: var(--c-slate-700);
+}
+
+/* Sub-sub list (numeric) */
+.sub-sub-list {
+    margin: 2px 0 6px 50px;
+    padding: 0;
+    list-style: none;
+    counter-reset: subsublist;
+}
+.sub-sub-list li {
+    counter-increment: subsublist;
+    position: relative;
+    padding-left: 22px;
+    margin-bottom: 3px;
+    font-size: 11pt;
+    line-height: 1.7;
+    color: var(--c-slate-800);
+    break-inside: avoid;
+}
+.sub-sub-list li::before {
+    content: "(" counter(subsublist) ")";
+    position: absolute;
+    left: 0;
+    font-weight: 600;
+    color: var(--c-slate-700);
+}
+
+/* SOP Tables - formal bordered */
+.sop-table {
+    break-inside: avoid;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 14px 0;
+    font-size: 10.5pt;
+}
+.sop-table th {
+    background: var(--c-primary);
+    color: var(--c-white);
+    text-align: left;
+    padding: 8px 10px;
+    font-weight: 700;
+    font-size: 10pt;
+    letter-spacing: 0.3px;
+    border: 1px solid var(--c-primary);
+}
+.sop-table td {
+    padding: 7px 10px;
+    border: 1px solid var(--c-slate-300);
+    color: var(--c-slate-800);
+    vertical-align: top;
+    line-height: 1.6;
+}
+.sop-table tr:nth-child(even) td { background: var(--c-slate-50); }
+
+/* Callout boxes */
+.callout {
+    break-inside: avoid;
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin: 10px 0;
+    font-size: 10.5pt;
+    line-height: 1.65;
+    border-left: 4px solid;
+}
+.callout.note {
+    background: var(--c-primary-light);
+    border-color: var(--c-primary-mid);
+    color: var(--c-primary);
+}
+.callout.note strong { color: var(--c-primary); }
+.callout.warn {
+    background: var(--c-accent-bg);
+    border-color: var(--c-accent);
+    color: #78350f;
+}
+.callout.warn strong { color: #92400e; }
+.callout.danger {
+    background: var(--c-rose-bg);
+    border-color: var(--c-rose);
+    color: #881337;
+}
+.callout.danger strong { color: var(--c-rose); }
+.callout.info {
+    background: var(--c-blue-bg);
+    border-color: var(--c-blue);
+    color: var(--c-blue);
+}
+.callout.info strong { color: var(--c-blue); }
+
+/* Signature/approval block */
+.approval-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin: 20px 0 10px 0;
+    break-inside: avoid;
+}
+.approval-box {
+    text-align: center;
+    font-size: 10.5pt;
+}
+.approval-role {
+    font-weight: 700;
+    color: var(--c-slate-800);
+    margin-bottom: 4px;
+}
+.approval-line {
+    border-bottom: 1px solid var(--c-slate-800);
+    height: 56px;
+    margin: 4px 0;
+}
+.approval-name {
+    font-weight: 700;
+    color: var(--c-slate-900);
+}
+.approval-nip {
+    font-size: 9.5pt;
+    color: var(--c-slate-600);
+}
+
+/* TOC */
+.toc {
+    margin: 8px 0;
+}
+.toc-item {
+    display: flex;
+    align-items: baseline;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--c-slate-200);
+    font-size: 11pt;
+    break-inside: avoid;
+}
+.toc-item.main { font-weight: 700; }
+.toc-item.sub { padding-left: 24px; font-weight: 400; }
+.toc-item.sub-sub { padding-left: 48px; font-weight: 400; font-size: 10.5pt; }
+.toc-label { flex: 1; color: var(--c-slate-800); }
+.toc-dots { flex: 0 1 auto; border-bottom: 1px dotted var(--c-slate-300); margin: 0 8px; min-width: 16px; align-self: stretch; margin-bottom: 3px; }
+.toc-page-num { color: var(--c-slate-600); font-weight: 600; min-width: 20px; text-align: right; }
+
+/* Flowchart container */
+.flow-container {
+    break-inside: avoid;
+    margin: 14px 0;
+    padding: 16px 12px;
+    background: var(--c-slate-50);
+    border: 1px solid var(--c-slate-200);
+    border-radius: 8px;
+}
+
+.flow-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+}
+.flow-step:not(:last-child) { border-bottom: 1px dashed var(--c-slate-200); }
+
+.flow-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--c-primary);
+    color: var(--c-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 12pt;
+    flex-shrink: 0;
+}
+
+.flow-content {
+    flex: 1;
+}
+
+.flow-title {
+    font-size: 11pt;
+    font-weight: 700;
+    color: var(--c-slate-900);
+    margin: 0 0 2px 0;
+}
+
+.flow-desc {
+    font-size: 10pt;
+    color: var(--c-slate-600);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.flow-actor {
+    display: inline-block;
+    font-size: 8.5pt;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+.flow-actor.admin { background: #d1fae5; color: #065f46; }
+.flow-actor.operator { background: #ccfbf1; color: #0f766e; }
+.flow-actor.bpjs { background: #ede9fe; color: #5b21b6; }
+.flow-actor.system { background: var(--c-slate-200); color: var(--c-slate-700); }
+
+/* Lampiran (attachment) style */
+.lampiran-box {
+    break-inside: avoid;
+    border: 1.5px solid var(--c-primary);
+    border-radius: 6px;
+    padding: 16px 18px;
+    margin: 12px 0;
+}
+.lampiran-header {
+    font-size: 10pt;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--c-primary);
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Ending page */
+.ending {
+    width: 210mm;
+    height: 297mm;
+    break-before: page;
+    background: var(--c-white);
+    position: relative;
+    overflow: hidden;
+    padding: 50px 65px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.ending .top-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 14px;
+    background: linear-gradient(90deg, var(--c-primary) 0%, var(--c-primary-mid) 100%);
+}
+.ending .bottom-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 14px;
+    background: linear-gradient(90deg, var(--c-primary) 0%, var(--c-primary-mid) 100%);
+}
+.ending-text {
+    font-family: 'Merriweather', serif;
+    font-size: 12pt;
+    color: var(--c-slate-600);
+    line-height: 1.8;
+    max-width: 400px;
+}
+
+</style>
+</head>
+<body>
+
+<!-- ============ COVER PAGE ============ -->
+<div class="cover">
+    <div class="cover-top-bar"></div>
+
+    <div class="cover-garuda-area">
+        <div class="cover-emblem">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#1e3a2f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/>
+                <path d="M9 21h6"/><path d="M10 17h4"/>
+                <path d="M12 9v4"/><path d="M10 11h4"/>
+            </svg>
+        </div>
+    </div>
+
+    <div class="cover-body">
+        <div class="cover-institution">Pemerintah Kabupaten Ngada</div>
+        <div class="cover-dept">Dinas Kependudukan dan Pencatatan Sipil</div>
+
+        <div class="cover-doc-type">Standar Operasional Prosedur</div>
+
+        <h1 class="cover-title"><span class="app-name">Penggunaan Aplikasi Sistem<br>Pencatatan Bayi Baru Lahir</span></h1>
+
+        <p class="cover-subtitle">Kabupaten Ngada, Provinsi Nusa Tenggara Timur</p>
+
+        <div class="cover-line"></div>
+
+        <div class="cover-identity">
+            <div class="cover-id-row"><div class="cover-id-label">Nomor SOP</div><div class="cover-id-value">SOP-DUKCAPIL/001/2025</div></div>
+            <div class="cover-id-row"><div class="cover-id-label">Versi</div><div class="cover-id-value">1.0</div></div>
+            <div class="cover-id-row"><div class="cover-id-label">Tanggal Efektif</div><div class="cover-id-value">27 Juli 2025</div></div>
+            <div class="cover-id-row"><div class="cover-id-label">Disusun Oleh</div><div class="cover-id-value">Tim Pengembang Sistem Dukcapil</div></div>
+            <div class="cover-id-row"><div class="cover-id-label">Disahkan Oleh</div><div class="cover-id-value">Kepala Dinas Kependudukan<br>dan Pencatatan Sipil Kabupaten Ngada</div></div>
+        </div>
+    </div>
+
+    <div class="cover-bottom-bar">
+        <span>Dinas Kependudukan dan Pencatatan Sipil &mdash; Kabupaten Ngada &mdash; NTT</span>
+    </div>
+</div>
+
+<!-- ============ MAIN CONTENT ============ -->
+<div class="main-content">
+
+<!-- ===== LEMBAR PENGESAHAN ===== -->
+<div class="chapter">
+    <div class="chapter-label">Dokumen Resmi</div>
+    <div class="chapter-title">Lembar Pengesahan</div>
+    <div class="chapter-rule"></div>
+</div>
+
+<p class="p">Standar Operasional Prosedur (SOP) ini disusun sebagai pedoman operasional resmi dalam penggunaan Aplikasi Sistem Pencatatan Bayi Baru Lahir di lingkungan Dinas Kependudukan dan Pencatatan Sipil Kabupaten Ngada. SOP ini telah ditinjau dan disahkan untuk diberlakukan efektif mulai tanggal yang tercantum pada halaman sampul.</p>
+
+<div class="approval-grid">
+    <div class="approval-box">
+        <div class="approval-role">Disusun oleh,</div>
+        <div class="approval-role">Tim Pengembang Sistem</div>
+        <div class="approval-line"></div>
+        <div class="approval-name">(.........................................)</div>
+        <div class="approval-nip">NIP.</div>
+    </div>
+    <div class="approval-box">
+        <div class="approval-role">Ditinjau oleh,</div>
+        <div class="approval-role">Sekretaris Dinas</div>
+        <div class="approval-line"></div>
+        <div class="approval-name">(.........................................)</div>
+        <div class="approval-nip">NIP.</div>
+    </div>
+    <div class="approval-box">
+        <div class="approval-role">Disahkan oleh,</div>
+        <div class="approval-role">Kepala Dinas Kep. dan Capil</div>
+        <div class="approval-line"></div>
+        <div class="approval-name">(.........................................)</div>
+        <div class="approval-nip">NIP.</div>
+    </div>
+</div>
+
+<!-- ===== DAFTAR ISI ===== -->
+<div class="chapter" style="margin-top:30px;">
+    <div class="chapter-label">Navigasi</div>
+    <div class="chapter-title">Daftar Isi</div>
+    <div class="chapter-rule"></div>
+</div>
+
+<div class="toc">
+    <div class="toc-item main"><span class="toc-label">BAB I &mdash; Pendahuluan</span><span class="toc-dots"></span><span class="toc-page-num">4</span></div>
+    <div class="toc-item sub"><span class="toc-label">1.1 Latar Belakang</span><span class="toc-dots"></span><span class="toc-page-num">4</span></div>
+    <div class="toc-item sub"><span class="toc-label">1.2 Tujuan</span><span class="toc-dots"></span><span class="toc-page-num">4</span></div>
+    <div class="toc-item sub"><span class="toc-label">1.3 Ruang Lingkup</span><span class="toc-dots"></span><span class="toc-page-num">4</span></div>
+    <div class="toc-item sub"><span class="toc-label">1.4 Dasar Hukum</span><span class="toc-dots"></span><span class="toc-page-num">5</span></div>
+    <div class="toc-item sub"><span class="toc-label">1.5 Referensi</span><span class="toc-dots"></span><span class="toc-page-num">5</span></div>
+
+    <div class="toc-item main"><span class="toc-label">BAB II &mdash; Definisi dan Istilah</span><span class="toc-dots"></span><span class="toc-page-num">5</span></div>
+
+    <div class="toc-item main"><span class="toc-label">BAB III &mdash; Uraian Tugas dan Tanggung Jawab</span><span class="toc-dots"></span><span class="toc-page-num">6</span></div>
+    <div class="toc-item sub"><span class="toc-label">3.1 Kepala Dinas</span><span class="toc-dots"></span><span class="toc-page-num">6</span></div>
+    <div class="toc-item sub"><span class="toc-label">3.2 Admin Dukcapil</span><span class="toc-dots"></span><span class="toc-page-num">6</span></div>
+    <div class="toc-item sub"><span class="toc-label">3.3 Operator Puskesmas</span><span class="toc-dots"></span><span class="toc-page-num">7</span></div>
+    <div class="toc-item sub"><span class="toc-label">3.4 Petugas BPJS Kesehatan</span><span class="toc-dots"></span><span class="toc-page-num">7</span></div>
+
+    <div class="toc-item main"><span class="toc-label">BAB IV &mdash; Prosedur Operasional</span><span class="toc-dots"></span><span class="toc-page-num">8</span></div>
+    <div class="toc-item sub"><span class="toc-label">4.1 Pencatatan Data Bayi Baru Lahir</span><span class="toc-dots"></span><span class="toc-page-num">8</span></div>
+    <div class="toc-item sub"><span class="toc-label">4.2 Verifikasi dan Validasi Data</span><span class="toc-dots"></span><span class="toc-page-num">10</span></div>
+    <div class="toc-item sub"><span class="toc-label">4.3 Penerbitan dan Pengelolaan NIK Bayi</span><span class="toc-dots"></span><span class="toc-page-num">11</span></div>
+    <div class="toc-item sub"><span class="toc-label">4.4 Pengelolaan Dokumen Pendukung</span><span class="toc-dots"></span><span class="toc-page-num">12</span></div>
+    <div class="toc-item sub"><span class="toc-label">4.5 Pengelolaan Pengaduan</span><span class="toc-dots"></span><span class="toc-page-num">13</span></div>
+    <div class="toc-item sub"><span class="toc-label">4.6 Pengelolaan Akun Pengguna</span><span class="toc-dots"></span><span class="toc-page-num">14</span></div>
+    <div class="toc-item sub"><span class="toc-label">4.7 Akses Data oleh BPJS Kesehatan</span><span class="toc-dots"></span><span class="toc-page-num">15</span></div>
+
+    <div class="toc-item main"><span class="toc-label">BAB V &mdash; Alur Kerja Sistem</span><span class="toc-dots"></span><span class="toc-page-num">16</span></div>
+
+    <div class="toc-item main"><span class="toc-label">BAB VI &mdash; Keamanan dan Privasi Data</span><span class="toc-dots"></span><span class="toc-page-num">17</span></div>
+
+    <div class="toc-item main"><span class="toc-label">BAB VII &mdash; Monitoring, Evaluasi, dan Pelaporan</span><span class="toc-dots"></span><span class="toc-page-num">19</span></div>
+
+    <div class="toc-item main"><span class="toc-label">BAB VIII &mdash; Penutup</span><span class="toc-dots"></span><span class="toc-page-num">20</span></div>
+
+    <div class="toc-item main"><span class="toc-label">Lampiran</span><span class="toc-dots"></span><span class="toc-page-num">21</span></div>
+</div>
+
+<!-- ================================================================ -->
+<!-- ===== BAB I: PENDAHULUAN ===== -->
+<!-- ================================================================ -->
+<div class="chapter">
+    <div class="chapter-label">BAB I</div>
+    <div class="chapter-title">Pendahuluan</div>
+    <div class="chapter-rule"></div>
+</div>
+
+<div class="sub"><div class="sub-title">1.1 Latar Belakang</div>
+<p class="p">Pencatatan kelahiran merupakan bagian fundamental dari administrasi kependudukan yang memiliki dampak langsung terhadap pelayanan publik, mulai dari penerbitan akta kelahiran, pendaftaran jaminan kesehatan nasional (JKN) melalui BPJS Kesehatan, hingga perencanaan program pembangunan berbasis data kependudukan. Di Kabupaten Ngada, Provinsi Nusa Tenggara Timur, pencatatan bayi baru lahir sebelumnya dilakukan secara manual di masing-masing Puskesmas dan disampaikan ke Dinas Kependudukan dan Pencatatan Sipil (Dukcapil) melalui dokumen fisik.</p>
+<p class="p">Metode manual tersebut menimbulkan berbagai permasalahan operasional, antara lain: risiko kesalahan penulisan data, keterlambatan alur informasi dari Puskesmas ke Dukcapil, kesulitan dalam pelacakan status pencatatan, serta terbatasnya kemampuan analisis data secara agregat. Untuk mengatasi permasalahan tersebut, Dinas Kependudukan dan Pencatatan Sipil Kabupaten Ngada mengembangkan Aplikasi Sistem Pencatatan Bayi Baru Lahir berbasis web yang mengintegrasikan tiga pihak utama: Operator Puskesmas sebagai pencatat data lapangan, Admin Dukcapil sebagai pengelola dan verifikator data, serta BPJS Kesehatan sebagai pengakses data yang telah memiliki Nomor Induk Kependudukan (NIK).</p>
+<p class="p">Dalam rangka menjamin ke tertiban, konsistensi, dan akuntabilitas penggunaan aplikasi tersebut, diperlukan suatu dokumen standar operasional prosedur yang mengatur seluruh aspek pengoperasian sistem secara terstruktur dan terukur. SOP ini disusun sebagai acuan resmi bagi seluruh pemangku kepentingan yang terlibat dalam pengelolaan data bayi baru lahir di Kabupaten Ngada.</p>
+</div>
+
+<div class="sub"><div class="sub-title">1.2 Tujuan</div>
+<p class="num-p">1. <span class="p-bold">Menetapkan prosedur baku</span> penggunaan Aplikasi Sistem Pencatatan Bayi Baru Lahir bagi seluruh pengguna di lingkungan Dukcapil Kabupaten Ngada, Puskesmas, dan BPJS Kesehatan.</p>
+<p class="num-p">2. <span class="p-bold">Menjamin konsistensi dan akurasi</span> data kelahiran yang dicatat melalui sistem, sehingga mengurangi risiko kesalahan dan duplikasi data.</p>
+<p class="num-p">3. <span class="p-bold">Mempercepat alur pelayanan</span> pencatatan kelahiran dari tingkat Puskesmas hingga penerbitan NIK dan akses oleh BPJS Kesehatan.</p>
+<p class="num-p">4. <span class="p-bold">Mengamankan data pribadi</span> warga yang tercatat dalam sistem sesuai dengan peraturan perundang-undangan yang berlaku.</p>
+<p class="num-p">5. <span class="p-bold">Menyediakan dasar hukum dan acuan</span> dalam pelaksanaan pengawasan, monitoring, dan evaluasi terhadap operasional sistem.</p>
+</div>
+
+<div class="sub"><div class="sub-title">1.3 Ruang Lingkup</div>
+<p class="p">SOP ini berlaku untuk seluruh kegiatan operasional yang terkait dengan penggunaan Aplikasi Sistem Pencatatan Bayi Baru Lahir, yang mencakup:</p>
+<p class="num-p">a. Pencatatan data bayi baru lahir oleh Operator Puskesmas, baik secara individual maupun massal melalui impor berkas Excel.</p>
+<p class="num-p">b. Verifikasi dan validasi data kelahiran oleh Admin Dukcapil, termasuk penerbitan atau penolakan data.</p>
+<p class="num-p">c. Pengelolaan Nomor Induk Kependudukan (NIK) bayi setelah data terverifikasi.</p>
+<p class="num-p">d. Pengunggahan dan pengelolaan dokumen pendukung berupa surat keterangan lahir dan kartu keluarga.</p>
+<p class="num-p">e. Pengelolaan akun pengguna, termasuk pembuatan, pengaktifan, penonaktifan, dan penghapusan akun.</p>
+<p class="num-p">f. Akses data oleh petugas BPJS Kesehatan untuk keperluan pendaftaran dan klaim jaminan kesehatan.</p>
+<p class="num-p">g. Pengelolaan pengaduan yang diajukan oleh Operator Puskesmas terkait operasional sistem.</p>
+<p class="num-p">h. Keamanan data, audit trail, monitoring, evaluasi, dan pelaporan berkala.</p>
+</div>
+
+<div class="sub"><div class="sub-title">1.4 Dasar Hukum</div>
+<p class="num-p">1. Undang-Undang Nomor 24 Tahun 2013 tentang Administrasi Kependudukan sebagaimana telah diubah dengan Undang-Undang Nomor 24 Tahun 2016.</p>
+<p class="num-p">2. Peraturan Pemerintah Nomor 40 Tahun 2019 tentang Perizinan Mendirikan Bangunan Gedung.</p>
+<p class="num-p">3. Peraturan Menteri Dalam Negeri Nomor 9 Tahun 2016 tentang Percepatan Peningkatan Cakupan Akta Kelahiran.</p>
+<p class="num-p">4. Peraturan Bupati Ngada tentang Organisasi dan Tata Kerja Dinas Kependudukan dan Pencatatan Sipil Kabupaten Ngada.</p>
+<p class="num-p">5. Peraturan Daerah Kabupaten Ngada tentang Penyelenggaraan Administrasi Kependudukan.</p>
+</div>
+
+<div class="sub"><div class="sub-title">1.5 Referensi</div>
+<p class="num-p">1. Panduan Teknis Penyelenggaraan Pencatatan Kelahiran, Direktorat Jenderal Kependudukan dan Pencatatan Sipil, Kementerian Dalam Negeri.</p>
+<p class="num-p">2. Buku Saku Pedoman Penggunaan Aplikasi Sistem Pencatatan Bayi Baru Lahir, Dukcapil Kabupaten Ngada, Edisi 1.0 (2025).</p>
+<p class="num-p">3. Standar Keamanan Informasi Peraturan BSSN Nomor 2 Tahun 2022 tentang Standar Keamanan Siber bagi Penyelenggara Sistem Elektronik Sektor Pemerintah.</p>
+</div>
+
+<!-- ================================================================ -->
+<!-- ===== BAB II: DEFINISI DAN ISTILAH ===== -->
+<!-- ================================================================ -->
+<div class="chapter">
+    <div class="chapter-label">BAB II</div>
+    <div class="chapter-title">Definisi dan Istilah</div>
+    <div class="chapter-rule"></div>
+</div>
+
+<p class="p">Dalam SOP ini, istilah-istilah berikut didefinisikan sebagai berikut:</p>
+
+<table class="sop-table">
+    <thead>
+        <tr><th style="width:28%">Istilah</th><th>Definisi</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>Sistem</strong></td><td>Aplikasi Sistem Pencatatan Bayi Baru Lahir berbasis web yang dikembangkan oleh Dinas Kependudukan dan Pencatatan Sipil Kabupaten Ngada, diakses melalui alamat pencatatan-bayi.vercel.app.</td></tr>
+        <tr><td><strong>Admin Dukcapil</strong></td><td>Pegawai Dinas Kependudukan dan Pencatatan Sipil yang diberikan kewenangan mengelola seluruh aspek sistem, termasuk verifikasi data, penerbitan NIK, dan pengelolaan pengguna.</td></tr>
+        <tr><td><strong>Operator Puskesmas</strong></td><td>Petugas kesehatan di Puskesmas yang ditugaskan melakukan pencatatan data bayi baru lahir ke dalam sistem sesuai wilayah kerja Puskesmas masing-masing.</td></tr>
+        <tr><td><strong>BPJS Kesehatan</strong></td><td>Petugas Badan Penyelenggara Jaminan Sosial Kesehatan yang berhak mengakses data bayi yang telah memiliki NIK untuk keperluan administrasi jaminan kesehatan nasional.</td></tr>
+        <tr><td><strong>Data Kelahiran</strong></td><td>Informasi mengenai bayi baru lahir yang mencakup: nama bayi, NIK ibu, nama ibu, nama ayah, tanggal lahir, tempat lahir, jenis kelamin, serta data kontak orang tua.</td></tr>
+        <tr><td><strong>NIK Bayi</strong></td><td>Nomor Induk Kependudukan yang diterbitkan oleh Dukcapil setelah data kelahiran terverifikasi dan diproses sesuai ketentuan administrasi kependudukan.</td></tr>
+        <tr><td><strong>Dokumen Pendukung</strong></td><td>Berkas digital berupa surat keterangan lahir dari tenaga kesehatan dan/atau fotokopi kartu keluarga yang diunggah oleh Operator sebagai bukti pendukung data kelahiran.</td></tr>
+        <tr><td><strong>Pengaduan</strong></td><td>Permintaan resmi yang diajukan oleh Operator melalui sistem terkait kendala operasional, kesalahan data, atau masalah teknis yang memerlukan tindak lanjut dari Admin.</td></tr>
+        <tr><td><strong>Audit Trail</strong></td><td>Catatan otomatis seluruh aktivitas penting dalam sistem (login, input, verifikasi, penghapusan, download) yang mencakup identitas pelaku, waktu, dan detail aksi.</td></tr>
+        <tr><td><strong>Verifikasi</strong></td><td>Proses pemeriksaan dan penyetujuan data kelahiran oleh Admin Dukcapil untuk memastikan kebenaran dan kelengkapan data sebelum diproses lebih lanjut.</td></tr>
+        <tr><td><strong>ACC</strong></td><td>Persetujuan (accept) atas data kelahiran yang telah diverifikasi, menandakan data dinyatakan valid dan layak diproses untuk penerbitan NIK.</td></tr>
+        <tr><td><strong>Register</strong></td><td>Kumpulan data kelahiran yang telah didownload oleh Admin Dukcapil untuk keperluan arsip atau pelaporan. Data dalam register bersifat historis dan tidak berubah.</td></tr>
+    </tbody>
+</table>
+
+<!-- ================================================================ -->
+<!-- ===== BAB III: URAIAN TUGAS ===== -->
+<!-- ================================================================ -->
+<div class="chapter">
+    <div class="chapter-label">BAB III</div>
+    <div class="chapter-title">Uraian Tugas dan Tanggung Jawab</div>
+    <div class="chapter-rule"></div>
+</div>
+
+<div class="sub"><div class="sub-title">3.1 Kepala Dinas Kependudukan dan Pencatatan Sipil</div>
+<p class="num-p">1. Mengesahkan SOP ini dan memastikan implementasinya di seluruh unit kerja terkait.</p>
+<p class="num-p">2. Menetapkan kebijakan strategis terkait pengelolaan data kependudukan berbasis sistem digital.</p>
+<p class="num-p">3. Melakukan evaluasi berkala terhadap efektivitas sistem dan kinerja petugas pengelola.</p>
+<p class="num-p">4. Menindaklanjuti temuan dari hasil monitoring dan evaluasi yang dilakukan oleh tim teknis.</p>
+<p class="num-p">5. Memberikan sanksi administratif kepada petugas yang melanggar ketentuan SOP ini sesuai peraturan perundang-undangan yang berlaku.</p>
+</div>
+
+<div class="sub"><div class="sub-title">3.2 Admin Dukcapil</div>
+<p class="num-p">1. Mengelola seluruh akun pengguna sistem, termasuk pembuatan, pengaktifan, penonaktifan, dan penghapusan akun sesuai prosedur.</p>
+<p class="num-p">2. Melakukan verifikasi dan validasi data kelahiran yang diinput oleh Operator Puskesmas dalam waktu paling lambat <span class="p-bold">2 (dua) hari kerja</span> setelah data diinput.</p>
+<p class="num-p">3. Memasukkan NIK Bayi pada data yang telah terverifikasi, paling lambat <span class="p-bold">3 (tiga) hari kerja</span> setelah verifikasi, kecuali terdapat kendala administratif yang dapat dijelaskan.</p>
+<p class="num-p">4. Mendownload data baru secara berkala (direkomendasikan <span class="p-bold">setiap hari kerja</span>) untuk keperluan arsip dan pelaporan.</p>
+<p class="num-p">5. Menanggapi pengaduan yang diajukan oleh Operator Puskesmas dalam waktu paling lambat <span class="p-bold">3 (tiga) hari kerja</span> sejak pengaduan diterima.</p>
+<p class="num-p">6. Memantau audit log secara berkala untuk mendeteksi aktivitas yang tidak wajar atau potensi pelanggaran.</p>
+<p class="num-p">7. Menyusun laporan bulanan mengenai jumlah data kelahiran yang tercatat, diverifikasi, dan diberi NIK, serta rekapitulasi pengaduan.</p>
+<p class="num-p">8. Menjaga kerahasiaan kredensial akun sistem dan tidak membagikannya kepada pihak manapun tanpa otorisasi.</p>
+</div>
+
+<div class="sub"><div class="sub-title">3.3 Operator Puskesmas</div>
+<p class="num-p">1. Melakukan pencatatan data bayi baru lahir ke dalam sistem <span class="p-bold">pada hari yang sama</span> dengan tanggal peristiwa kelahiran, atau paling lambat <span class="p-bold">1 (satu) hari kerja</span> setelahnya.</p>
+<p class="num-p">2. Memastikan kebenaran dan kelengkapan data yang diinput berdasarkan dokumen sumber yang sah (KTP ibu, surat keterangan lahir, kartu keluarga).</p>
+<p class="num-p">3. Mengunggah dokumen pendukung (surat keterangan lahir dan/atau kartu keluarga) sebagai bukti verifikasi data.</p>
+<p class="num-p">4. Melakukan koreksi data yang ditolak oleh Admin berdasarkan alasan penolakan yang tercantum, kemudian menginput ulang sebagai data baru.</p>
+<p class="num-p">5. Mengajukan pengaduan melalui fitur sistem apabila menemui kendala teknis atau prosedural.</p>
+<p class="num-p">6. Mengganti kata sandi akun secara berkala, minimal <span class="p-bold">setiap 3 (tiga) bulan</span>, serta segera setelah menerima kata sandi sementara dari Admin.</p>
+<p class="num-p">7. Tidak mengakses data di luar wilayah kerja Puskesmasnya dan tidak membagikan kredensial akun kepada pihak lain.</p>
+</div>
+
+<div class="sub"><div class="sub-title">3.4 Petugas BPJS Kesehatan</div>
+<p class="num-p">1. Mengakses data bayi yang telah terverifikasi dan memiliki NIK melalui dashboard BPJS sesuai kewenangan.</p>
+<p class="num-p">2. Mengunduh data secara bertanggung jawab hanya untuk keperluan pendaftaran peserta dan administrasi klaim jaminan kesehatan.</p>
+<p class="num-p">3. Tidak mengubah, menghapus, atau memodifikasi data apapun dalam sistem (akses bersifat read-only).</p>
+<p class="num-p">4. Menjaga kerahasiaan data yang diakses dan tidak mendistribusikannya kepada pihak yang tidak berwenang.</p>
+<p class="num-p">5. Melaporkan kepada Admin Dukcapil apabila menemukan ketidaksesuaian data antara sistem dan data BPJS.</p>
+</div>
+
+<div class="callout note">
+    <strong>Catatan:</strong> Seluruh pihak yang diatur dalam SOP ini wajib menandatangani Surat Pernyataan Tidak Menyebarkan Data Pribadi sebelum diberikan akses ke sistem. Surat pernyataan tersebut disimpan oleh Admin Dukcapil sebagai bagian dari administrasi keamanan data.
+</div>
+
+<!-- ================================================================ -->
+<!-- ===== BAB IV: PROSEDUR OPERASIONAL ===== -->
+<!-- ================================================================ -->
+<div class="chapter">
+    <div class="chapter-label">BAB IV</div>
+    <div class="chapter-title">Prosedur Operasional</div>
+    <div class="chapter-rule"></div>
+</div>
+
+<p class="p">Bab ini mengatur prosedur detail untuk setiap kegiatan operasional dalam penggunaan sistem. Setiap prosedur disusun secara kronologis dengan penanggung jawab, langkah kerja, output yang diharapkan, dan catatan penting yang harus diperhatikan.</p>
+
+<!-- ===== 4.1 PENCATATAN ===== -->
+<div class="sub"><div class="sub-title">4.1 Pencatatan Data Bayi Baru Lahir</div>
+
+<div class="sub-sub-title">4.1.1 Penanggung Jawab</div>
+<p class="p">Operator Puskesmas di wilayah kerja masing-masing.</p>
+
+<div class="sub-sub-title">4.1.2 Langkah Kerja Pencatatan Individual</div>
+<p class="num-p">1. Operator membuka aplikasi melalui peramban (browser) dan login menggunakan username serta kata sandi yang diberikan oleh Admin Dukcapil.</p>
+<p class="num-p">2. Pada dashboard Operator, klik menu <strong>"Input Data"</strong> atau tombol akses cepat yang tersedia.</p>
+<p class="num-p">3. Operator mengisi formulir data kelahiran dengan ketentuan sebagai berikut:</p>
+
+<table class="sop-table">
+    <thead><tr><th style="width:22%">Field Data</th><th style="width:12%">Status</th><th style="width:20%">Ketentuan</th><th style="width:22%">Sumber Data</th><th style="width:24%">Catatan</th></tr></thead>
+    <tbody>
+        <tr><td>NIK Ibu</td><td>Wajib</td><td>16 digit angka</td><td>KTP ibu</td><td>Validasi otomatis oleh sistem</td></tr>
+        <tr><td>Nama Ibu</td><td>Wajib</td><td>Min. 3 karakter</td><td>KTP ibu</td><td>Sesuai ejaan resmi KTP</td></tr>
+        <tr><td>Nama Ayah</td><td>Opsional</td><td>Min. 3 karakter jika diisi</td><td>KK / KTP ayah</td><td>Dapat dikosongkan</td></tr>
+        <tr><td>Nama Bayi</td><td>Wajib</td><td>Min. 3 karakter</td><td>Surat keterangan lahir</td><td>Gunakan inisial jika belum diberi nama</td></tr>
+        <tr><td>Tanggal Lahir</td><td>Wajib</td><td>Tidak melebihi hari ini</td><td>Surat keterangan lahir</td><td>Format: DD/MM/YYYY</td></tr>
+        <tr><td>Tempat Lahir</td><td>Wajib</td><td>Nama lokasi</td><td>Surat keterangan lahir</td><td>Kota/kabupaten atau nama fasilitas</td></tr>
+        <tr><td>Jenis Kelamin</td><td>Wajib</td><td>Laki-laki / Perempuan</td><td>Pemeriksaan fisik</td><td>Pilih dari dropdown</td></tr>
+        <tr><td>No. HP Orang Tua</td><td>Opsional</td><td>Format nomor telepon</td><td>Keterangan orang tua</td><td>Untuk verifikasi/tindak lanjut</td></tr>
+        <tr><td>Email Orang Tua</td><td>Opsional</td><td>Format email valid</td><td>Keterangan orang tua</td><td>Untuk komunikasi resmi</td></tr>
+    </tbody>
+</table>
+
+<p class="num-p">4. (Opsional) Operator mengunggah dokumen pendukung pada bagian bawah formulir:
+<ul class="sub-list">
+    <li>Surat Keterangan Lahir dari tenaga kesehatan (format gambar atau PDF, maks. 5 MB per file).</li>
+    <li>Kartu Keluarga (format gambar atau PDF, maks. 5 MB per file).</li>
+</ul></p>
+
+<p class="num-p">5. Operator mengklik tombol <strong>"Simpan"</strong> untuk menyimpan satu data, atau <strong>"Simpan &amp; Input Lagi"</strong> untuk menyimpan dan langsung mengosongkan formulir untuk input berikutnya.</p>
+<p class="num-p">6. Sistem menampilkan notifikasi konfirmasi keberhasilan penyimpanan beserta nama bayi yang telah dicatat.</p>
+
+<div class="sub-sub-title">4.1.3 Langkah Kerja Pencatatan Massal (Impor Excel)</div>
+<p class="num-p">1. Operator membuka halaman <strong>"Riwayat"</strong> dari dashboard, kemudian klik tombol <strong>"Import Excel"</strong>.</p>
+<p class="num-p">2. Operator mengunduh <strong>template impor</strong> yang disediakan sistem dalam format .xlsx.</p>
+<p class="num-p">3. Operator mengisi data pada template sesuai ketentuan kolom, dengan memastikan:</p>
+<ul class="sub-list">
+    <li>Sel kolom NIK Ibu diformat sebagai <strong>Text</strong> (bukan Number) agar 16 digit angka tidak terpotong atau berubah menjadi notasi ilmiah.</li>
+    <li>Seluruh field wajib diisi dan sesuai dengan ketentuan yang berlaku pada tabel di atas.</li>
+    <li>Tidak terdapat baris kosong di antara data.</li>
+</ul>
+<p class="num-p">4. Operator mengunggah file yang telah diisi melalui tombol impor pada sistem.</p>
+<p class="num-p">5. Sistem memvalidasi setiap baris data. Baris yang valid langsung tersimpan, sedangkan baris yang gagal ditampilkan beserta alasan kegagalan untuk diperbaiki oleh Operator.</p>
+
+<div class="callout warn">
+    <strong>Peringatan:</strong> Operator <strong>wajib melakukan verifikasi silang</strong> antara data yang diimpor dengan dokumen sumber sebelum mengunggah. Kesalahan massal akibat ketidaktelitian dalam pengisian template menjadi tanggung jawab Operator yang bersangkutan.
+</div>
+
+<div class="sub-sub-title">4.1.4 Waktu Penyelesaian</div>
+<p class="p">Pencatatan data individual harus diselesaikan pada hari yang sama dengan tanggal peristiwa kelahiran. Pencatatan data massal melalui impor Excel tidak boleh melebihi rentang waktu <span class="p-bold">7 (tujuh) hari kalender</span> dari tanggal kelahiran tertua dalam berkas impor.</p>
+</div>
+
+<!-- ===== 4.2 VERIFIKASI ===== -->
+<div class="sub"><div class="sub-title">4.2 Verifikasi dan Validasi Data</div>
+
+<div class="sub-sub-title">4.2.1 Penanggung Jawab</div>
+<p class="p">Admin Dukcapil.</p>
+
+<div class="sub-sub-title">4.2.2 Langkah Kerja Verifikasi Individual</div>
+<p class="num-p">1. Admin login ke sistem dan membuka <strong>dashboard Admin Dukcapil</strong>.</p>
+<p class="num-p">2. Admin memastikan tampilan tabel berada pada mode <strong>"Data Baru"</strong> yang menampilkan seluruh data yang belum didownload (belum masuk register).</p>
+<p class="num-p">3. Admin memeriksa data berstatus <em>"Menunggu"</em> dengan mengklik ikon detail (mata) untuk melihat informasi lengkap dan dokumen pendukung (jika ada).</p>
+<p class="num-p">4. Admin melakukan pengecekan silang terhadap kriteria berikut:</p>
+<ul class="sub-list">
+    <li>NIK Ibu terdiri dari 16 digit angka dan sesuai format NIK nasional.</li>
+    <li>Nama Ibu dan NIK Ibu konsisten antar record (jika terdapat lebih dari satu kelahiran dari ibu yang sama).</li>
+    <li>Tanggal lahir tidak melebihi tanggal input dan masuk akal secara medis.</li>
+    <li>Dokumen pendukung (jika diunggah) sesuai dengan data yang diinput.</li>
+</ul>
+<p class="num-p">5. Berdasarkan hasil pengecekan, Admin mengambil keputusan:</p>
+<ul class="sub-list">
+    <li><strong>Data valid:</strong> Klik tombol <strong>"ACC"</strong> (hijau). Status data berubah menjadi <em>"Terverifikasi"</em> dan siap diproses penerbitan NIK.</li>
+    <li><strong>Data tidak valid:</strong> Klik tombol <strong>"Tolak"</strong> (merah), wajib mengisi <strong>alasan penolakan</strong> secara jelas dan spesifik agar Operator dapat memahami dan memperbaiki kesalahan.</li>
+</ul>
+
+<div class="sub-sub-title">4.2.3 Verifikasi Massal (ACC Semua)</div>
+<p class="p">Admin dapat menggunakan fitur <strong>"ACC Semua"</strong> untuk memverifikasi seluruh data berstatus menunggu secara sekaligus. Fitur ini <span class="p-bold">hanya boleh digunakan</span> apabila Admin telah melakukan pengecekan sampel minimal <span class="p-bold">10% (sepuluh persen)</span> dari total data menunggu dan yakin bahwa seluruh data dalam kondisi valid. Penggunaan fitur ini tanpa pengecekan sampel merupakan pelanggaran terhadap SOP dan dapat dikenai sanksi administratif.</p>
+
+<div class="sub-sub-title">4.2.4 Waktu Penyelesaian</div>
+<p class="p">Verifikasi data harus diselesaikan dalam waktu paling lambat <span class="p-bold">2 (dua) hari kerja</span> setelah data diinput oleh Operator. Apabila terdapat kendala yang menyebabkan keterlambatan, Admin wajib mencatatkan alasan keterlambatan dalam catatan kinerja.</p>
+</div>
+
+<!-- ===== 4.3 NIK BAYI ===== -->
+<div class="sub"><div class="sub-title">4.3 Penerbitan dan Pengelolaan NIK Bayi</div>
+
+<div class="sub-sub-title">4.3.1 Penanggung Jawab</div>
+<p class="p">Admin Dukcapil, berkoordinasi dengan bagian penerbitan NIK.</p>
+
+<div class="sub-sub-title">4.3.2 Langkah Kerja</div>
+<p class="num-p">1. Admin membuka menu <strong>"NIK Bayi"</strong> pada navigasi dashboard.</p>
+<p class="num-p">2. Admin memilih data bayi yang berstatus <em>"Terverifikasi"</em> dan belum memiliki NIK.</p>
+<p class="num-p">3. Admin memasukkan <strong>16 digit NIK Bayi</strong> sesuai dengan dokumen penerbitan NIK yang diterbitkan oleh Dukcapil.</p>
+<p class="num-p">4. Admin mengklik <strong>"Simpan NIK"</strong>. Setelah disimpan, data bayi secara otomatis menjadi terlihat oleh petugas BPJS Kesehatan melalui dashboard BPJS.</p>
+<p class="num-p">5. Apabila terjadi kesalahan input NIK (misalnya salah ketik atau kesalahan dokumen), Admin dapat menghapus NIK melalui tombol hapus (ikon tempat sampah) pada halaman NIK Bayi. Penghapusan NIK hanya mengosongkan kolom NIK tanpa menghapus data kelahiran. Setelah NIK dihapus, Admin dapat memasukkan NIK yang benar.</p>
+
+<div class="sub-sub-title">4.3.3 Waktu Penyelesaian</div>
+<p class="p">Input NIK Bayi harus diselesaikan dalam waktu paling lambat <span class="p-bold">3 (tiga) hari kerja</span> setelah data dinyatakan terverifikasi. Keterlambatan di luar batas ini harus disertai alasan yang tercatat.</p>
+
+<div class="callout danger">
+    <strong>Penting:</strong> NIK Bayi merupakan data identitas resmi negara. Setiap input, penghapusan, dan perubahan NIK tercatat dalam audit log. Penyalahgunaan kewenangan pengelolaan NIK dapat diproses sesuai peraturan perundang-undangan yang berlaku.
+</div>
+</div>
+
+<!-- ===== 4.4 DOKUMEN PENDUKUNG ===== -->
+<div class="sub"><div class="sub-title">4.4 Pengelolaan Dokumen Pendukung</div>
+
+<div class="sub-sub-title">4.4.1 Penanggung Jawab</div>
+<p class="p">Operator Puskesmas (pengunggahan), Admin Dukcapil (pengelolaan dan audit).</p>
+
+<div class="sub-sub-title">4.4.2 Ketentuan Teknis</div>
+<p class="num-p">a. Format file yang diterima: gambar (<strong>JPG, PNG</strong>) atau dokumen (<strong>PDF</strong>).</p>
+<p class="num-p">b. Ukuran maksimal setiap file: <strong>5 MB</strong> (lima megabyte).</p>
+<p class="num-p">c. Satu jenis dokumen hanya boleh satu file aktif. Pengunggahan ulang akan menggantikan file sebelumnya secara otomatis.</p>
+<p class="num-p">d. Pengunggahan dapat dilakukan pada saat input data atau kemudian melalui halaman Riwayat Operator.</p>
+<p class="num-p">e. Admin dapat melihat seluruh dokumen pendukung dari seluruh Puskesmas melalui menu <strong>"Dokumen"</strong> pada dashboard Admin, dengan kemampuan filter berdasarkan puskesmas dan tipe file.</p>
+</div>
+
+<!-- ===== 4.5 PENGADUAN ===== -->
+<div class="sub"><div class="sub-title">4.5 Pengelolaan Pengaduan</div>
+
+<div class="sub-sub-title">4.5.1 Penanggung Jawab</div>
+<p class="p">Operator Puskesmas (pengaju), Admin Dukcapil (penanganan).</p>
+
+<div class="sub-sub-title">4.5.2 Klasifikasi Pengaduan</div>
+<table class="sop-table">
+    <thead><tr><th style="width:18%">Kategori</th><th style="width:35%">Contoh Permasalahan</th><th style="width:15%">Prioritas</th><th style="width:32%">Batas Waktu Penanganan</th></tr></thead>
+    <tbody>
+        <tr><td><strong>Sistem</strong></td><td>Error, halaman tidak bisa diakses, fitur tidak berfungsi</td><td>Tinggi</td><td>1 hari kerja</td></tr>
+        <tr><td><strong>Data</strong></td><td>Data tidak sesuai, duplikasi, NIK salah</td><td>Sedang</td><td>2 hari kerja</td></tr>
+        <tr><td><strong>Proses Verifikasi</strong></td><td>Verifikasi terlambat, penolakan tanpa alasan</td><td>Sedang</td><td>2 hari kerja</td></tr>
+        <tr><td><strong>Lainnya</strong></td><td>Permintaan fitur baru, pertanyaan umum</td><td>Rendah</td><td>5 hari kerja</td></tr>
+    </tbody>
+</table>
+
+<div class="sub-sub-title">4.5.3 Prosedur Pengajuan oleh Operator</div>
+<p class="num-p">1. Operator membuka menu <strong>"Pengaduan"</strong> pada dashboard dan klik <strong>"Buat Pengaduan"</strong>.</p>
+<p class="num-p">2. Operator mengisi formulir pengaduan yang mencakup: <strong>subjek</strong> (ringkasan masalah), <strong>kategori</strong>, <strong>prioritas</strong>, dan <strong>pesan</strong> (uraian detail permasalahan).</p>
+<p class="num-p">3. Operator mengklik <strong>"Kirim"</strong>. Status pengaduan otomatis menjadi <em>"Terbuka"</em>.</p>
+<p class="num-p">4. Operator dapat menghapus pengaduan hanya jika status masih <em>"Terbuka"</em> (belum ditanggapi). Pengaduan yang sudah diproses tidak dapat dihapus demi menjaga integritas catatan penanganan.</p>
+
+<div class="sub-sub-title">4.5.4 Prosedur Penanganan oleh Admin</div>
+<p class="num-p">1. Admin membuka menu <strong>"Pengaduan"</strong> pada dashboard Admin.</p>
+<p class="num-p">2. Admin memfilter dan memprioritaskan pengaduan berdasarkan kategori dan prioritas, dengan fokus utama pada pengaduan berprioritas <strong>Tinggi</strong>.</p>
+<p class="num-p">3. Admin klik <strong>"Balas"</strong>, menuliskan tanggapan, dan mengubah status sesuai progres: <em>"Diproses"</em> (sedang ditangani) atau <em>"Selesai"</em> (masalah telah tertangani).</p>
+<p class="num-p">4. Admin juga dapat menggunakan tombol cepat <strong>"Tandai Diproses"</strong>, <strong>"Tandai Selesai"</strong>, atau <strong>"Tutup"</strong> tanpa perlu menuliskan balasan panjang.</p>
+<p class="num-p">5. Balasan Admin secara otomatis terlihat oleh Operator pada halaman pengaduan masing-masing.</p>
+</div>
+
+<!-- ===== 4.6 KELOLA AKUN ===== -->
+<div class="sub"><div class="sub-title">4.6 Pengelolaan Akun Pengguna</div>
+
+<div class="sub-sub-title">4.6.1 Penanggung Jawab</div>
+<p class="p">Admin Dukcapil.</p>
+
+<div class="sub-sub-title">4.6.2 Pembuatan Akun Baru</div>
+<p class="num-p">1. Admin membuka menu <strong>"Pengguna"</strong> dan klik <strong>"Tambah User"</strong>.</p>
+<p class="num-p">2. Admin mengisi data akun sesuai ketentuan berikut:</p>
+<ul class="sub-list">
+    <li><strong>Peran:</strong> Operator atau BPJS (peran Admin hanya dapat ditambahkan oleh pengembang sistem).</li>
+    <li><strong>Username:</strong> Unik, tanpa spasi, direkomendasikan format: nama.puskesmas (untuk Operator) atau bpjs.nama (untuk BPJS).</li>
+    <li><strong>Nama Lengkap:</strong> Sesuai identitas resmi pegawai.</li>
+    <li><strong>Email:</strong> Email dinas atau email resmi instansi.</li>
+    <li><strong>Kata Sandi Awal:</strong> Diberikan secara lisan atau melalui jalur komunikasi resmi, <strong>tidak melalui pesan instan pribadi</strong>.</li>
+    <li><strong>Puskesmas:</strong> Hanya untuk akun Operator; pilih dari daftar atau input manual.</li>
+</ul>
+<p class="num-p">3. Admin menyampaikan kredensial akun kepada pengguna baru dan menginstruksikan untuk segera <strong>mengganti kata sandi</strong> pada login pertama.</p>
+
+<div class="sub-sub-title">4.6.3 Penonaktifan dan Penghapusan Akun</div>
+<p class="p">Akun pengguna dapat dinonaktifkan secara sementara (misalnya karena mutasi atau cuti panjang) melalui tombol toggle status pada menu Pengguna. <span class="p-bold">Penghapusan akun bersifat permanen</span> dan hanya dilakukan untuk akun yang salah input, duplikat, atau tidak lagi relevan. Sebelum menghapus akun, Admin harus memastikan data yang pernah diinput oleh akun tersebut sudah dipindahkan atau diverifikasi.</p>
+
+<div class="callout info">
+    <strong>Rekomendasi:</strong> Setiap Puskesmas sebaiknya memiliki minimal <span class="p-bold">2 (dua) akun Operator</span> sebagai backup jika salah satu operator berhalangan. Jumlah akun BPJS disesuaikan dengan kebutuhan operasional, direkomendasikan tidak lebih dari 3 (tiga) akun aktif secara bersamaan.
+</div>
+</div>
+
+<!-- ===== 4.7 AKSES BPJS ===== -->
+<div class="sub"><div class="sub-title">4.7 Akses Data oleh BPJS Kesehatan</div>
+
+<div class="sub-sub-title">4.7.1 Penanggung Jawab</div>
+<p class="p">Petugas BPJS Kesehatan yang telah memiliki akun terdaftar.</p>
+
+<div class="sub-sub-title">4.7.2 Hak Akses</div>
+<p class="p">Akun BPJS memiliki akses <span class="p-bold">read-only</span> (hanya baca) terhadap data bayi yang memenuhi kriteria berikut:</p>
+<ul class="sub-list">
+    <li>Data berstatus <em>"Terverifikasi"</em> oleh Admin Dukcapil.</li>
+    <li>Data telah memiliki NIK Bayi yang diinput oleh Admin.</li>
+    <li>Data dari seluruh Puskesmas di Kabupaten Ngada (tanpa batasan per Puskesmas).</li>
+</ul>
+
+<div class="sub-sub-title">4.7.3 Prosedur Akses dan Export</div>
+<p class="num-p">1. Petugas BPJS login ke sistem dan diarahkan ke <strong>dashboard BPJS</strong>.</p>
+<p class="num-p">2. Petugas BPJS dapat memfilter data berdasarkan nama bayi, NIK bayi, NIK ibu, puskesmas, atau rentang tanggal.</p>
+<p class="num-p">3. Untuk keperluan administrasi, petugas BPJS dapat mengunduh (export) data ke format Excel melalui tombol <strong>"Export"</strong>. Setiap aktivitas export tercatat dalam audit log.</p>
+<p class="num-p">4. Data yang diunduh oleh BPJS <span class="p-bold">hanya boleh digunakan</span> untuk keperluan pendaftaran peserta JKN dan administrasi klaim jaminan kesehatan nasional. Penggunaan untuk tujuan lain di luar tupoksi BPJS merupakan pelanggaran SOP.</p>
+</div>
+
+<!-- ================================================================ -->
+<!-- ===== BAB V: ALUR KERJA ===== -->
+<!-- ================================================================ -->
+<div class="chapter">
+    <div class="chapter-label">BAB V</div>
+    <div class="chapter-title">Alur Kerja Sistem</div>
+    <div class="chapter-rule"></div>
+</div>
+
+<p class="p">Berikut adalah alur kerja utama sistem pencatatan bayi baru lahir dari tahap input hingga akses oleh BPJS Kesehatan:</p>
+
+<div class="flow-container">
+    <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-content">
+            <div class="flow-title">Pencatatan Data <span class="flow-actor operator">Operator</span></div>
+            <p class="flow-desc">Operator Puskesmas menginput data bayi baru lahir ke sistem, melampirkan dokumen pendukung. Data berstatus <em>"Menunggu"</em>.</p>
+        </div>
+    </div>
+    <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-content">
+            <div class="flow-title">Verifikasi Data <span class="flow-actor admin">Admin Dukcapil</span></div>
+            <p class="flow-desc">Admin memeriksa kebenaran dan kelengkapan data. Jika valid: ACC (verifikasi). Jika tidak valid: Tolak dengan alasan jelas.</p>
+        </div>
+    </div>
+    <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-content">
+            <div class="flow-title">Penerbitan NIK Bayi <span class="flow-actor admin">Admin Dukcapil</span></div>
+            <p class="flow-desc">Setelah data terverifikasi, Admin memasukkan NIK Bayi sesuai dokumen resmi. Data siap diakses BPJS.</p>
+        </div>
+    </div>
+    <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div class="flow-content">
+            <div class="flow-title">Download &amp; Arsip <span class="flow-actor admin">Admin Dukcapil</span></div>
+            <p class="flow-desc">Admin mendownload data baru secara berkala untuk arsip Dukcapil. Data berpindah dari tampilan "Data Baru" ke "Register".</p>
+        </div>
+    </div>
+    <div class="flow-step">
+        <div class="flow-num">5</div>
+        <div class="flow-content">
+            <div class="flow-title">Akses Data BPJS <span class="flow-actor bpjs">BPJS Kesehatan</span></div>
+            <p class="flow-desc">Petugas BPJS mengakses data bayi yang sudah memiliki NIK, memfilter sesuai kebutuhan, dan mengunduh untuk administrasi JKN.</p>
+        </div>
+    </div>
+    <div class="flow-step">
+        <div class="flow-num">6</div>
+        <div class="flow-content">
+            <div class="flow-title">Monitoring &amp; Audit <span class="flow-actor admin">Admin Dukcapil</span></div>
+            <p class="flow-desc">Admin memantau audit log, menganalisis tren data, dan menyusun laporan berkala untuk Kepala Dinas.</p>
+        </div>
+    </div>
+</div>
+
+<div class="callout note">
+    <strong>Alur Pengaduan (Paralel):</strong> Pada setiap tahap, Operator dapat mengajukan pengaduan melalui fitur sistem. Pengaduan diterima oleh Admin, ditangani sesuai prioritas, dan dibalas melalui sistem. Alur ini berjalan paralel dengan alur utama dan tidak menghentikan proses pencatatan.
+</div>
+
+<!-- ================================================================ -->
+<!-- ===== BAB VI: KEAMANAN ===== -->
+<!-- ================================================================ -->
+<div class="chapter">
+    <div class="chapter-label">BAB VI</div>
+    <div class="chapter-title">Keamanan dan Privasi Data</div>
+    <div class="chapter-rule"></div>
+</div>
+
+<div class="sub"><div class="sub-title">6.1 Klasifikasi Data</div>
+<p class="p">Seluruh data yang diolah dalam sistem diklasifikasikan sebagai <span class="p-bold">Data Pribadi Sensitif</span> sesuai dengan Undang-Undang Nomor 27 Tahun 2022 tentang Perlindungan Data Pribadi. Data ini mencakup namun tidak terbatas pada: Nomor Induk Kependudukan (NIK), nama lengkap, tanggal lahir, data keluarga, dan informasi kontak.</p>
+</div>
+
+<div class="sub"><div class="sub-title">6.2 Pengendalian Akses</div>
+<p class="num-p">1. Akses ke sistem dilakukan melalui mekanisme autentikasi berupa <strong>username dan kata sandi</strong>. Seluruh percakapan autentikasi dienkripsi melalui protokol HTTPS.</p>
+<p class="num-p">2. Setiap pengguna hanya dapat mengakses data dan fitur sesuai dengan peran yang ditetapkan (<span class="p-bold">Role-Based Access Control</span>). Operator hanya dapat melihat data Puskesmasnya sendiri; BPJS hanya dapat melihat data yang sudah terverifikasi dan memiliki NIK.</p>
+<p class="num-p">3. Sesi pengguna (session) memiliki batas waktu kadaluarsa. Pengguna yang tidak aktif secara otomatis ter-logout dari sistem.</p>
+<p class="num-p">4. Fitur <strong>"Ingat Saya"</strong> pada halaman login hanya boleh diaktifkan pada perangkat pribadi, <span class="p-bold">dilarang</span> diaktifkan pada komputer yang digunakan bersama (shared computer).</p>
+</div>
+
+<div class="sub"><div class="sub-title">6.3 Pengelolaan Kata Sandi</div>
+<p class="num-p">a. Kata sandi minimal <strong>8 (delapan) karakter</strong>, direkomendasikan kombinasi huruf besar, huruf kecil, angka, dan simbol khusus.</p>
+<p class="num-p">b. Penggantian kata sandi wajib dilakukan minimal <span class="p-bold">setiap 3 (tiga) bulan</span> oleh seluruh pengguna.</p>
+<p class="num-p">c. Kata sandi sementara yang diberikan Admin kepada pengguna baru wajib diganti <strong>segera setelah login pertama</strong>.</p>
+<p class="num-p">d. Dilarang menggunakan kata sandi yang mudah ditebak (tanggal lahir, nama, "12345678", "password", atau variasi sejenisnya).</p>
+<p class="num-p">e. Dilarang menuliskan kata sandi pada media fisik (kertas, sticky note) atau menyimpannya dalam file yang tidak terenkripsi.</p>
+<p class="num-p">f. Apabila terindikasi kata sandi telah dikompromikan, pengguna wajib segera melapor ke Admin dan mengganti kata sandi.</p>
+</div>
+
+<div class="sub"><div class="sub-title">6.4 Audit Trail</div>
+<p class="p">Sistem mencatat seluruh aktivitas penting secara otomatis dalam <strong>audit log</strong> yang mencakup informasi berikut:</p>
+<table class="sop-table">
+    <thead><tr><th style="width:28%">Jenis Aksi</th><th>Detail yang Tercatat</th></tr></thead>
+    <tbody>
+        <tr><td>Login / Logout</td><td>Waktu, identitas pengguna, alamat perangkat (IP address)</td></tr>
+        <tr><td>Input Data</td><td>Waktu, identitas Operator, id record, ringkasan data</td></tr>
+        <tr><td>Verifikasi (ACC)</td><td>Waktu, identitas Admin, id record</td></tr>
+        <tr><td>Penolakan</td><td>Waktu, identitas Admin, id record, alasan penolakan</td></tr>
+        <tr><td>Input NIK Bayi</td><td>Waktu, identitas Admin, id record, NIK yang diinput</td></tr>
+        <tr><td>Hapus NIK Bayi</td><td>Waktu, identitas Admin, id record, NIK yang dihapus</td></tr>
+        <tr><td>Download Data</td><td>Waktu, identitas pengguna, tipe download (baru/register)</td></tr>
+        <tr><td>Pengelolaan User</td><td>Waktu, identitas Admin, aksi (tambah/hapus/aktifkan/nonaktifkan), target user</td></tr>
+        <tr><td>Upload Dokumen</td><td>Waktu, identitas Operator, id record, tipe file, ukuran file</td></tr>
+        <tr><td>Ganti Password</td><td>Waktu, identitas pengguna</td></tr>
+    </tbody>
+</table>
+<p class="p">Data audit log bersifat <span class="p-bold">permanen</span> dan <span class="p-bold">tidak dapat dihapus</span> oleh pengguna sistem. Admin dapat memantau log melalui menu <strong>"Log Aktivitas"</strong> dan memfilter berdasarkan tipe aksi, pengguna, atau rentang tanggal.</p>
+</div>
+
+<div class="sub"><div class="sub-title">6.5 Penanganan Insiden Keamanan</div>
+<p class="p">Apabila terjadi atau diduga terjadi insiden keamanan data, langkah penanganan yang harus diambil adalah sebagai berikut:</p>
+<p class="num-p">1. <strong>Laporan awal:</strong> Pelapor (siapapun yang mengetahui) segera melapor kepada Admin Dukcapil secara lisan atau melalui fitur pengaduan sistem.</p>
+<p class="num-p">2. <strong>Asesmen awal:</strong> Admin melakukan penilaian awal terhadap keparahan insiden dalam waktu maksimal <span class="p-bold">2 jam</span> sejak laporan diterima.</p>
+<p class="num-p">3. <strong>Pembatasan dampak:</strong> Admin mengambil langkah mitigasi, antara lain: menonaktifkan akun yang terkait, memaksa logout seluruh sesi, atau menghubungi pengembang sistem untuk patch keamanan.</p>
+<p class="num-p">4. <strong>Eskalasi:</strong> Untuk insiden yang berpotensi menimbulkan kebocoran data skala besar, Admin wajib melaporkan kepada Kepala Dinas dalam waktu maksimal <span class="p-bold">4 jam</span> sejak insiden diketahui.</p>
+<p class="num-p">5. <strong>Dokumentasi:</strong> Seluruh proses penanganan insiden dicatat secara detail untuk keperluan evaluasi dan perbaikan sistem ke depan.</p>
+</div>
+
+<!-- ================================================================ -->
+<!-- ===== BAB VII: MONEV ===== -->
+<!-- ================================================================ -->
+<div class="chapter">
+    <div class="chapter-label">BAB VII</div>
+    <div class="chapter-title">Monitoring, Evaluasi, dan Pelaporan</div>
+    <div class="chapter-rule"></div>
+</div>
+
+<div class="sub"><div class="sub-title">7.1 Monitoring Harian</div>
+<p class="num-p">1. Admin Dukcapil melakukan pengecekan dashboard sistem setiap <span class="p-bold">hari kerja</span> untuk memantau jumlah data baru yang masuk dan status verifikasi.</p>
+<p class="num-p">2. Admin memastikan tidak terdapat data yang berstatus <em>"Menunggu"</em> melebihi batas waktu 2 hari kerja.</p>
+<p class="num-p">3. Admin mengecek menu <strong>"Pengaduan"</strong> untuk memastikan seluruh pengaduan berprioritas Tinggi telah ditangani.</p>
+<p class="num-p">4. Admin mendownload data baru ke register arsip secara berkala, minimal sekali setiap hari kerja.</p>
+</div>
+
+<div class="sub"><div class="sub-title">7.2 Evaluasi Bulanan</div>
+<p class="num-p">1. Admin menyusun <strong>laporan bulanan</strong> yang memuat:</p>
+<ul class="sub-list">
+    <li>Jumlah data kelahiran yang tercatat per Puskesmas.</li>
+    <li>Rasio verifikasi: persentase data yang berhasil diverifikasi dibandingkan total input.</li>
+    <li>Rasio penolakan: persentase data yang ditolak beserta alasan utama penolakan.</li>
+    <li>Rata-rata waktu verifikasi (dari input hingga ACC).</li>
+    <li>Jumlah data yang telah memiliki NIK Bayi.</li>
+    <li>Rekapitulasi pengaduan: jumlah, kategori, status penanganan, dan rata-rata waktu penyelesaian.</li>
+    <li>Jumlah data yang diakses/diunduh oleh BPJS Kesehatan.</li>
+</ul>
+<p class="num-p">2. Laporan bulanan disampaikan kepada Kepala Dinas paling lambat <span class="p-bold">tanggal 5 bulan berikutnya</span> dan dijadikan bahan rapat evaluasi kinerja.</p>
+<p class="num-p">3. Menu <strong>"Analitik"</strong> pada dashboard Admin dapat dimanfaatkan untuk menyajikan visualisasi data yang mendukung penyusunan laporan bulanan.</p>
+</div>
+
+<div class="sub"><div class="sub-title">7.3 Evaluasi Triwulanan</div>
+<p class="num-p">1. Setiap triwulan, Kepala Dinas atau pejabat yang ditunjuk melakukan evaluasi menyeluruh terhadap efektivitas sistem dengan indikator:</p>
+<ul class="sub-list">
+    <li>Tingkat kelengkapan dokumen pendukung per Puskesmas (target: minimal 80% data memiliki dokumen).</li>
+    <li>Tingkat kepatuhan terhadap batas waktu verifikasi (target: minimal 90% data diverifikasi dalam 2 hari kerja).</li>
+    <li>Tingkat kepatuhan terhadap batas waktu input NIK (target: minimal 85% NIK diinput dalam 3 hari kerja setelah verifikasi).</li>
+    <li>Tingkat penyelesaian pengaduan sesuai batas waktu (target: minimal 85% pengaduan terselesaikan sesuai SLA).</li>
+    <li>Jumlah insiden keamanan data (target: nol insiden serius).</li>
+</ul>
+<p class="num-p">2. Hasil evaluasi triwulanan dituangkan dalam laporan evaluasi yang memuat rekomendasi perbaikan dan ditindaklanjuti melalui rapat koordinasi lintas bidang.</p>
+</div>
+
+<div class="sub"><div class="sub-title">7.4 Penggunaan Fitur Analitik</div>
+<p class="p">Menu <strong>"Analitik"</strong> pada dashboard Admin menyediakan visualisasi data yang meliputi: tren pencatatan bulanan, distribusi data per Puskesmas, perbandingan jenis kelamin, usia input (selisih tanggal lahir dengan tanggal pencatatan), serta rasio data dengan dan tanpa dokumen pendukung. Data analitik ini merupakan alat bantu pengambilan keputusan yang harus dimanfaatkan secara optimal dalam setiap kegiatan monitoring dan evaluasi.</p>
+</div>
+
+<!-- ================================================================ -->
+<!-- ===== BAB VIII: PENUTUP ===== -->
+<!-- ================================================================ -->
+<div class="chapter">
+    <div class="chapter-label">BAB VIII</div>
+    <div class="chapter-title">Penutup</div>
+    <div class="chapter-rule"></div>
+</div>
+
+<p class="p">Standar Operasional Prosedur ini disusun sebagai instrumen pengendalian mutu dalam pengelolaan data bayi baru lahir di Kabupaten Ngada. Keberhasilan implementasi SOP ini bergantung pada komitmen dan disiplin seluruh pihak yang terlibat, baik di tingkat Puskesmas, Dinas Kependudukan dan Pencatatan Sipil, maupun BPJS Kesehatan.</p>
+
+<p class="p">SOP ini bersifat <span class="p-bold">dokumen hidup</span> yang akan ditinjau dan diperbarui secara berkala sesuai dengan perkembangan kebutuhan operasional, perubahan regulasi, atau peningkatan fitur sistem. Setiap perubahan terhadap SOP ini harus melalui mekanisme persetujuan yang sama dengan dokumen awal, yaitu disusun oleh Tim Pengembang, ditinjau oleh Sekretaris Dinas, dan disahkan oleh Kepala Dinas.</p>
+
+<p class="p">Dengan berlakunya SOP ini, diharapkan seluruh proses pencatatan, verifikasi, penerbitan NIK, dan akses data bayi baru lahir di Kabupaten Ngada berjalan secara <span class="p-bold">tertib, transparan, akuntabel, dan efisien</span>, sehingga mendorong peningkatan cakupan akta kelahiran dan pelayanan jaminan kesehatan nasional bagi seluruh masyarakat Kabupaten Ngada.</p>
+
+<!-- ================================================================ -->
+<!-- ===== LAMPIRAN ===== -->
+<!-- ================================================================ -->
+<div class="chapter" style="margin-top:30px;">
+    <div class="chapter-label">Lampiran</div>
+    <div class="chapter-title">Lampiran 1: Matriks Hak Akses per Peran</div>
+    <div class="chapter-rule"></div>
+</div>
+
+<table class="sop-table">
+    <thead>
+        <tr><th style="width:36%">Fitur / Aktivitas</th><th style="width:21%">Admin Dukcapil</th><th style="width:21%">Operator Puskesmas</th><th style="width:22%">BPJS Kesehatan</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Dashboard (statistik &amp; grafik)</td><td style="text-align:center">Lihat</td><td style="text-align:center">Lihat (Puskesmas sendiri)</td><td style="text-align:center">Lihat</td></tr>
+        <tr><td>Input data bayi baru lahir</td><td style="text-align:center">-</td><td style="text-align:center">Buat, Edit (menunggu)</td><td style="text-align:center">-</td></tr>
+        <tr><td>Import data massal (Excel)</td><td style="text-align:center">-</td><td style="text-align:center">Import</td><td style="text-align:center">-</td></tr>
+        <tr><td>Verifikasi data (ACC / Tolak)</td><td style="text-align:center">Verifikasi</td><td style="text-align:center">-</td><td style="text-align:center">-</td></tr>
+        <tr><td>ACC Semua (verifikasi massal)</td><td style="text-align:center">Verifikasi</td><td style="text-align:center">-</td><td style="text-align:center">-</td></tr>
+        <tr><td>Input NIK Bayi</td><td style="text-align:center">Buat, Hapus</td><td style="text-align:center">-</td><td style="text-align:center">-</td></tr>
+        <tr><td>Download data baru / register</td><td style="text-align:center">Download</td><td style="text-align:center">Download (Puskesmas sendiri)</td><td style="text-align:center">Export</td></tr>
+        <tr><td>Upload dokumen pendukung</td><td style="text-align:center">Lihat, Unduh</td><td style="text-align:center">Upload, Hapus</td><td style="text-align:center">-</td></tr>
+        <tr><td>Pengaduan</td><td style="text-align:center">Lihat, Balas, Status</td><td style="text-align:center">Buat, Lihat, Hapus (terbuka)</td><td style="text-align:center">-</td></tr>
+        <tr><td>Kelola User</td><td style="text-align:center">Buat, Edit, Hapus, Status</td><td style="text-align:center">Ganti password sendiri</td><td style="text-align:center">Ganti password sendiri</td></tr>
+        <tr><td>Kelola Puskesmas</td><td style="text-align:center">Buat, Edit, Nonaktif</td><td style="text-align:center">-</td><td style="text-align:center">-</td></tr>
+        <tr><td>Audit Log</td><td style="text-align:center">Lihat, Filter, Bersihkan</td><td style="text-align:center">-</td><td style="text-align:center">-</td></tr>
+        <tr><td>Analitik</td><td style="text-align:center">Lihat</td><td style="text-align:center">-</td><td style="text-align:center">-</td></tr>
+    </tbody>
+</table>
+
+<div class="chapter" style="margin-top:24px;">
+    <div class="chapter-title">Lampiran 2: Indikator Kinerja Utama (IKU)</div>
+    <div class="chapter-rule"></div>
+</div>
+
+<table class="sop-table">
+    <thead>
+        <tr><th style="width:6%">No</th><th style="width:34%">Indikator</th><th style="width:24%">Target</th><th style="width:18%">Frekuensi Ukur</th><th style="width:18%">Penanggung Jawab</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>1</td><td>Cakupan input data dalam 1 hari kerja</td><td>Minimal 95%</td><td>Bulanan</td><td>Operator / Admin</td></tr>
+        <tr><td>2</td><td>Kecepatan verifikasi (maks 2 hari kerja)</td><td>Minimal 90%</td><td>Bulanan</td><td>Admin</td></tr>
+        <tr><td>3</td><td>Kecepatan input NIK (maks 3 hari kerja)</td><td>Minimal 85%</td><td>Bulanan</td><td>Admin</td></tr>
+        <tr><td>4</td><td>Kelengkapan dokumen pendukung</td><td>Minimal 80%</td><td>Triwulanan</td><td>Operator / Admin</td></tr>
+        <tr><td>5</td><td>Pengaduan terselesaikan sesuai SLA</td><td>Minimal 85%</td><td>Bulanan</td><td>Admin</td></tr>
+        <tr><td>6</td><td>Insiden keamanan data serius</td><td>0 (nol)</td><td>Triwulanan</td><td>Admin / Kepala Dinas</td></tr>
+        <tr><td>7</td><td>Penggantian kata sandi tepat waktu</td><td>100%</td><td>Triwulanan</td><td>Seluruh pengguna</td></tr>
+        <tr><td>8</td><td>Akta kelahiran terbit berdasarkan data sistem</td><td>Meningkat 10% per tahun</td><td>Tahunan</td><td>Kepala Dinas</td></tr>
+    </tbody>
+</table>
+
+<div class="chapter" style="margin-top:24px;">
+    <div class="chapter-title">Lampiran 3: Format Surat Pernyataan Tidak Menyebarkan Data Pribadi</div>
+    <div class="chapter-rule"></div>
+</div>
+
+<div class="lampiran-box">
+    <div class="lampiran-header">Surat Pernyataan</div>
+    <p class="p p-no-indent" style="text-align:center; font-weight:700; margin-bottom:12px;">TIDAK MENYEBARKAN DATA PRIBADI</p>
+    <p class="p">Yang bertanda tangan di bawah ini:</p>
+    <table class="sop-table" style="margin:8px 0;">
+        <tbody>
+            <tr><td style="width:30%; border:none; font-weight:700;">Nama</td><td style="border:none;">: ............................................</td></tr>
+            <tr><td style="border:none; font-weight:700;">NIP</td><td style="border:none;">: ............................................</td></tr>
+            <tr><td style="border:none; font-weight:700;">Jabatan</td><td style="border:none;">: ............................................</td></tr>
+            <tr><td style="border:none; font-weight:700;">Instansi / Puskesmas</td><td style="border:none;">: ............................................</td></tr>
+            <tr><td style="border:none; font-weight:700;">Peran dalam Sistem</td><td style="border:none;">: ............................................</td></tr>
+        </tbody>
+    </table>
+    <p class="p">Dengan ini menyatakan dengan sesungguhnya bahwa saya akan:</p>
+    <p class="num-p">1. Menggunakan data pribadi yang diakses melalui Aplikasi Sistem Pencatatan Bayi Baru Lahir <span class="p-bold">hanya untuk keperluan tugas pokok dan fungsi (tupoksi)</span> saya sesuai peraturan perundang-undangan yang berlaku.</p>
+    <p class="num-p">2. <span class="p-bold">Tidak akan</span> menyebarluaskan, menyalin, memindahkan, atau membagikan data pribadi tersebut kepada pihak manapun yang tidak berwenang, baik dalam bentuk cetak maupun digital.</p>
+    <p class="num-p">3. <span class="p-bold">Tidak akan</span> menyimpan data yang diunduh dari sistem pada perangkat pribadi atau media penyimpanan yang tidak terenkripsi.</p>
+    <p class="num-p">4. <span class="p-bold">Tidak akan</span> mengakses data yang bukan merupakan kewenangan saya sesuai peran yang ditetapkan dalam SOP.</p>
+    <p class="num-p">5. Bertanggung jawab penuh atas segala akibat yang timbul dari pelanggaran terhadap pernyataan ini, termasuk sanksi administratif dan/atau sanksi sesuai peraturan perundang-undangan yang berlaku.</p>
+    <br>
+    <div style="display:flex; justify-content:space-between; margin-top:16px;">
+        <div style="text-align:center; font-size:10.5pt;">
+            <p style="margin:0 0 4px 0;">Dibuat di,........................,</p>
+            <p style="margin:0 0 4px 0;">Pada tanggal ..........................</p>
+            <p style="margin:0 0 4px 0;">Yang membuat pernyataan,</p>
+            <br>
+            <br>
+            <br>
+            <p style="margin:0; font-weight:700;">(............................................)</p>
+        </div>
+        <div style="text-align:center; font-size:10.5pt;">
+            <p style="margin:0 0 4px 0;">Mengetahui,</p>
+            <p style="margin:0 0 4px 0;">Kepala Dinas Kep. dan Capil</p>
+            <p style="margin:0 0 4px 0;">Kabupaten Ngada</p>
+            <br>
+            <br>
+            <br>
+            <p style="margin:0; font-weight:700;">(............................................)</p>
+        </div>
+    </div>
+</div>
+
+</div>
+<!-- /main-content -->
+
+<!-- ============ ENDING PAGE ============ -->
+<div class="ending">
+    <div class="top-line"></div>
+    <div class="bottom-line"></div>
+    <div class="ending-text">
+        <p style="font-family:'Playfair Display',serif; font-size:18pt; font-weight:900; color:var(--c-primary); margin:0 0 24px 0; line-height:1.3;">Demikian Standar Operasional<br>Prosedur ini disusun untuk<br>dilaksanakan sebagaimana mestinya.</p>
+        <p style="margin:0 0 6px 0;">Ditetapkan di: Bajawa</p>
+        <p style="margin:0 0 6px 0;">Pada tanggal: 27 Juli 2025</p>
+        <p style="margin:0 0 24px 0;">Kepala Dinas Kependudukan dan<br>Pencatatan Sipil<br>Kabupaten Ngada</p>
+        <br><br><br>
+        <p style="margin:0; font-weight:700;">(............................................)</p>
+        <p style="margin:0; font-size:10pt; color:var(--c-slate-500);">NIP.</p>
+    </div>
+</div>
+
+</body>
+</html>

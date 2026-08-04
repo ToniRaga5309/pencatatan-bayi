@@ -409,3 +409,41 @@ Stage Summary:
 - 8 bab + cover + daftar isi + ending, mencakup semua 3 role dan seluruh fitur sistem
 - QA: 10 checks passed, metadata lengkap, full-bleed cover, no blank pages, fonts embedded, no overflow, fill ratio adequate
 - Tidak mengubah kode aplikasi sama sekali (hanya membuat dokumen di folder download/)
+
+---
+Task ID: 14
+Agent: Main Agent
+Task: Buat SOP Penggunaan Aplikasi untuk Dukcapil Kabupaten Ngada
+
+Work Log:
+- User request: "buatkan saya sop penggunaan aplikasi ini untuk saya terapkan di dinas kependudukan dan pencatatan sipil kabupaten ngada"
+- Mendesain struktur SOP formal pemerintah: cover resmi, lembar pengesahan, daftar isi, 8 bab utama, 3 lampiran
+- Menulis HTML SOP lengkap (73 KB) dengan desain formal pemerintah:
+  - Cover: emblem, institusi, identitas dokumen (nomor SOP, versi, tanggal efektif, penanggung jawab)
+  - Lembar Pengesahan: 3 kolom tanda tangan (Tim Pengembang, Sekretaris Dinas, Kepala Dinas)
+  - Bab I: Pendahuluan (latar belakang, tujuan, ruang lingkup, dasar hukum UU 24/2013, referensi)
+  - Bab II: Definisi dan Istilah (12 istilah termasuk Sistem, Admin, Operator, BPJS, NIK Bayi, Audit Trail, dll)
+  - Bab III: Uraian Tugas dan Tanggung Jawab (Kepala Dinas, Admin, Operator, BPJS dengan SLA spesifik)
+  - Bab IV: Prosedur Operasional (7 sub-bab: pencatatan individual/massal, verifikasi, NIK bayi, dokumen, pengaduan, akun, BPJS)
+  - Bab V: Alur Kerja Sistem (6 tahap flowchart: pencatatan-verifikasi-NIK-download-BPJS-monitoring)
+  - Bab VI: Keamanan dan Privasi Data (klasifikasi data, RBAC, password policy, audit trail, penanganan insiden)
+  - Bab VII: Monitoring, Evaluasi, dan Pelaporan (harian, bulanan, triwulanan dengan IKU)
+  - Bab VIII: Penutup
+  - Lampiran 1: Matriks Hak Akses per Peran (13 fitur x 3 role)
+  - Lampiran 2: Indikator Kinerja Utama (8 IKU dengan target, frekuensi, penanggung jawab)
+  - Lampiran 3: Format Surat Pernyataan Tidak Menyebarkan Data Pribadi (siap cetak)
+  - Halaman penutup: penandatanganan Kepala Dinas
+- Fixed cover text-line overlap (increased spacing between cover elements)
+- Rendered via html2pdf-next.js --nopaged, A4 format (210mm x 297mm)
+- QA: 11/11 checks PASSED (all passed, zero warnings)
+- Metadata: Title, Author, Subject, Creator, Keywords
+- Visual verification via VLM: cover "simetris dan formal", content "tabel rapi, siap digunakan", ending "formal dan rapi"
+
+Stage Summary:
+- Deliverables:
+  - /home/z/my-project/download/SOP-Penggunaan-Aplikasi-Bayi-Baru-Lahir.pdf (435 KB, 24 halaman, ~4.445 kata, 7 tabel)
+  - /home/z/my-project/download/sop-penggunaan-aplikasi.html (73 KB, editable source)
+- Format A4, tema formal pemerintah (hijau tua + emas)
+- Nomor SOP: SOP-DUKCAPIL/001/2025, Versi 1.0
+- QA: 11/11 passed, zero warnings
+- Tidak mengubah kode aplikasi
