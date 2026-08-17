@@ -447,3 +447,27 @@ Stage Summary:
 - Nomor SOP: SOP-DUKCAPIL/001/2025, Versi 1.0
 - QA: 11/11 passed, zero warnings
 - Tidak mengubah kode aplikasi
+---
+Task ID: 14
+Agent: Main Agent
+Task: Buat Draft Skema dan Catatan Teknis Operasional untuk bukti dukung laporan
+
+Work Log:
+- Membaca prisma/schema.prisma untuk memahami 6 tabel database (puskesmas, users, birth_records, birth_record_files, audit_logs, pengaduan)
+- Membaca src/lib/schema-sync.ts untuk memahami mekanisme Schema Synchronization Engine
+- Membaca package.json untuk mengidentifikasi seluruh tech stack (Next.js 16, React 19, Prisma 6, Tailwind CSS 4, shadcn/ui, dll)
+- Menugaskan Explore Agent untuk menganalisis 44 file API route, 17 halaman, 5 komponen kustom, middleware, dan utility files
+- Explore Agent mengembalikan laporan komprehensif 55+ endpoint API, sistem autentikasi, fitur import/export, audit logging, pengaduan system
+- Menulis HTML dokumen 9 bab: Pendahuluan, Arsitektur Sistem, Skema Basis Data (6 tabel detail), Spesifikasi API, Keamanan & Autentikasi, Catatan Operasional, Infrastruktur & Deployment, Halaman & Komponen, Ringkasan & Rekomendasi
+- Desain profesional: tema teal/emerald, Playfair Display + Inter fonts, diagram arsitektur berlapis, flow diagram alur bisnis, 17 tabel data
+- Validasi HTML via poster_validate.py (cover text overlap diabaikan - validator untuk poster, bukan dokumen teknis)
+- Render PDF via html2pdf-next.js (Chromium native @page, --nopaged)
+- QA passed: 11/11 checks (metadata, page size, no blank pages, fonts embedded, no overflow, fill ratio, full-bleed cover, symmetric margins)
+- Metadata ditambahkan: Title, Author (Disdukcapil Kab Ngada), Subject, Creator
+- Verifikasi visual via agent-browser screenshot + VLM analysis: cover professional, tables well-formatted, text readable
+
+Stage Summary:
+- Output: /home/z/my-project/download/Skema-Teknis-Operasional.pdf (423 KB, 20 halaman, 4294 kata, 17 tabel)
+- Output: /home/z/my-project/download/skema-teknis-operasional.html (editable source)
+- Tidak mengubah kode aplikasi
+- Dokumen mencakup: arsitektur 3-tier, detail 6 tabel DB, 55+ API endpoint, RBAC 3 role, mekanisme session JWT, schema sync engine, penyimpanan berkas base64, import/export Excel, audit logging, dan rekomendasi pengembangan
