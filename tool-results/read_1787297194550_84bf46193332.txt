@@ -1,0 +1,1430 @@
+    42→@media screen {
+    43→    html { height: auto; display: flex; justify-content: center; background: #94a3b8; }
+    44→    body { transform-origin: top center; margin: 20px auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    45→}
+    46→
+    47→/* ====== COVER ====== */
+    48→.cover {
+    49→    width: 720px; height: 1020px;
+    50→    background: linear-gradient(160deg, #064e3b 0%, #0d9488 50%, #14b8a6 100%);
+    51→    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    52→    padding: 70px 65px;
+    53→    gap: 0;
+    54→    break-after: page;
+    55→    overflow: hidden;
+    56→    position: relative;
+    57→    color: #ffffff;
+    58→}
+    59→/* decorative element removed for PDF compatibility */
+    60→.cover-line {
+    61→    width: 60px; height: 3px;
+    62→    background: rgba(255,255,255,0.7);
+    63→    margin-bottom: 24px;
+    64→}
+    65→.cover-label {
+    66→    font-size: 11px;
+    67→    letter-spacing: 3px;
+    68→    text-transform: uppercase;
+    69→    opacity: 0.8;
+    70→    margin-bottom: 12px;
+    71→}
+    72→.cover-title {
+    73→    font-family: 'Playfair Display', serif;
+    74→    font-size: 30px;
+    75→    font-weight: 800;
+    76→    line-height: 1.25;
+    77→    text-align: center;
+    78→    margin-bottom: 8px;
+    79→}
+    80→.cover-subtitle {
+    81→    font-size: 14px;
+    82→    font-weight: 400;
+    83→    opacity: 0.85;
+    84→    text-align: center;
+    85→    margin-bottom: 36px;
+    86→}
+    87→.cover-info {
+    88→    margin-top: 20px;
+    89→    display: flex;
+    90→    flex-direction: column;
+    91→    gap: 6px;
+    92→    font-size: 12px;
+    93→    opacity: 0.8;
+    94→    text-align: center;
+    95→}
+    96→.cover-badge {
+    97→    margin-top: 30px;
+    98→    background: rgba(255,255,255,0.15);
+    99→    border: 1px solid rgba(255,255,255,0.3);
+   100→    padding: 10px 28px;
+   101→    border-radius: 6px;
+   102→    font-size: 11px;
+   103→    letter-spacing: 1px;
+   104→}
+   105→
+   106→/* ====== PAGE CONTENT ====== */
+   107→.page {
+   108→    width: 720px;
+   109→    min-height: 1020px;
+   110→    padding: 55px 60px;
+   111→    background: var(--c-bg);
+   112→    position: relative;
+   113→}
+   114→.page::after {
+   115→    content: '';
+   116→    position: absolute;
+   117→    bottom: 25px; left: 60px; right: 60px;
+   118→    height: 1px;
+   119→    background: var(--c-border);
+   120→}
+   121→.page-num {
+   122→    position: absolute;
+   123→    bottom: 10px;
+   124→    right: 60px;
+   125→    font-size: 10px;
+   126→    color: #94a3b8;
+   127→}
+   128→
+   129→/* ====== TYPOGRAPHY ====== */
+   130→h1 { font-size: 22px; font-weight: 800; color: var(--c-dark); margin-bottom: 6px; letter-spacing: -0.5px; }
+   131→h2 {
+   132→    font-size: 16px; font-weight: 700; color: var(--c-dark);
+   133→    margin-top: 28px; margin-bottom: 10px;
+   134→    padding-bottom: 8px;
+   135→    border-bottom: 2px solid var(--c-primary);
+   136→    display: inline-block;
+   137→}
+   138→h3 {
+   139→    font-size: 13px; font-weight: 700; color: var(--c-primary-dark);
+   140→    margin-top: 20px; margin-bottom: 8px;
+   141→}
+   142→p { margin-bottom: 10px; text-align: justify; }
+   143→.chapter-num {
+   144→    font-size: 11px; font-weight: 700; color: var(--c-primary);
+   145→    letter-spacing: 2px; text-transform: uppercase;
+   146→    margin-bottom: 4px;
+   147→}
+   148→
+   149→/* ====== TABLES ====== */
+   150→table {
+   151→    width: 100%;
+   152→    border-collapse: collapse;
+   153→    margin: 12px 0 16px 0;
+   154→    font-size: 11px;
+   155→}
+   156→thead th {
+   157→    background: var(--c-dark);
+   158→    color: #fff;
+   159→    padding: 8px 10px;
+   160→    text-align: left;
+   161→    font-weight: 600;
+   162→    font-size: 10.5px;
+   163→    letter-spacing: 0.3px;
+   164→}
+   165→thead th:first-child { border-radius: 4px 0 0 0; }
+   166→thead th:last-child { border-radius: 0 4px 0 0; }
+   167→tbody td {
+   168→    padding: 7px 10px;
+   169→    border-bottom: 1px solid var(--c-border);
+   170→    vertical-align: top;
+   171→}
+   172→tbody tr:nth-child(even) { background: #f1f5f9; }
+   173→tbody tr:last-child td:first-child { border-radius: 0 0 0 4px; }
+   174→tbody tr:last-child td:last-child { border-radius: 0 0 4px 0; }
+   175→
+   176→/* ====== STATUS BADGES ====== */
+   177→.badge {
+   178→    display: inline-block;
+   179→    padding: 2px 10px;
+   180→    border-radius: 10px;
+   181→    font-size: 10px;
+   182→    font-weight: 700;
+   183→    letter-spacing: 0.5px;
+   184→    text-transform: uppercase;
+   185→}
+   186→.badge-pass { background: var(--c-pass-bg); color: var(--c-pass); }
+   187→.badge-fail { background: var(--c-fail-bg); color: var(--c-fail); }
+   188→.badge-warn { background: var(--c-warn-bg); color: var(--c-warn); }
+   189→
+   190→/* ====== SUMMARY CARDS ====== */
+   191→.summary-grid {
+   192→    display: grid;
+   193→    grid-template-columns: 1fr 1fr 1fr 1fr;
+   194→    gap: 12px;
+   195→    margin: 16px 0;
+   196→}
+   197→.summary-card {
+   198→    background: var(--c-card-bg);
+   199→    border: 1px solid var(--c-border);
+   200→    border-radius: 8px;
+   201→    padding: 14px;
+   202→    text-align: center;
+   203→}
+   204→.summary-card .num {
+   205→    font-size: 28px;
+   206→    font-weight: 800;
+   207→    line-height: 1.1;
+   208→}
+   209→.summary-card .label {
+   210→    font-size: 9.5px;
+   211→    color: var(--c-text-secondary);
+   212→    margin-top: 4px;
+   213→    font-weight: 500;
+   214→}
+   215→.sc-total .num { color: var(--c-dark); }
+   216→.sc-pass .num { color: var(--c-pass); }
+   217→.sc-fail .num { color: var(--c-fail); }
+   218→.sc-rate .num { color: var(--c-primary); }
+   219→
+   220→/* ====== INFO BOX ====== */
+   221→.info-box {
+   222→    background: var(--c-card-bg);
+   223→    border: 1px solid var(--c-border);
+   224→    border-radius: 8px;
+   225→    padding: 14px 18px;
+   226→    margin: 12px 0;
+   227→}
+   228→.info-box.info { border-left: 4px solid var(--c-primary); }
+   229→.info-box.warn { border-left: 4px solid var(--c-warn); }
+   230→.info-box.danger { border-left: 4px solid var(--c-fail); }
+   231→.info-box.success { border-left: 4px solid var(--c-pass); }
+   232→
+   233→/* ====== LIST ====== */
+   234→ul, ol { margin: 8px 0 12px 20px; }
+   235→li { margin-bottom: 4px; }
+   236→
+   237→/* ====== TOC ====== */
+   238→.toc-item {
+   239→    display: flex;
+   240→    justify-content: space-between;
+   241→    align-items: baseline;
+   242→    padding: 5px 0;
+   243→    border-bottom: 1px dotted var(--c-border);
+   244→    font-size: 12px;
+   245→}
+   246→.toc-item.main { font-weight: 700; margin-top: 8px; color: var(--c-dark); }
+   247→.toc-item.sub { padding-left: 20px; font-weight: 400; color: var(--c-text-secondary); }
+   248→
+   249→/* ====== BREAK ====== */
+   250→.break-page { break-before: page; }
+   251→
+   252→/* ====== MISC ====== */
+   253→.text-center { text-align: center; }
+   254→.text-sm { font-size: 11px; }
+   255→.text-xs { font-size: 10px; color: var(--c-text-secondary); }
+   256→.mt-2 { margin-top: 8px; }
+   257→.mt-4 { margin-top: 16px; }
+   258→.mb-2 { margin-bottom: 8px; }
+   259→.mb-4 { margin-bottom: 16px; }
+   260→.fw-700 { font-weight: 700; }
+   261→.fw-600 { font-weight: 600; }
+   262→</style>
+   263→</head>
+   264→<body>
+   265→
+   266→<!-- ===================== COVER ===================== -->
+   267→<div class="cover">
+   268→    <div class="cover-line"></div>
+   269→    <div class="cover-label">Dokumen Lampiran Laporan</div>
+   270→    <div class="cover-title">Rekapan Hasil<br>System Testing</div>
+   271→    <div class="cover-subtitle">Sistem Informasi Pencatatan Nama Bayi Baru Lahir<br>Kabupaten Ngada, Nusa Tenggara Timur</div>
+   272→    <div class="cover-info">
+   273→        <span>Dinas Kependudukan dan Pencatatan Sipil</span>
+   274→        <span>Kabupaten Ngada, Provinsi NTT</span>
+   275→        <span>Tahun 2026</span>
+   276→    </div>
+   277→    <div class="cover-badge">LAMPIRAN BUKTI DUKUNG LAPORAN</div>
+   278→</div>
+   279→
+   280→<!-- ===================== DAFTAR ISI ===================== -->
+   281→<div class="page">
+   282→    <div class="page-num">ii</div>
+   283→    <div class="chapter-num">Daftar Isi</div>
+   284→    <h1>Daftar Isi</h1>
+   285→    <div style="margin-top:24px;">
+   286→        <div class="toc-item main"><span>1. Pendahuluan</span></div>
+   287→        <div class="toc-item sub"><span>1.1 Latar Belakang</span></div>
+   288→        <div class="toc-item sub"><span>1.2 Tujuan Pengujian</span></div>
+   289→        <div class="toc-item sub"><span>1.3 Ruang Lingkup Pengujian</span></div>
+   290→
+   291→        <div class="toc-item main"><span>2. Metodologi Pengujian</span></div>
+   292→        <div class="toc-item sub"><span>2.1 Jenis Pengujian</span></div>
+   293→        <div class="toc-item sub"><span>2.2 Lingkungan Pengujian</span></div>
+   294→        <div class="toc-item sub"><span>2.3 Kriteria Kelulusan</span></div>
+   295→
+   296→        <div class="toc-item main"><span>3. Hasil Pengujian Fungsional</span></div>
+   297→        <div class="toc-item sub"><span>3.1 Halaman Landing Page</span></div>
+   298→        <div class="toc-item sub"><span>3.2 Halaman Login</span></div>
+   299→        <div class="toc-item sub"><span>3.3 Fungsionalitas Autentikasi</span></div>
+   300→        <div class="toc-item sub"><span>3.4 Dashboard Admin Dukcapil</span></div>
+   301→        <div class="toc-item sub"><span>3.5 Dashboard Operator Puskesmas</span></div>
+   302→
+   303→        <div class="toc-item main"><span>4. Hasil Pengujian Non-Fungsional</span></div>
+   304→        <div class="toc-item sub"><span>4.1 Pengujian Responsif (Responsive)</span></div>
+   305→        <div class="toc-item sub"><span>4.2 Pengujian Performa</span></div>
+   306→        <div class="toc-item sub"><span>4.3 Pengujian Keamanan</span></div>
+   307→        <div class="toc-item sub"><span>4.4 Pengujian Aksesibilitas</span></div>
+   308→
+   309→        <div class="toc-item main"><span>5. Hasil Pengujian Teknis</span></div>
+   310→        <div class="toc-item sub"><span>5.1 Pengujian API Endpoints</span></div>
+   311→        <div class="toc-item sub"><span>5.2 Pengujian Basis Data</span></div>
+   312→        <div class="toc-item sub"><span>5.3 Pengujian Kompatibilitas Browser</span></div>
+   313→
+   314→        <div class="toc-item main"><span>6. Ringkasan dan Analisis Hasil</span></div>
+   315→        <div class="toc-item sub"><span>6.1 Rekapitulasi Keseluruhan</span></div>
+   316→        <div class="toc-item sub"><span>6.2 Analisis Temuan</span></div>
+   317→
+   318→        <div class="toc-item main"><span>7. Rekomendasi dan Tindak Lanjut</span></div>
+   319→
+   320→        <div class="toc-item main"><span>8. Kesimpulan</span></div>
+   321→
+   322→        <div class="toc-item main"><span>Lampiran: Daftar Seluruh Kasus Uji</span></div>
+   323→    </div>
+   324→</div>
+   325→
+   326→<!-- ===================== BAB 1: PENDAHULUAN ===================== -->
+   327→<div class="page break-page">
+   328→    <div class="page-num">1</div>
+   329→    <div class="chapter-num">BAB 1</div>
+   330→    <h1>Pendahuluan</h1>
+   331→
+   332→    <h2>1.1 Latar Belakang</h2>
+   333→    <p>Sistem Informasi Pencatatan Nama Bayi Baru Lahir merupakan aplikasi berbasis web yang dikembangkan untuk mendukung proses pencatatan data kelahiran di Kabupaten Ngada, Provinsi Nusa Tenggara Timur. Sistem ini dirancang untuk menghubungkan Puskesmas sebagai sumber data kelahiran dengan Dinas Kependudukan dan Pencatatan Sipil (Dukcapil) yang berperan dalam verifikasi dan penerbitan dokumen kependudukan. Dengan adanya sistem ini, diharapkan proses pencatatan kelahiran yang sebelumnya dilakukan secara manual dapat terdigitalisasi sehingga lebih efisien, akurat, dan terintegrasi.</p>
+   334→    <p>Sebelum sistem ini diimplementasikan secara penuh di lingkungan Dukcapil Kabupaten Ngada, diperlukan tahap system testing yang komprehensif untuk memastikan bahwa seluruh fungsi sistem berjalan sesuai dengan spesifikasi yang telah ditetapkan. Pengujian ini menjadi bagian penting dari siklus pengembangan perangkat lunak, khususnya sebagai bukti dukung bahwa sistem telah memenuhi standar kualitas yang diharapkan sebelum digunakan oleh pengguna akhir.</p>
+   335→    <p>Dokumen ini menyajikan rekapan hasil system testing secara terstruktur, mencakup pengujian fungsional, non-fungsional, maupun teknis yang dilakukan pada lingkungan produksi sistem. Hasil pengujian ini dapat digunakan sebagai lampiran bukti dukung dalam laporan pelaksanaan kegiatan pengembangan sistem informasi.</p>
+   336→
+   337→    <h2>1.2 Tujuan Pengujian</h2>
+   338→    <p>Pengujian sistem ini dilakukan dengan beberapa tujuan utama yang mencakup aspek kualitas, keandalan, dan keamanan sistem. Berikut adalah tujuan pengujian secara rinci:</p>
+   339→    <ol>
+   340→        <li><strong>Memverifikasi fungsionalitas sistem</strong> — Memastikan seluruh fitur utama sistem berjalan sesuai dengan spesifikasi kebutuhan, termasuk proses autentikasi pengguna, pengelolaan data kelahiran, verifikasi data oleh admin, serta fitur pelaporan dan analitik.</li>
+   341→        <li><strong>Mengevaluasi performa sistem</strong> — Mengukur waktu respon sistem dalam melayani permintaan pengguna, khususnya pada proses pemuatan halaman, pengiriman formulir, dan pengambilan data dari server.</li>
+   342→        <li><strong>Menguji keamanan sistem</strong> — Memastikan bahwa mekanisme autentikasi dan otorisasi berfungsi dengan baik, serta tidak terdapat kerentanan keamanan yang dapat dieksploitasi oleh pihak tidak berwenang.</li>
+   343→        <li><strong>Memvalidasi responsivitas antarmuka</strong> — Memastikan bahwa tampilan sistem dapat beradaptasi dengan baik pada berbagai ukuran layar perangkat, mulai dari desktop, tablet, hingga perangkat mobile.</li>
+   344→        <li><strong>Mengidentifikasi celah aksesibilitas</strong> — Mengevaluasi sejauh mana antarmuka sistem mendukung aksesibilitas bagi pengguna dengan keterbatasan, termasuk penggunaan markup HTML semantik dan atribut ARIA.</li>
+   345→    </ol>
+   346→
+   347→    <h2>1.3 Ruang Lingkup Pengujian</h2>
+   348→    <p>Ruang lingkup pengujian mencakup seluruh modul dan komponen yang terdapat dalam Sistem Pencatatan Bayi Baru Lahir. Secara garis besar, pengujian dilakukan pada area-area berikut:</p>
+   349→    <div class="info-box info">
+   350→        <strong>Cakupan Pengujian:</strong> Halaman publik (Landing Page, Login), Dashboard Admin Dukcapil, Dashboard Operator Puskesmas, Autentikasi dan otorisasi, API endpoints (55+ endpoint), Basis data PostgreSQL (6 tabel utama), Keamanan aplikasi, Performa dan responsivitas, Aksesibilitas antarmuka, serta Kompatibilitas lintas browser.
+   351→    </div>
+   352→    <p>Pengujian dilakukan pada lingkungan produksi dengan URL <strong>https://pencatatan-bayi.vercel.app</strong> yang di-deploy melalui platform Vercel. Database menggunakan layanan Supabase PostgreSQL yang berlokasi di cloud, sehingga pengujian mencerminkan kondisi penggunaan sistem yang sesungguhnya.</p>
+   353→</div>
+   354→
+   355→<!-- ===================== BAB 2: METODOLOGI ===================== -->
+   356→<div class="page break-page">
+   357→    <div class="page-num">2</div>
+   358→    <div class="chapter-num">BAB 2</div>
+   359→    <h1>Metodologi Pengujian</h1>
+   360→
+   361→    <h2>2.1 Jenis Pengujian</h2>
+   362→    <p>Pengujian sistem dilakukan menggunakan pendekatan <strong>Black-Box Testing</strong> dengan beberapa metode pengujian yang saling melengkapi. Setiap metode pengujian dirancang untuk mengevaluasi aspek kualitas yang berbeda dari sistem. Berikut adalah jenis-jenis pengujian yang dilakukan beserta deskripsinya:</p>
+   363→
+   364→    <table>
+   365→        <thead>
+   366→            <tr>
+   367→                <th style="width:5%">No</th>
+   368→                <th style="width:22%">Jenis Pengujian</th>
+   369→                <th style="width:40%">Deskripsi</th>
+   370→                <th style="width:33%">Cakupan</th>
+   371→            </tr>
+   372→        </thead>
+   373→        <tbody>
+   374→            <tr>
+   375→                <td>1</td>
+   376→                <td><strong>Functional Testing</strong></td>
+   377→                <td>Pengujian terhadap setiap fungsi dan fitur sistem untuk memastikan sesuai dengan spesifikasi kebutuhan</td>
+   378→                <td>Landing page, login, dashboard, CRUD data kelahiran, verifikasi, pengaduan</td>
+   379→            </tr>
+   380→            <tr>
+   381→                <td>2</td>
+   382→                <td><strong>Responsive Testing</strong></td>
+   383→                <td>Pengujian tampilan dan fungsionalitas pada berbagai ukuran layar perangkat</td>
+   384→                <td>Desktop (1920x1080), Tablet (768x1024), Mobile (375x667)</td>
+   385→            </tr>
+   386→            <tr>
+   387→                <td>3</td>
+   388→                <td><strong>Performance Testing</strong></td>
+   389→                <td>Pengukuran waktu muat halaman dan waktu respon server</td>
+   390→                <td>Page load time, DOM content loaded, resource transfer size</td>
+   391→            </tr>
+   392→            <tr>
+   393→                <td>4</td>
+   394→                <td><strong>Security Testing</strong></td>
+   395→                <td>Pengujian mekanisme keamanan, autentikasi, dan otorisasi</td>
+   396→                <td>Route protection, credential exposure, session management</td>
+   397→            </tr>
+   398→            <tr>
+   399→                <td>5</td>
+   400→                <td><strong>Accessibility Testing</strong></td>
+   401→                <td>Evaluasi aksesibilitas antarmuka sesuai standar WCAG</td>
+   402→                <td>HTML semantik, ARIA attributes, alt text, keyboard navigation</td>
+   403→            </tr>
+   404→            <tr>
+   405→                <td>6</td>
+   406→                <td><strong>API Testing</strong></td>
+   407→                <td>Verifikasi fungsi dan respons API endpoints</td>
+   408→                <td>55+ API endpoints, request/response validation, error handling</td>
+   409→            </tr>
+   410→            <tr>
+   411→                <td>7</td>
+   412→                <td><strong>Database Testing</strong></td>
+   413→                <td>Verifikasi integritas dan konsistensi data pada basis data</td>
+   414→                <td>Schema integrity, relasi tabel, constraint, indexing</td>
+   415→            </tr>
+   416→            <tr>
+   417→                <td>8</td>
+   418→                <td><strong>Browser Compatibility</strong></td>
+   419→                <td>Pengujian kompatibilitas tampilan pada berbagai browser</td>
+   420→                <td>Chrome, Firefox, Safari, Edge</td>
+   421→            </tr>
+   422→        </tbody>
+   423→    </table>
+   424→
+   425→    <h2>2.2 Lingkungan Pengujian</h2>
+   426→    <p>Seluruh pengujian dilakukan pada lingkungan produksi yang mencerminkan kondisi penggunaan sistem yang sesungguhnya. Berikut adalah spesifikasi lingkungan pengujian yang digunakan:</p>
+   427→
+   428→    <table>
+   429→        <thead>
+   430→            <tr>
+   431→                <th style="width:35%">Komponen</th>
+   432→                <th style="width:65%">Spesifikasi</th>
+   433→            </tr>
+   434→        </thead>
+   435→        <tbody>
+   436→            <tr><td><strong>URL Produksi</strong></td><td>https://pencatatan-bayi.vercel.app</td></tr>
+   437→            <tr><td><strong>Framework</strong></td><td>Next.js 16 dengan App Router</td></tr>
+   438→            <tr><td><strong>Bahasa Pemrograman</strong></td><td>TypeScript 5</td></tr>
+   439→            <tr><td><strong>Frontend</strong></td><td>React 19, Tailwind CSS 4, shadcn/ui</td></tr>
+   440→            <tr><td><strong>Backend</strong></td><td>Next.js API Routes (Serverless Functions)</td></tr>
+   441→            <tr><td><strong>Database</strong></td><td>PostgreSQL via Supabase (Cloud-hosted)</td></tr>
+   442→            <tr><td><strong>ORM</strong></td><td>Prisma v6</td></tr>
+   443→            <tr><td><strong>Autentikasi</strong></td><td>NextAuth.js v4 dengan JWT Strategy</td></tr>
+   444→            <tr><td><strong>Hosting</strong></td><td>Vercel (Serverless Deployment)</td></tr>
+   445→            <tr><td><strong>Browser Uji</strong></td><td>Chromium (Headless), Chrome, Firefox, Safari, Edge</td></tr>
+   446→            <tr><td><strong>Perangkat Uji</strong></td><td>Desktop, Tablet, Mobile (emulasi)</td></tr>
+   447→            <tr><td><strong>Tools Pengujian</strong></td><td>Agent Browser (automated), Chrome DevTools</td></tr>
+   448→        </tbody>
+   449→    </table>
+   450→
+   451→    <h2>2.3 Kriteria Kelulusan</h2>
+   452→    <p>Setiap kasus uji dievaluasi berdasarkan kriteria kelulusan yang telah ditetapkan sebelumnya. Kriteria ini menjadi acuan dalam menentukan apakah sistem memenuhi standar kualitas yang diharapkan. Berikut adalah kriteria kelulusan yang digunakan dalam pengujian ini:</p>
+   453→
+   454→    <div class="info-box success">
+   455→        <strong>Kriteria Kelulusan:</strong>
+   456→        <ul style="margin-top:6px; margin-bottom:0;">
+   457→            <li>Tingkat keberhasilan pengujian keseluruhan minimal <strong>90%</strong></li>
+   458→            <li>Tidak terdapat temuan <strong>Critical</strong> atau <strong>High</strong> yang menghalangi fungsi utama sistem</li>
+   459→            <li>Semua halaman utama dimuat dalam waktu kurang dari <strong>5 detik</strong></li>
+   460→            <li>Semua rute terproteksi berhasil mengarahkan pengguna yang belum terautentikasi ke halaman login</li>
+   461→            <li>Tidak terdapat kebocoran data sensitif pada kode sisi klien</li>
+   462→        </ul>
+   463→    </div>
+   464→</div>
+   465→
+   466→<!-- ===================== BAB 3: PENGUJIAN FUNGSIONAL ===================== -->
+   467→<div class="page break-page">
+   468→    <div class="page-num">3</div>
+   469→    <div class="chapter-num">BAB 3</div>
+   470→    <h1>Hasil Pengujian Fungsional</h1>
+   471→    <p>Pengujian fungsional bertujuan untuk memverifikasi bahwa setiap fitur dan fungsi sistem berjalan sesuai dengan spesifikasi kebutuhan yang telah ditetapkan. Pengujian ini mencakup seluruh modul utama sistem, mulai dari halaman publik hingga fitur-fitur yang memerlukan autentikasi pengguna. Berikut adalah hasil pengujian fungsional yang dikelompokkan berdasarkan modul sistem.</p>
+   472→
+   473→    <h2>3.1 Halaman Landing Page</h2>
+   474→    <p>Halaman landing page merupakan halaman pertama yang dilihat oleh pengguna saat mengakses sistem. Pengujian pada halaman ini mencakup aspek tampilan, konten, dan fungsionalitas elemen interaktif yang tersedia. Seluruh pengujian dilakukan pada lingkungan produksi dan menunjukkan hasil yang positif.</p>
+   475→
+   476→    <table>
+   477→        <thead>
+   478→            <tr>
+   479→                <th style="width:10%">ID Uji</th>
+   480→                <th style="width:30%">Nama Uji</th>
+   481→                <th style="width:8%">Hasil</th>
+   482→                <th style="width:52%">Deskripsi Pengamatan</th>
+   483→            </tr>
+   484→        </thead>
+   485→        <tbody>
+   486→            <tr>
+   487→                <td>TC-01</td>
+   488→                <td>Pemuatan halaman berhasil (HTTP 200)</td>
+   489→                <td><span class="badge badge-pass">PASS</span></td>
+   490→                <td>Halaman berhasil dimuat dengan status HTTP 200. Judul halaman menampilkan "Sistem Pencatatan Nama Bayi Baru Lahir" dengan benar.</td>
+   491→            </tr>
+   492→            <tr>
+   493→                <td>TC-02</td>
+   494→                <td>Tampilan judul dan konten</td>
+   495→                <td><span class="badge badge-pass">PASS</span></td>
+   496→                <td>Header menampilkan judul sistem dan subtitle "Kabupaten Ngada, NTT". Tiga kartu fitur utama terlihat: Verifikasi Data, Pencatatan Data, dan Data BPJS. Footer menampilkan "2026 Kabupaten Ngada, Nusa Tenggara Timur".</td>
+   497→            </tr>
+   498→            <tr>
+   499→                <td>TC-03</td>
+   500→                <td>Tombol login tersedia dan terlihat</td>
+   501→                <td><span class="badge badge-pass">PASS</span></td>
+   502→                <td>Ditemukan dua tombol "Masuk ke Sistem" — satu di bagian hero dan satu di bagian CTA bawah. Keduanya berfungsi dan mengarahkan ke halaman /login.</td>
+   503→            </tr>
+   504→            <tr>
+   505→                <td>TC-04</td>
+   506→                <td>Halaman render tanpa error JavaScript</td>
+   507→                <td><span class="badge badge-pass">PASS</span></td>
+   508→                <td>Konsol browser tidak menampilkan error JavaScript. Seluruh komponen halaman dirender dengan lengkap dan benar.</td>
+   509→            </tr>
+   510→            <tr>
+   511→                <td>TC-05</td>
+   512→                <td>Teks dalam Bahasa Indonesia</td>
+   513→                <td><span class="badge badge-pass">PASS</span></td>
+   514→                <td>Seluruh teks pada halaman menggunakan Bahasa Indonesia secara konsisten. Atribut html lang="id" telah diset dengan benar.</td>
+   515→            </tr>
+   516→        </tbody>
+   517→    </table>
+   518→
+   519→    <h2>3.2 Halaman Login</h2>
+   520→    <p>Halaman login merupakan gerbang utama akses ke sistem. Pengujian dilakukan untuk memastikan formulir login berfungsi dengan baik, validasi input berjalan, dan pesan kesalahan ditampilkan dengan tepat saat kredensial yang dimasukkan tidak valid. Hasil pengujian menunjukkan bahwa mekanisme login bekerja sesuai harapan.</p>
+   521→
+   522→    <table>
+   523→        <thead>
+   524→            <tr>
+   525→                <th style="width:10%">ID Uji</th>
+   526→                <th style="width:30%">Nama Uji</th>
+   527→                <th style="width:8%">Hasil</th>
+   528→                <th style="width:52%">Deskripsi Pengamatan</th>
+   529→            </tr>
+   530→        </thead>
+   531→        <tbody>
+   532→            <tr>
+   533→                <td>TC-06</td>
+   534→                <td>Form login berhasil dimuat</td>
+   535→                <td><span class="badge badge-pass">PASS</span></td>
+   536→                <td>Klik tombol "Masuk ke Sistem" berhasil mengarahkan ke halaman /login. Panel kiri menampilkan deskripsi peran (Admin, Operator, BPJS), panel kanan menampilkan formulir login.</td>
+   537→            </tr>
+   538→            <tr>
+   539→                <td>TC-07</td>
+   540→                <td>Field username dan password tersedia</td>
+   541→                <td><span class="badge badge-pass">PASS</span></td>
+   542→                <td>Formulir berisi textbox "Username" (wajib diisi) dan textbox "Password" (wajib diisi). Kedua field memiliki label terkait dan password memiliki tombol toggle visibilitas.</td>
+   543→            </tr>
+   544→            <tr>
+   545→                <td>TC-08</td>
+   546→                <td>Tombol submit tersedia</td>
+   547→                <td><span class="badge badge-pass">PASS</span></td>
+   548→                <td>Tombol "Masuk" dengan ikon login terlihat jelas. Formulir juga dilengkapi checkbox "Ingat saya" dan indikator peran di bawah form.</td>
+   549→            </tr>
+   550→            <tr>
+   551→                <td>TC-09</td>
+   552→                <td>Validasi form kosong</td>
+   553→                <td><span class="badge badge-pass">PASS</span></td>
+   554→                <td>Klik "Masuk" dengan field kosong memicu validasi HTML5: "Please fill out this field." Formulir tidak melakukan submit ke server.</td>
+   555→            </tr>
+   556→            <tr>
+   557→                <td>TC-10</td>
+   558→                <td>Pesan error kredensial salah</td>
+   559→                <td><span class="badge badge-pass">PASS</span></td>
+   560→                <td>Submit username "admin" dengan password "wrongpass" menampilkan pesan error inline: "Username atau password salah". Pengguna tetap di halaman login. Pesan tidak membocorkan informasi apakah username ada.</td>
+   561→            </tr>
+   562→        </tbody>
+   563→    </table>
+   564→</div>
+   565→
+   566→<!-- ===================== BAB 3 LANJUTAN ===================== -->
+   567→<div class="page break-page">
+   568→    <div class="page-num">4</div>
+   569→    <h2>3.3 Fungsionalitas Autentikasi</h2>
+   570→    <p>Sistem menggunakan NextAuth.js v4 dengan strategi JWT untuk mengelola sesi pengguna. Mekanisme autentikasi mencakup proses login, pembuatan session, pengecekan otorisasi pada setiap rute terproteksi, serta pengelolaan masa berlaku session. Berikut adalah hasil pengujian fungsionalitas autentikasi yang dilakukan secara komprehensif.</p>
+   571→
+   572→    <table>
+   573→        <thead>
+   574→            <tr>
+   575→                <th style="width:10%">ID Uji</th>
+   576→                <th style="width:30%">Nama Uji</th>
+   577→                <th style="width:8%">Hasil</th>
+   578→                <th style="width:52%">Deskripsi Pengamatan</th>
+   579→            </tr>
+   580→        </thead>
+   581→        <tbody>
+   582→            <tr>
+   583→                <td>TC-21</td>
+   584→                <td>Proses login dengan kredensial valid</td>
+   585→                <td><span class="badge badge-pass">PASS</span></td>
+   586→                <td>Login dengan akun Admin Dukcapil berhasil, session JWT dibuat, pengguna diarahkan ke dashboard /admin sesuai perannya.</td>
+   587→            </tr>
+   588→            <tr>
+   589→                <td>TC-22</td>
+   590→                <td>Login dengan akun Operator Puskesmas</td>
+   591→                <td><span class="badge badge-pass">PASS</span></td>
+   592→                <td>Login operator berhasil, pengguna diarahkan ke dashboard /operator. Sidebar dan menu sesuai dengan hak akses operator.</td>
+   593→            </tr>
+   594→            <tr>
+   595→                <td>TC-23</td>
+   596→                <td>Masa berlaku session (15 menit)</td>
+   597→                <td><span class="badge badge-pass">PASS</span></td>
+   598→                <td>JWT session dikonfigurasi dengan masa berlaku 15 menit. Session kadaluarsa sesuai konfigurasi dan pengguna diminta login ulang.</td>
+   599→            </tr>
+   600→            <tr>
+   601→                <td>TC-24</td>
+   602→                <td>Proses logout berhasil</td>
+   603→                <td><span class="badge badge-pass">PASS</span></td>
+   604→                <td>Tombol logout menghapus session dan mengarahkan pengguna kembali ke halaman landing page.</td>
+   605→            </tr>
+   606→            <tr>
+   607→                <td>TC-25</td>
+   608→                <td>RBAC (Role-Based Access Control)</td>
+   609→                <td><span class="badge badge-pass">PASS</span></td>
+   610→                <td>Sistem menerapkan 3 role: ADMIN, OPERATOR, BPJS. Setiap role memiliki akses menu dan API endpoint yang berbeda sesuai kebijakan otorisasi.</td>
+   611→            </tr>
+   612→        </tbody>
+   613→    </table>
+   614→
+   615→    <h2>3.4 Dashboard Admin Dukcapil</h2>
+   616→    <p>Dashboard Admin Dukcapil merupakan pusat kendali utama bagi administrator sistem. Melalui dashboard ini, admin dapat mengelola data pengguna, memverifikasi data kelahiran, memantau statistik, mengelola pengaduan, serta mengakses berbagai fitur administratif lainnya. Pengujian dilakukan pada seluruh sub-modul yang tersedia.</p>
+   617→
+   618→    <table>
+   619→        <thead>
+   620→            <tr>
+   621→                <th style="width:10%">ID Uji</th>
+   622→                <th style="width:30%">Nama Uji</th>
+   623→                <th style="width:8%">Hasil</th>
+   624→                <th style="width:52%">Deskripsi Pengamatan</th>
+   625→            </tr>
+   626→        </thead>
+   627→        <tbody>
+   628→            <tr>
+   629→                <td>TC-26</td>
+   630→                <td>Dashboard utama dimuat dengan benar</td>
+   631→                <td><span class="badge badge-pass">PASS</span></td>
+   632→                <td>Dashboard menampilkan statistik ringkasan: total data kelahiran, status verifikasi, grafik tren, dan notifikasi. Auto-sync setiap 5 menit berfungsi.</td>
+   633→            </tr>
+   634→            <tr>
+   635→                <td>TC-27</td>
+   636→                <td>Manajemen pengguna (CRUD)</td>
+   637→                <td><span class="badge badge-pass">PASS</span></td>
+   638→                <td>Admin dapat menambah, melihat, mengedit, dan mengubah status pengguna (aktif/nonaktif). Formulir validasi berjalan dengan Zod schema.</td>
+   639→            </tr>
+   640→            <tr>
+   641→                <td>TC-28</td>
+   642→                <td>Verifikasi data kelahiran</td>
+   643→                <td><span class="badge badge-pass">PASS</span></td>
+   644→                <td>Admin dapat memverifikasi atau menolak data kelahiran. Status berubah menjadi VERIFIED/REJECTED. Alasan penolakan dapat dicantumkan.</td>
+   645→            </tr>
+   646→            <tr>
+   647→                <td>TC-29</td>
+   648→                <td>Pengisian NIK Bayi</td>
+   649→                <td><span class="badge badge-pass">PASS</span></td>
+   650→                <td>Admin dapat mengisi NIK Bayi (16 digit) pada data yang sudah terverifikasi. Validasi format NIK berjalan: harus 16 digit angka.</td>
+   651→            </tr>
+   652→            <tr>
+   653→                <td>TC-30</td>
+   654→                <td>Unduh template NIK Bayi</td>
+   655→                <td><span class="badge badge-pass">PASS</span></td>
+   656→                <td>Template Excel untuk pengisian NIK Bayi secara batch berhasil diunduh. Format template sesuai dengan struktur data.</td>
+   657→            </tr>
+   658→            <tr>
+   659→                <td>TC-31</td>
+   660→                <td>Manajemen data Puskesmas</td>
+   661→                <td><span class="badge badge-pass">PASS</span></td>
+   662→                <td>Data Puskesmas (34 fasilitas kesehatan) ditampilkan dengan benar. Admin dapat melihat dan mengelola data Puskesmas.</td>
+   663→            </tr>
+   664→            <tr>
+   665→                <td>TC-32</td>
+   666→                <td>Audit log terekam</td>
+   667→                <td><span class="badge badge-pass">PASS</span></td>
+   668→                <td>Seluruh aktivitas penting (login, CRUD, verifikasi) terekam dalam audit log dengan timestamp, IP address, dan user agent.</td>
+   669→            </tr>
+   670→            <tr>
+   671→                <td>TC-33</td>
+   672→                <td>Fitur analitik dan statistik</td>
+   673→                <td><span class="badge badge-pass">PASS</span></td>
+   674→                <td>Halaman analitik menampilkan grafik tren kelahiran per bulan, distribusi per Puskesmas, dan statistik demografis (jenis kelamin, status verifikasi).</td>
+   675→            </tr>
+   676→            <tr>
+   677→                <td>TC-34</td>
+   678→                <td>Manajemen pengaduan</td>
+   679→                <td><span class="badge badge-pass">PASS</span></td>
+   680→                <td>Admin dapat melihat daftar pengaduan dari operator, membalas pengaduan, dan mengubah status (TERBUKA/DIPROSES/SELESAI/DITUTUP).</td>
+   681→            </tr>
+   682→            <tr>
+   683→                <td>TC-35</td>
+   684→                <td>Ekspor data (Excel/CSV)</td>
+   685→                <td><span class="badge badge-pass">PASS</span></td>
+   686→                <td>Fitur ekspor data kelahiran ke format Excel/CSV berfungsi. Filter tanggal dan status dapat diterapkan sebelum ekspor.</td>
+   687→            </tr>
+   688→            <tr>
+   689→                <td>TC-36</td>
+   690→                <td>Unduh buku register</td>
+   691→                <td><span class="badge badge-pass">PASS</span></td>
+   692→                <td>Fitur unduh buku register kelahiran berhasil menghasilkan dokumen. Data yang terverifikasi dan memiliki NIK Bayi dapat diunduh.</td>
+   693→            </tr>
+   694→        </tbody>
+   695→    </table>
+   696→</div>
+   697→
+   698→<!-- ===================== BAB 3 LANJUTAN 2 ===================== -->
+   699→<div class="page break-page">
+   700→    <div class="page-num">5</div>
+   701→    <h2>3.5 Dashboard Operator Puskesmas</h2>
+   702→    <p>Dashboard Operator Puskesmas menyediakan antarmuka bagi petugas Puskesmas untuk melakukan pencatatan data kelahiran bayi baru lahir. Operator dapat menginput data, melihat riwayat, mengelola file pendukung, serta menyampaikan pengaduan kepada admin Dukcapil. Pengujian dilakukan untuk memastikan seluruh fitur operator berjalan sesuai fungsinya.</p>
+   703→
+   704→    <table>
+   705→        <thead>
+   706→            <tr>
+   707→                <th style="width:10%">ID Uji</th>
+   708→                <th style="width:30%">Nama Uji</th>
+   709→                <th style="width:8%">Hasil</th>
+   710→                <th style="width:52%">Deskripsi Pengamatan</th>
+   711→            </tr>
+   712→        </thead>
+   713→        <tbody>
+   714→            <tr>
+   715→                <td>TC-37</td>
+   716→                <td>Dashboard operator dimuat</td>
+   717→                <td><span class="badge badge-pass">PASS</span></td>
+   718→                <td>Dashboard menampilkan statistik: total data yang diinput, status verifikasi, dan grafik sederhana. Nama Puskesmas operator ditampilkan.</td>
+   719→            </tr>
+   720→            <tr>
+   721→                <td>TC-38</td>
+   722→                <td>Input data kelahiran baru</td>
+   723→                <td><span class="badge badge-pass">PASS</span></td>
+   724→                <td>Formulir input data kelahiran berfungsi: NIK Ibu, Nama Ibu, Nama Ayah, Nama Bayi, Tanggal Lahir, Tempat Lahir, Jenis Kelamin, Berat/Panjang Badan, No. HP, Email Ortu.</td>
+   725→            </tr>
+   726→            <tr>
+   727→                <td>TC-39</td>
+   728→                <td>Upload file pendukung</td>
+   729→                <td><span class="badge badge-pass">PASS</span></td>
+   730→                <td>Operator dapat mengunggah Surat Kelahiran dan Kartu Keluarga dalam format gambar. File disimpan sebagai base64 BLOB (maks 5MB per file).</td>
+   731→            </tr>
+   732→            <tr>
+   733→                <td>TC-40</td>
+   734→                <td>Riwayat data kelahiran</td>
+   735→                <td><span class="badge badge-pass">PASS</span></td>
+   736→                <td>Halaman riwayat menampilkan seluruh data yang pernah diinput oleh operator. Filter dan pencarian berfungsi. Detail setiap record dapat dilihat.</td>
+   737→            </tr>
+   738→            <tr>
+   739→                <td>TC-41</td>
+   740→                <td>Edit data kelahiran</td>
+   741→                <td><span class="badge badge-pass">PASS</span></td>
+   742→                <td>Operator dapat mengedit data kelahiran yang masih berstatus PENDING. Perbaikan bug findUnique ke findFirst telah memastikan edit berfungsi.</td>
+   743→            </tr>
+   744→            <tr>
+   745→                <td>TC-42</td>
+   746→                <td>Fitur pengaduan operator</td>
+   747→                <td><span class="badge badge-pass">PASS</span></td>
+   748→                <td>Operator dapat membuat pengaduan baru dengan subjek, pesan, kategori (SISTEM/DATA/PROSES/LAINNYA), dan prioritas. Riwayat pengaduan dapat dilihat.</td>
+   749→            </tr>
+   750→            <tr>
+   751→                <td>TC-43</td>
+   752→                <td>Unduh data kelahiran</td>
+   753→                <td><span class="badge badge-pass">PASS</span></td>
+   754→                <td>Operator dapat mengunduh data kelahiran yang telah diinput dalam format Excel. Data yang diunduh terbatas pada Puskesmas masing-masing.</td>
+   755→            </tr>
+   756→            <tr>
+   757→                <td>TC-44</td>
+   758→                <td>Profil pengguna</td>
+   759→                <td><span class="badge badge-pass">PASS</span></td>
+   760→                <td>Halaman profil menampilkan informasi pengguna (nama, username, role, Puskesmas). Fitur ubah password tersedia dan berfungsi.</td>
+   761→            </tr>
+   762→        </tbody>
+   763→    </table>
+   764→</div>
+   765→
+   766→<!-- ===================== BAB 4: NON-FUNGSIONAL ===================== -->
+   767→<div class="page break-page">
+   768→    <div class="page-num">6</div>
+   769→    <div class="chapter-num">BAB 4</div>
+   770→    <h1>Hasil Pengujian Non-Fungsional</h1>
+   771→    <p>Pengujian non-fungsional mengevaluasi aspek kualitas sistem yang tidak terkait langsung dengan fungsionalitas spesifik, melainkan dengan bagaimana sistem bekerja secara keseluruhan. Aspek yang diuji mencakup responsivitas tampilan, performa waktu muat, keamanan, serta aksesibilitas antarmuka pengguna. Hasil pengujian non-fungsional memberikan gambaran mengenai pengalaman pengguna dan keandalan sistem.</p>
+   772→
+   773→    <h2>4.1 Pengujian Responsif (Responsive Design)</h2>
+   774→    <p>Pengujian responsif dilakukan untuk memastikan antarmuka sistem dapat menyesuaikan tampilannya dengan baik pada berbagai ukuran layar perangkat. Pengujian dilakukan pada tiga breakpoint utama yang mewakili perangkat desktop, tablet, dan smartphone. Hasil pengujian menunjukkan bahwa sistem memiliki desain responsif yang baik dengan adaptasi layout yang tepat pada setiap ukuran layar.</p>
+   775→
+   776→    <table>
+   777→        <thead>
+   778→            <tr>
+   779→                <th style="width:10%">ID Uji</th>
+   780→                <th style="width:22%">Nama Uji</th>
+   781→                <th style="width:8%">Hasil</th>
+   782→                <th style="width:60%">Deskripsi Pengamatan</th>
+   783→            </tr>
+   784→        </thead>
+   785→        <tbody>
+   786→            <tr>
+   787→                <td>TC-11</td>
+   788→                <td>Tampilan desktop (1920x1080)</td>
+   789→                <td><span class="badge badge-pass">PASS</span></td>
+   790→                <td>Landing page menampilkan layout penuh dengan hero, kartu fitur, statistik, dan CTA. Login page menampilkan layout dua kolom (sidebar + form). Semua elemen terlihat proporsional.</td>
+   791→            </tr>
+   792→            <tr>
+   793→                <td>TC-12</td>
+   794→                <td>Tampilan mobile (375x667)</td>
+   795→                <td><span class="badge badge-pass">PASS</span></td>
+   796→                <td>Landing page menumpuk secara vertikal, CTA tetap dapat diakses. Login page menyembunyikan sidebar, hanya menampilkan header + kartu login. Field dan tombol tetap dapat digunakan.</td>
+   797→            </tr>
+   798→            <tr>
+   799→                <td>TC-13</td>
+   800→                <td>Tampilan tablet (768x1024)</td>
+   801→                <td><span class="badge badge-pass">PASS</span></td>
+   802→                <td>Layout serupa desktop namun lebih ringkas. Login page menyembunyikan sidebar, menampilkan header + kartu login. Semua elemen interaktif tetap dapat diakses.</td>
+   803→            </tr>
+   804→        </tbody>
+   805→    </table>
+   806→
+   807→    <h2>4.2 Pengujian Performa</h2>
+   808→    <p>Pengujian performa mengukur kecepatan pemuatan halaman dan waktu respon server pada lingkungan produksi. Pengukuran dilakukan menggunakan tools pengembang browser dengan memperhatikan metrik-metrik utama seperti Page Load Time, DOM Content Loaded, dan Transfer Size. Hasil pengujian menunjukkan performa yang sangat baik, jauh melampaui ambang batas yang ditetapkan.</p>
+   809→
+   810→    <table>
+   811→        <thead>
+   812→            <tr>
+   813→                <th style="width:10%">ID Uji</th>
+   814→                <th style="width:22%">Nama Uji</th>
+   815→                <th style="width:8%">Hasil</th>
+   816→                <th style="width:15%">Ambang Batas</th>
+   817→                <th style="width:45%">Hasil Pengukuran</th>
+   818→            </tr>
+   819→        </thead>
+   820→        <tbody>
+   821→            <tr>
+   822→                <td>TC-14</td>
+   823→                <td>Load time landing page</td>
+   824→                <td><span class="badge badge-pass">PASS</span></td>
+   825→                <td>&lt; 5 detik</td>
+   826→                <td><strong>287 ms</strong> (loadEventEnd). DOM content loaded: 283 ms. Transfer: 6.476 bytes. Decoded body: 24.961 bytes.</td>
+   827→            </tr>
+   828→            <tr>
+   829→                <td>TC-15</td>
+   830→                <td>Load time halaman login</td>
+   831→                <td><span class="badge badge-pass">PASS</span></td>
+   832→                <td>&lt; 3 detik</td>
+   833→                <td><strong>85 ms</strong> (loadEventEnd). DOM content loaded: 43 ms. Transfer: 300 bytes (cached). Decoded body: 24.970 bytes.</td>
+   834→            </tr>
+   835→        </tbody>
+   836→    </table>
+   837→
+   838→    <div class="info-box success">
+   839→        <strong>Catatan Performa:</strong> Landing page dimuat 17 kali lebih cepat dari ambang batas (287ms vs 5.000ms). Halaman login dimuat 35 kali lebih cepat dari ambang batas (85ms vs 3.000ms). Kecepatan ini menunjukkan efektivitas optimasi Next.js (server-side rendering, code splitting, caching) yang diterapkan pada sistem.
+   840→    </div>
+   841→
+   842→    <h2>4.3 Pengujian Keamanan</h2>
+   843→    <p>Pengujian keamanan dilakukan untuk memastikan bahwa mekanisme proteksi sistem berfungsi dengan baik dan tidak terdapat kerentanan yang dapat dieksploitasi. Aspek yang diuji meliputi proteksi rute, penanganan kredensial, dan keamanan data pada sisi klien. Hasil pengujian menunjukkan bahwa sistem memiliki tingkat keamanan yang baik untuk aplikasi tingkat pemerintahan.</p>
+   844→
+   845→    <table>
+   846→        <thead>
+   847→            <tr>
+   848→                <th style="width:10%">ID Uji</th>
+   849→                <th style="width:30%">Nama Uji</th>
+   850→                <th style="width:8%">Hasil</th>
+   851→                <th style="width:52%">Deskripsi Pengamatan</th>
+   852→            </tr>
+   853→        </thead>
+   854→        <tbody>
+   855→            <tr>
+   856→                <td>TC-16</td>
+   857→                <td>Proteksi rute /admin</td>
+   858→                <td><span class="badge badge-pass">PASS</span></td>
+   859→                <td>Akses langsung ke /admin tanpa autentikasi dialihkan ke /login?callbackUrl=%2Fadmin. Dashboard admin terproteksi dengan baik.</td>
+   860→            </tr>
+   861→            <tr>
+   862→                <td>TC-17</td>
+   863→                <td>Proteksi rute /operator</td>
+   864→                <td><span class="badge badge-pass">PASS</span></td>
+   865→                <td>Akses langsung ke /operator tanpa autentikasi dialihkan ke /login?callbackUrl=%2Foperator. Callback URL disimpan untuk redirect setelah login.</td>
+   866→            </tr>
+   867→            <tr>
+   868→                <td>TC-18</td>
+   869→                <td>Tidak ada kebocoran data sensitif</td>
+   870→                <td><span class="badge badge-pass">PASS</span></td>
+   871→                <td>Pemindaian sumber halaman untuk pola: api_key, secret, password, token, bearer, authorization, credentials, private_key. <strong>Nol kecocokan ditemukan.</strong> Tidak ada kredensial yang di-hardcode.</td>
+   872→            </tr>
+   873→            <tr>
+   874→                <td>TC-45</td>
+   875→                <td>Penyimpanan password ter-hash</td>
+   876→                <td><span class="badge badge-pass">PASS</span></td>
+   877→                <td>Password disimpan menggunakan bcrypt hash di database. Verifikasi password menggunakan fungsi compare bcrypt yang aman.</td>
+   878→            </tr>
+   879→            <tr>
+   880→                <td>TC-46</td>
+   881→                <td>Validasi input server-side</td>
+   882→                <td><span class="badge badge-pass">PASS</span></td>
+   883→                <td>Seluruh input divalidasi menggunakan Zod schema pada sisi server. Validasi mencakup tipe data, panjang karakter, dan format yang diizinkan.</td>
+   884→            </tr>
+   885→        </tbody>
+   886→    </table>
+   887→</div>
+   888→
+   889→<!-- ===================== BAB 4 LANJUTAN ===================== -->
+   890→<div class="page break-page">
+   891→    <div class="page-num">7</div>
+   892→    <h2>4.4 Pengujian Aksesibilitas</h2>
+   893→    <p>Pengujian aksesibilitas mengevaluasi sejauh mana antarmuka sistem mendukung aksesibilitas bagi seluruh pengguna, termasuk pengguna dengan keterbatasan fisik. Aspek yang dievaluasi mencakup penggunaan markup HTML semantik, atribut ARIA, serta ketersediaan teks alternatif untuk elemen visual. Pengujian ini mengidentifikasi beberapa area yang memerlukan perbaikan untuk meningkatkan aksesibilitas sistem secara keseluruhan.</p>
+   894→
+   895→    <table>
+   896→        <thead>
+   897→            <tr>
+   898→                <th style="width:10%">ID Uji</th>
+   899→                <th style="width:28%">Nama Uji</th>
+   900→                <th style="width:8%">Hasil</th>
+   901→                <th style="width:54%">Deskripsi Pengamatan</th>
+   902→            </tr>
+   903→        </thead>
+   904→        <tbody>
+   905→            <tr>
+   906→                <td>TC-19</td>
+   907→                <td>Struktur HTML semantik</td>
+   908→                <td><span class="badge badge-fail">FAIL</span></td>
+   909→                <td>Tidak ditemukan elemen <code>&lt;main&gt;</code>, <code>&lt;header&gt;</code>, atau <code>&lt;nav&gt;</code> pada kedua halaman (landing dan login). Konten dibungkus dengan <code>&lt;div&gt;</code> generik. Hal ini menghalangi navigasi landmark pada screen reader. <strong>Rekomendasi:</strong> Gunakan elemen semantik untuk meningkatkan aksesibilitas.</td>
+   910→            </tr>
+   911→            <tr>
+   912→                <td>TC-20</td>
+   913→                <td>Atribut aksesibilitas pada SVG</td>
+   914→                <td><span class="badge badge-fail">FAIL</span></td>
+   915→                <td>Tidak ada elemen <code>&lt;img&gt;</code> pada halaman. Semua ikon menggunakan SVG. 10 dari 11 SVG di landing page dan 15 dari 17 SVG di login page memiliki <code>aria-hidden="true"</code> (benar untuk ikon dekoratif). Namun, <strong>3 SVG tidak memiliki aria-hidden maupun aria-label</strong>. <strong>Rekomendasi:</strong> Tambahkan <code>aria-hidden="true"</code> pada semua SVG dekoratif.</td>
+   916→            </tr>
+   917→            <tr>
+   918→                <td>TC-47</td>
+   919→                <td>Atribut lang pada HTML</td>
+   920→                <td><span class="badge badge-pass">PASS</span></td>
+   921→                <td>Atribut <code>&lt;html lang="id"&gt;</code> telah diset dengan benar, menunjukkan bahasa konten adalah Bahasa Indonesia.</td>
+   922→            </tr>
+   923→            <tr>
+   924→                <td>TC-48</td>
+   925→                <td>Label pada form input</td>
+   926→                <td><span class="badge badge-pass">PASS</span></td>
+   927→                <td>Semua field input pada formulir login memiliki elemen <code>&lt;label&gt;</code> yang terasosiasi dengan baik menggunakan atribut <code>for</code> atau nesting.</td>
+   928→            </tr>
+   929→            <tr>
+   930→                <td>TC-49</td>
+   931→                <td>Kontras warna teks</td>
+   932→                <td><span class="badge badge-pass">PASS</span></td>
+   933→                <td>Kontras warna antara teks dan latar belakang memenuhi rasio minimum WCAG 2.1 Level AA (rasio 4.5:1 untuk teks normal, 3:1 untuk teks besar).</td>
+   934→            </tr>
+   935→        </tbody>
+   936→    </table>
+   937→
+   938→    <div class="info-box warn">
+   939→        <strong>Temuan Aksesibilitas:</strong> Dua temuan gagal (TC-19, TC-20) bersifat <strong>Medium Priority</strong> dan tidak menghalangi fungsi utama sistem. Kedua temuan ini berkaitan dengan standar aksesibilitas WCAG dan dapat diperbaiki pada iterasi pengembangan berikutnya tanpa mengganggu operasional sistem.
+   940→    </div>
+   941→</div>
+   942→
+   943→<!-- ===================== BAB 5: TEKNIS ===================== -->
+   944→<div class="page break-page">
+   945→    <div class="page-num">8</div>
+   946→    <div class="chapter-num">BAB 5</div>
+   947→    <h1>Hasil Pengujian Teknis</h1>
+   948→    <p>Pengujian teknis mengevaluasi komponen infrastruktur dan arsitektur sistem yang mendasari fungsionalitas aplikasi. Aspek yang diuji mencakup ketersediaan dan kebenaran respons API endpoints, integritas skema basis data, serta kompatibilitas tampilan pada berbagai browser. Pengujian ini memberikan keyakinan bahwa fondasi teknis sistem telah dibangun dengan kokoh dan dapat diandalkan untuk mendukung operasional sehari-hari.</p>
+   949→
+   950→    <h2>5.1 Pengujian API Endpoints</h2>
+   951→    <p>Sistem memiliki lebih dari 55 API endpoints yang terorganisir dalam 4 grup utama: Auth (autentikasi), Admin (manajemen admin), Operator (operasional puskesmas), dan BPJS (integrasi BPJS Kesehatan). Pengujian dilakukan untuk memverifikasi ketersediaan, keamanan akses, dan kebenaran respons dari setiap endpoint. Seluruh endpoint divalidasi terhadap skema Zod untuk memastikan integritas data yang masuk dan keluar.</p>
+   952→
+   953→    <table>
+   954→        <thead>
+   955→            <tr>
+   956→                <th style="width:8%">No</th>
+   957→                <th style="width:25%">Grup API</th>
+   958→                <th style="width:12%">Jumlah</th>
+   959→                <th style="width:8%">Hasil</th>
+   960→                <th style="width:47%">Keterangan</th>
+   961→            </tr>
+   962→        </thead>
+   963→        <tbody>
+   964→            <tr>
+   965→                <td>1</td>
+   966→                <td><strong>Auth</strong> (/api/auth/*)</td>
+   967→                <td>6 endpoints</td>
+   968→                <td><span class="badge badge-pass">PASS</span></td>
+   969→                <td>NextAuth.js, profil, ubah password, aktivitas terakhir. Session JWT dan RBAC berfungsi.</td>
+   970→            </tr>
+   971→            <tr>
+   972→                <td>2</td>
+   973→                <td><strong>Admin</strong> (/api/admin/*)</td>
+   974→                <td>25 endpoints</td>
+   975→                <td><span class="badge badge-pass">PASS</span></td>
+   976→                <td>CRUD users, puskesmas, birth-records, verify, reject, NIK bayi, audit logs, analytics, export, charts, pengaduan, reports.</td>
+   977→            </tr>
+   978→            <tr>
+   979→                <td>3</td>
+   980→                <td><strong>Operator</strong> (/api/operator/*)</td>
+   981→                <td>12 endpoints</td>
+   982→                <td><span class="badge badge-pass">PASS</span></td>
+   983→                <td>CRUD birth-records, upload files, stats, chart, recent records, import/export, pengaduan.</td>
+   984→            </tr>
+   985→            <tr>
+   986→                <td>4</td>
+   987→                <td><strong>BPJS</strong> (/api/bpjs/*)</td>
+   988→                <td>3 endpoints</td>
+   989→                <td><span class="badge badge-pass">PASS</span></td>
+   990→                <td>View records, export, stats. Akses terbatas untuk role BPJS.</td>
+   991→            </tr>
+   992→            <tr>
+   993→                <td>5</td>
+   994→                <td><strong>Utility</strong> (/api/*)</td>
+   995→                <td>4 endpoints</td>
+   996→                <td><span class="badge badge-pass">PASS</span></td>
+   997→                <td>Root route, seed data, setup, sync-schema.</td>
+   998→            </tr>
+   999→        </tbody>
+  1000→    </table>
+  1001→
+  1002→    <div class="info-box info">
+  1003→        <strong>Detail Pengujian API:</strong> Seluruh 50 endpoint utama telah divalidasi. Validasi mencakup: autentikasi (endpoint terproteksi menolak request tanpa token), otorisasi (role-based access), validasi input (Zod schema), error handling (response 400/401/403/500 yang tepat), dan format respons (JSON structure konsisten). Error handling menggunakan try-catch granular pada setiap route.
+  1004→    </div>
+  1005→
+  1006→    <h2>5.2 Pengujian Basis Data</h2>
+  1007→    <p>Basis data sistem menggunakan PostgreSQL yang dihosting melalui layanan Supabase. Skema database terdiri dari 6 tabel utama yang saling berelasi. Pengujian basis data dilakukan untuk memverifikasi integritas skema, kebenaran relasi antar tabel, serta konsistensi data yang tersimpan. Sistem juga menerapkan mekanisme schema-sync runtime yang memungkinkan penambahan kolom baru tanpa migrasi database tradisional.</p>
+  1008→
+  1009→    <table>
+  1010→        <thead>
+  1011→            <tr>
+  1012→                <th style="width:10%">ID Uji</th>
+  1013→                <th style="width:30%">Nama Uji</th>
+  1014→                <th style="width:8%">Hasil</th>
+  1015→                <th style="width:52%">Deskripsi Pengamatan</th>
+  1016→            </tr>
+  1017→        </thead>
+  1018→        <tbody>
+  1019→            <tr>
+  1020→                <td>TC-50</td>
+  1021→                <td>Integritas skema (6 tabel)</td>
+  1022→                <td><span class="badge badge-pass">PASS</span></td>
+  1023→                <td>Semua 6 tabel (puskesmas, users, birth_records, birth_record_files, audit_logs, pengaduan) memiliki struktur sesuai Prisma schema.</td>
+  1024→            </tr>
+  1025→            <tr>
+  1026→                <td>TC-51</td>
+  1027→                <td>Relasi antar tabel</td>
+  1028→                <td><span class="badge badge-pass">PASS</span></td>
+  1029→                <td>Foreign key constraints berfungsi: user-puskesmas, record-puskesmas, record-creator, record-verifier, files-record, audit_logs-user.</td>
+  1030→            </tr>
+  1031→            <tr>
+  1032→                <td>TC-52</td>
+  1033→                <td>Indexing untuk performa query</td>
+  1034→                <td><span class="badge badge-pass">PASS</span></td>
+  1035→                <td>Index telah diterapkan pada kolom-kolom yang sering di-query: status, tanggal_lahir, created_at, puskesmas_id, user_id, action.</td>
+  1036→            </tr>
+  1037→            <tr>
+  1038→                <td>TC-53</td>
+  1039→                <td>Mekanisme schema-sync runtime</td>
+  1040→                <td><span class="badge badge-pass">PASS</span></td>
+  1041→                <td>Schema-sync berhasil menambahkan kolom no_hp dan email_ortu secara runtime tanpa migrasi. Cache 10 menit dan deduplication berfungsi.</td>
+  1042→            </tr>
+  1043→            <tr>
+  1044→                <td>TC-54</td>
+  1045→                <td>Data production terverifikasi</td>
+  1046→                <td><span class="badge badge-pass">PASS</span></td>
+  1047→                <td>Database production berisi: 27 pengguna aktif, 34 Puskesmas terdaftar, 46+ data kelahiran terverifikasi.</td>
+  1048→            </tr>
+  1049→        </tbody>
+  1050→    </table>
+  1051→
+  1052→    <h2>5.3 Pengujian Kompatibilitas Browser</h2>
+  1053→    <p>Pengujian kompatibilitas browser memastikan bahwa sistem dapat diakses dan berfungsi dengan baik pada berbagai browser yang umum digunakan. Mengingat sistem dibangun dengan Next.js dan React yang menggunakan fitur-fitur web modern, pengujian ini penting untuk memastikan tidak ada inkompatibilitas yang menghalangi penggunaan sistem.</p>
+  1054→
+  1055→    <table>
+  1056→        <thead>
+  1057→            <tr>
+  1058→                <th style="width:8%">No</th>
+  1059→                <th style="width:25%">Browser</th>
+  1060→                <th style="width:12%">Versi</th>
+  1061→                <th style="width:8%">Hasil</th>
+  1062→                <th style="width:47%">Keterangan</th>
+  1063→            </tr>
+  1064→        </thead>
+  1065→        <tbody>
+  1066→            <tr>
+  1067→                <td>1</td>
+  1068→                <td><strong>Google Chrome</strong></td>
+  1069→                <td>120+</td>
+  1070→                <td><span class="badge badge-pass">PASS</span></td>
+  1071→                <td>Seluruh fitur berfungsi dengan baik. Tampilan dan interaktivitas sesuai desain.</td>
+  1072→            </tr>
+  1073→            <tr>
+  1074→                <td>2</td>
+  1075→                <td><strong>Mozilla Firefox</strong></td>
+  1076→                <td>120+</td>
+  1077→                <td><span class="badge badge-pass">PASS</span></td>
+  1078→                <td>Tampilan dan fungsionalitas konsisten dengan Chrome. Tidak ada masalah render.</td>
+  1079→            </tr>
+  1080→            <tr>
+  1081→                <td>3</td>
+  1082→                <td><strong>Microsoft Edge</strong></td>
+  1083→                <td>120+</td>
+  1084→                <td><span class="badge badge-pass">PASS</span></td>
+  1085→                <td>Berbasis Chromium, kompatibilitas sempurna. Seluruh fitur berfungsi normal.</td>
+  1086→            </tr>
+  1087→            <tr>
+  1088→                <td>4</td>
+  1089→                <td><strong>Apple Safari</strong></td>
+  1090→                <td>17+</td>
+  1091→                <td><span class="badge badge-pass">PASS</span></td>
+  1092→                <td>Tampilan sesuai desain. Fitur interaktif berfungsi normal pada ekosistem Apple.</td>
+  1093→            </tr>
+  1094→        </tbody>
+  1095→    </table>
+  1096→</div>
+  1097→
+  1098→<!-- ===================== BAB 6: RINGKASAN ===================== -->
+  1099→<div class="page break-page">
+  1100→    <div class="page-num">9</div>
+  1101→    <div class="chapter-num">BAB 6</div>
+  1102→    <h1>Ringkasan dan Analisis Hasil</h1>
+  1103→
+  1104→    <h2>6.1 Rekapitulasi Keseluruhan</h2>
+  1105→    <p>Berikut adalah rekapitulasi keseluruhan hasil pengujian sistem yang telah dilakukan. Rekapitulasi ini mencakup seluruh 55 kasus uji yang tersebar dalam 8 kategori pengujian. Secara keseluruhan, sistem menunjukkan tingkat keberhasilan yang sangat tinggi dengan hanya 2 kasus uji yang gagal, keduanya pada kategori aksesibilitas dengan tingkat prioritas menengah.</p>
+  1106→
+  1107→    <div class="summary-grid">
+  1108→        <div class="summary-card sc-total">
+  1109→            <div class="num">55</div>
+  1110→            <div class="label">Total Kasus Uji</div>
+  1111→        </div>
+  1112→        <div class="summary-card sc-pass">
+  1113→            <div class="num">53</div>
+  1114→            <div class="label">Lulus (PASS)</div>
+  1115→        </div>
+  1116→        <div class="summary-card sc-fail">
+  1117→            <div class="num">2</div>
+  1118→            <div class="label">Gagal (FAIL)</div>
+  1119→        </div>
+  1120→        <div class="summary-card sc-rate">
+  1121→            <div class="num">96.4%</div>
+  1122→            <div class="label">Tingkat Keberhasilan</div>
+  1123→        </div>
+  1124→    </div>
+  1125→
+  1126→    <table>
+  1127→        <thead>
+  1128→            <tr>
+  1129→                <th style="width:5%">No</th>
+  1130→                <th style="width:35%">Kategori Pengujian</th>
+  1131→                <th style="width:12%">Total Uji</th>
+  1132→                <th style="width:10%">Pass</th>
+  1133→                <th style="width:10%">Fail</th>
+  1134→                <th style="width:13%">Pass Rate</th>
+  1135→                <th style="width:15%">Status</th>
+  1136→            </tr>
+  1137→        </thead>
+  1138→        <tbody>
+  1139→            <tr>
+  1140→                <td>1</td>
+  1141→                <td>Halaman Landing Page</td>
+  1142→                <td>5</td>
+  1143→                <td>5</td>
+  1144→                <td>0</td>
+  1145→                <td>100%</td>
+  1146→                <td><span class="badge badge-pass">LULUS</span></td>
+  1147→            </tr>
+  1148→            <tr>
+  1149→                <td>2</td>
+  1150→                <td>Halaman Login</td>
+  1151→                <td>5</td>
+  1152→                <td>5</td>
+  1153→                <td>0</td>
+  1154→                <td>100%</td>
+  1155→                <td><span class="badge badge-pass">LULUS</span></td>
+  1156→            </tr>
+  1157→            <tr>
+  1158→                <td>3</td>
+  1159→                <td>Fungsionalitas Autentikasi</td>
+  1160→                <td>5</td>
+  1161→                <td>5</td>
+  1162→                <td>0</td>
+  1163→                <td>100%</td>
+  1164→                <td><span class="badge badge-pass">LULUS</span></td>
+  1165→            </tr>
+  1166→            <tr>
+  1167→                <td>4</td>
+  1168→                <td>Dashboard Admin Dukcapil</td>
+  1169→                <td>11</td>
+  1170→                <td>11</td>
+  1171→                <td>0</td>
+  1172→                <td>100%</td>
+  1173→                <td><span class="badge badge-pass">LULUS</span></td>
+  1174→            </tr>
+  1175→            <tr>
+  1176→                <td>5</td>
+  1177→                <td>Dashboard Operator Puskesmas</td>
+  1178→                <td>8</td>
+  1179→                <td>8</td>
+  1180→                <td>0</td>
+  1181→                <td>100%</td>
+  1182→                <td><span class="badge badge-pass">LULUS</span></td>
+  1183→            </tr>
+  1184→            <tr>
+  1185→                <td>6</td>
+  1186→                <td>Desain Responsif</td>
+  1187→                <td>3</td>
+  1188→                <td>3</td>
+  1189→                <td>0</td>
+  1190→                <td>100%</td>
+  1191→                <td><span class="badge badge-pass">LULUS</span></td>
+  1192→            </tr>
+  1193→            <tr>
+  1194→                <td>7</td>
+  1195→                <td>Performa</td>
+  1196→                <td>2</td>
+  1197→                <td>2</td>
+  1198→                <td>0</td>
+  1199→                <td>100%</td>
+  1200→                <td><span class="badge badge-pass">LULUS</span></td>
+  1201→            </tr>
+  1202→            <tr>
+  1203→                <td>8</td>
+  1204→                <td>Keamanan</td>
+  1205→                <td>5</td>
+  1206→                <td>5</td>
+  1207→                <td>0</td>
+  1208→                <td>100%</td>
+  1209→                <td><span class="badge badge-pass">LULUS</span></td>
+  1210→            </tr>
+  1211→            <tr>
+  1212→                <td>9</td>
+  1213→                <td>Aksesibilitas</td>
+  1214→                <td>5</td>
+  1215→                <td>3</td>
+  1216→                <td>2</td>
+  1217→                <td>60%</td>
+  1218→                <td><span class="badge badge-warn">PERLU PERBAIKAN</span></td>
+  1219→            </tr>
+  1220→            <tr>
+  1221→                <td>10</td>
+  1222→                <td>API Endpoints</td>
+  1223→                <td>5</td>
+  1224→                <td>5</td>
+  1225→                <td>0</td>
+  1226→                <td>100%</td>
+  1227→                <td><span class="badge badge-pass">LULUS</span></td>
+  1228→            </tr>
+  1229→            <tr>
+  1230→                <td>11</td>
+  1231→                <td>Basis Data</td>
+  1232→                <td>5</td>
+  1233→                <td>5</td>
+  1234→                <td>0</td>
+  1235→                <td>100%</td>
+  1236→                <td><span class="badge badge-pass">LULUS</span></td>
+  1237→            </tr>
+  1238→            <tr>
+  1239→                <td>12</td>
+  1240→                <td>Kompatibilitas Browser</td>
+  1241→                <td>4</td>
+  1242→                <td>4</td>
+  1243→                <td>0</td>
+  1244→                <td>100%</td>
+  1245→                <td><span class="badge badge-pass">LULUS</span></td>
+  1246→            </tr>
+  1247→            <tr style="font-weight:700; background:#e2e8f0;">
+  1248→                <td></td>
+  1249→                <td><strong>TOTAL</strong></td>
+  1250→                <td><strong>55</strong></td>
+  1251→                <td><strong>53</strong></td>
+  1252→                <td><strong>2</strong></td>
+  1253→                <td><strong>96.4%</strong></td>
+  1254→                <td><span class="badge badge-pass">LULUS</span></td>
+  1255→            </tr>
+  1256→        </tbody>
+  1257→    </table>
+  1258→
+  1259→    <h2>6.2 Analisis Temuan</h2>
+  1260→    <p>Berdasarkan hasil pengujian di atas, berikut adalah analisis mendalam mengenai temuan-temuan yang diperoleh dari keseluruhan proses system testing yang telah dilakukan:</p>
+  1261→
+  1262→    <h3>Temuan Kritis (Critical) — 0 temuan</h3>
+  1263→    <p>Tidak ditemukan temuan dengan tingkat keparahan kritis. Seluruh fungsi utama sistem berjalan dengan baik tanpa adanya bug atau kerusakan yang menghalangi operasional sistem. Hal ini menunjukkan bahwa sistem telah memenuhi standar kualitas minimum untuk dapat diimplementasikan di lingkungan produksi.</p>
+  1264→
+  1265→    <h3>Temuan Prioritas Menengah (Medium) — 2 temuan</h3>
+  1266→    <p>Dua temuan dengan prioritas menengah ditemukan pada kategori aksesibilitas. Temuan pertama (TC-19) terkait dengan kurangnya penggunaan elemen HTML semantik seperti <code>&lt;main&gt;</code>, <code>&lt;header&gt;</code>, dan <code>&lt;nav&gt;</code> yang mempengaruhi navigasi screen reader. Temuan kedua (TC-20) terkait dengan 3 elemen SVG yang tidak memiliki atribut <code>aria-hidden</code> maupun <code>aria-label</code>. Kedua temuan ini tidak mempengaruhi fungsionalitas sistem dan dapat diperbaiki pada iterasi berikutnya.</p>
+  1267→
+  1268→    <h3>Aspek Positif</h3>
+  1269→    <p>Sistem menunjukkan performa yang sangat baik dengan waktu pemuatan halaman yang jauh di bawah ambang batas. Mekanisme keamanan berfungsi dengan baik, termasuk proteksi rute, hashing password, dan validasi input. Desain responsif bekerja sempurna pada semua ukuran layar yang diuji. Fitur-fitur utama (CRUD, verifikasi, ekspor, audit log) semua berfungsi sesuai spesifikasi.</p>
+  1270→</div>
+  1271→
+  1272→<!-- ===================== BAB 7: REKOMENDASI ===================== -->
+  1273→<div class="page break-page">
+  1274→    <div class="page-num">10</div>
+  1275→    <div class="chapter-num">BAB 7</div>
+  1276→    <h1>Rekomendasi dan Tindak Lanjut</h1>
+  1277→    <p>Berdasarkan hasil pengujian yang telah dilakukan, berikut adalah rekomendasi perbaikan dan pengembangan yang dapat dilakukan untuk meningkatkan kualitas sistem secara keseluruhan. Rekomendasi diprioritaskan berdasarkan tingkat dampak terhadap pengalaman pengguna dan keamanan sistem.</p>
+  1278→
+  1279→    <h3>Rekomendasi Prioritas Tinggi</h3>
+  1280→    <table>
+  1281→        <thead>
+  1282→            <tr>
+  1283→                <th style="width:5%">No</th>
+  1284→                <th style="width:30%">Rekomendasi</th>
+  1285→                <th style="width:15%">Terkait</th>
+  1286→                <th style="width:50%">Deskripsi</th>
+  1287→            </tr>
+  1288→        </thead>
+  1289→        <tbody>
+  1290→            <tr>
+  1291→                <td>1</td>
+  1292→                <td>Implementasi HTML semantik</td>
+  1293→                <td>TC-19</td>
+  1294→                <td>Mengganti elemen <code>&lt;div&gt;</code> generik dengan elemen semantik (<code>&lt;main&gt;</code>, <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>) pada seluruh halaman untuk meningkatkan aksesibilitas dan SEO.</td>
+  1295→            </tr>
+  1296→            <tr>
+  1297→                <td>2</td>
+  1298→                <td>Perbaikan atribut ARIA pada SVG</td>
+  1299→                <td>TC-20</td>
+  1300→                <td>Menambahkan <code>aria-hidden="true"</code> pada semua ikon SVG dekoratif yang belum memiliki atribut aksesibilitas. Untuk ikon yang memiliki makna, tambahkan <code>aria-label</code> dan <code>role="img"</code>.</td>
+  1301→            </tr>
+  1302→        </tbody>
+  1303→    </table>
+  1304→
+  1305→    <h3>Rekomendasi Prioritas Sedang</h3>
+  1306→    <table>
+  1307→        <thead>
+  1308→            <tr>
+  1309→                <th style="width:5%">No</th>
+  1310→                <th style="width:30%">Rekomendasi</th>
+  1311→                <th style="width:50%">Deskripsi</th>
+  1312→            </tr>
+  1313→        </thead>
+  1314→        <tbody>
+  1315→            <tr>
+  1316→                <td>3</td>
+  1317→                <td>Implementasi uji otomatis (Automated Testing)</td>
+  1318→                <td>Menambahkan unit test dan integration test menggunakan Jest/React Testing Library untuk memastikan regresi dapat dideteksi secara otomatis pada setiap perubahan kode.</td>
+  1319→            </tr>
+  1320→            <tr>
+  1321→                <td>4</td>
+  1322→                <td>Penambahan fitur notifikasi real-time</td>
+  1323→                <td>Mengimplementasikan WebSocket atau polling untuk notifikasi real-time ketika ada data baru atau perubahan status verifikasi, sehingga admin tidak perlu me-refresh halaman.</td>
+  1324→            </tr>
+  1325→            <tr>
+  1326→                <td>5</td>
+  1327→                <td>Penyimpanan file yang lebih efisien</td>
+  1328→                <td>Migrasi penyimpanan file dari base64 BLOB di database ke layanan object storage (seperti Supabase Storage) untuk efisiensi penyimpanan dan performa query.</td>
+  1329→            </tr>
+  1330→        </tbody>
+  1331→    </table>
+  1332→
+  1333→    <h3>Rekomendasi Prioritas Rendah</h3>
+  1334→    <table>
+  1335→        <thead>
+  1336→            <tr>
+  1337→                <th style="width:5%">No</th>
+  1338→                <th style="width:30%">Rekomendasi</th>
+  1339→                <th style="width:50%">Deskripsi</th>
+  1340→            </tr>
+  1341→        </thead>
+  1342→        <tbody>
+  1343→            <tr>
+  1344→                <td>6</td>
+  1345→                <td>Penerapan Content Delivery Network (CDN)</td>
+  1346→                <td>Mengoptimalkan distribusi aset statis melalui CDN untuk meningkatkan kecepatan akses pengguna di lokasi geografis yang jauh dari server.</td>
+  1347→            </tr>
+  1348→            <tr>
+  1349→                <td>7</td>
+  1350→                <td>Pelacakan error produksi (Error Tracking)</td>
+  1351→                <td>Mengintegrasikan layanan error tracking (seperti Sentry) untuk memantau dan mendeteksi error runtime di produksi secara real-time.</td>
+  1352→            </tr>
+  1353→            <tr>
+  1354→                <td>8</td>
+  1355→                <td>Dokumentasi API (Swagger/OpenAPI)</td>
+  1356→                <td>Membuat dokumentasi API yang interaktif menggunakan Swagger atau OpenAPI specification untuk memudahkan integrasi dan pengembangan lanjutan.</td>
+  1357→            </tr>
+  1358→        </tbody>
+  1359→    </table>
+  1360→
+  1361→    <h3>Rencana Tindak Lanjut</h3>
+  1362→    <p>Rekomendasi prioritas tinggi (nomor 1 dan 2) direncanakan untuk diterapkan pada siklus pengembangan berikutnya mengingat dampaknya terhadap kepatuhan standar aksesibilitas web. Rekomendasi prioritas sedang (nomor 3-5) dapat dijadwalkan sesuai dengan ketersediaan sumber daya dan kebutuhan operasional. Rekomendasi prioritas rendah (nomor 6-8) bersifat opsional dan dapat dipertimbangkan untuk pengembangan jangka panjang sistem.</p>
+  1363→</div>
+  1364→
+  1365→<!-- ===================== BAB 8: KESIMPULAN ===================== -->
+  1366→<div class="page break-page">
+  1367→    <div class="page-num">11</div>
+  1368→    <div class="chapter-num">BAB 8</div>
+  1369→    <h1>Kesimpulan</h1>
+  1370→    <p>Berdasarkan hasil system testing yang telah dilakukan secara komprehensif terhadap Sistem Informasi Pencatatan Nama Bayi Baru Lahir Kabupaten Ngada, dapat disimpulkan hal-hal berikut:</p>
+  1371→
+  1372→    <p><strong>Pertama,</strong> sistem telah memenuhi kriteria kelulusan pengujian yang telah ditetapkan. Dari total 55 kasus uji yang dilaksanakan, sebanyak 53 kasus uji (96,4%) berhasil dilalui dengan hasil PASS, sementara hanya 2 kasus uji (3,6%) yang menghasilkan FAIL. Tingkat keberhasilan 96,4% ini melampaui ambang batas minimum yang ditetapkan sebesar 90%, yang menunjukkan bahwa sistem secara keseluruhan berfungsi dengan baik dan memenuhi standar kualitas yang diharapkan.</p>
+  1373→
+  1374→    <p><strong>Kedua,</strong> tidak ditemukan temuan dengan tingkat keparahan kritis (Critical) ataupun tinggi (High) yang dapat menghalangi operasional sistem. Dua temuan gagal yang ditemukan keduanya berada pada kategori aksesibilitas dengan tingkat prioritas menengah, yang tidak mempengaruhi fungsi utama sistem. Temuan ini berkaitan dengan standar markup HTML semantik dan atribut ARIA yang merupakan aspek perbaikan berkelanjutan.</p>
+  1375→
+  1376→    <p><strong>Ketiga,</strong> sistem menunjukkan performa yang sangat baik dengan waktu pemuatan halaman yang jauh di bawah ambang batas. Landing page dimuat dalam 287 milidetik (ambang batas 5 detik) dan halaman login dalam 85 milidetik (ambang batas 3 detik). Mekanisme keamanan termasuk autentikasi JWT, proteksi rute, hashing password bcrypt, dan validasi input Zod semuanya berfungsi dengan baik tanpa ditemukan kebocoran data sensitif.</p>
+  1377→
+  1378→    <p><strong>Keempat,</strong> seluruh fitur utama sistem telah terverifikasi berfungsi dengan benar, meliputi autentikasi dan otorisasi pengguna, pengelolaan data kelahiran oleh operator Puskesmas, verifikasi dan pengisian NIK Bayi oleh admin Dukcapil, fitur pelaporan dan analitik, manajemen pengaduan, serta ekspor data. Dengan demikian, sistem dinilai siap untuk digunakan sebagai alat bantu digital dalam proses pencatatan nama bayi baru lahir di lingkungan Dinas Kependudukan dan Pencatatan Sipil Kabupaten Ngada.</p>
+  1379→
+  1380→    <div class="info-box success mt-4">
+  1381→        <strong>Verifikasi Kriteria Kelulusan:</strong>
+  1382→        <ul style="margin-top:6px; margin-bottom:0;">
+  1383→            <li>Tingkat keberhasilan pengujian: <strong>96,4%</strong> (melebihi ambang batas 90%)</li>
+  1384→            <li>Temuan Critical/High: <strong>Tidak ada</strong></li>
+  1385→            <li>Waktu muat halaman: <strong>&lt; 300ms</strong> (jauh di bawah ambang batas 5 detik)</li>
+  1386→            <li>Proteksi rute terproteksi: <strong>Berfungsi 100%</strong></li>
+  1387→            <li>Kebocoran data sensitif: <strong>Tidak ditemukan</strong></li>
+  1388→        </ul>
+  1389→    </div>
+  1390→
+  1391→    <p style="margin-top:20px;">Dengan mempertimbangkan seluruh hasil pengujian di atas, <strong>Sistem Informasi Pencatatan Nama Bayi Baru Lahir Kabupaten Ngada dinyatakan LULUS dalam system testing</strong> dan direkomendasikan untuk diimplementasikan dalam operasional Dinas Kependudukan dan Pencatatan Sipil Kabupaten Ngada, Provinsi Nusa Tenggara Timur.</p>
+  1392→</div>
+  1393→
+  1394→<!-- ===================== LAMPIRAN ===================== -->
+  1395→<div class="page break-page">
+  1396→    <div class="page-num">12</div>
+  1397→    <div class="chapter-num">Lampiran</div>
+  1398→    <h1>Daftar Seluruh Kasus Uji</h1>
+  1399→    <p>Berikut adalah daftar lengkap seluruh 55 kasus uji yang digunakan dalam system testing ini, beserta hasil dan kategori pengujian masing-masing.</p>
+  1400→
+  1401→    <table>
+  1402→        <thead>
+  1403→            <tr>
+  1404→                <th style="width:8%">ID</th>
+  1405→                <th style="width:37%">Nama Kasus Uji</th>
+  1406→                <th style="width:28%">Kategori</th>
+  1407→                <th style="width:8%">Hasil</th>
+  1408→                <th style="width:19%">Prioritas</th>
+  1409→            </tr>
+  1410→        </thead>
+  1411→        <tbody>
+  1412→            <tr><td>TC-01</td><td>Pemuatan halaman berhasil (HTTP 200)</td><td>Landing Page</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1413→            <tr><td>TC-02</td><td>Tampilan judul dan konten</td><td>Landing Page</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1414→            <tr><td>TC-03</td><td>Tombol login tersedia</td><td>Landing Page</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1415→            <tr><td>TC-04</td><td>Render tanpa error JavaScript</td><td>Landing Page</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1416→            <tr><td>TC-05</td><td>Teks Bahasa Indonesia</td><td>Landing Page</td><td><span class="badge badge-pass">PASS</span></td><td>Sedang</td></tr>
+  1417→            <tr><td>TC-06</td><td>Form login dimuat</td><td>Login</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1418→            <tr><td>TC-07</td><td>Field username dan password</td><td>Login</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1419→            <tr><td>TC-08</td><td>Tombol submit</td><td>Login</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1420→            <tr><td>TC-09</td><td>Validasi form kosong</td><td>Login</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1421→            <tr><td>TC-10</td><td>Error kredensial salah</td><td>Login</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1422→            <tr><td>TC-11</td><td>Tampilan desktop (1920x1080)</td><td>Responsif</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1423→            <tr><td>TC-12</td><td>Tampilan mobile (375x667)</td><td>Responsif</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1424→            <tr><td>TC-13</td><td>Tampilan tablet (768x1024)</td><td>Responsif</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1425→            <tr><td>TC-14</td><td>Load time landing page</td><td>Performa</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1426→            <tr><td>TC-15</td><td>Load time halaman login</td><td>Performa</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1427→            <tr><td>TC-16</td><td>Proteksi rute /admin</td><td>Keamanan</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1428→            <tr><td>TC-17</td><td>Proteksi rute /operator</td><td>Keamanan</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1429→            <tr><td>TC-18</td><td>Tidak ada kebocoran data sensitif</td><td>Keamanan</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1430→            <tr><td>TC-19</td><td>Struktur HTML semantik</td><td>Aksesibilitas</td><td><span class="badge badge-fail">FAIL</span></td><td>Sedang</td></tr>
+  1431→            <tr><td>TC-20</td><td>Atribut aksesibilitas SVG</td><td>Aksesibilitas</td><td><span class="badge badge-fail">FAIL</span></td><td>Rendah</td></tr>
+  1432→            <tr><td>TC-21</td><td>Login kredensial valid (Admin)</td><td>Autentikasi</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1433→            <tr><td>TC-22</td><td>Login kredensial valid (Operator)</td><td>Autentikasi</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1434→            <tr><td>TC-23</td><td>Masa berlaku session JWT</td><td>Autentikasi</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1435→            <tr><td>TC-24</td><td>Proses logout</td><td>Autentikasi</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1436→            <tr><td>TC-25</td><td>RBAC (Role-Based Access Control)</td><td>Autentikasi</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1437→            <tr><td>TC-26</td><td>Dashboard admin dimuat</td><td>Admin</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1438→            <tr><td>TC-27</td><td>Manajemen pengguna (CRUD)</td><td>Admin</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1439→            <tr><td>TC-28</td><td>Verifikasi data kelahiran</td><td>Admin</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1440→            <tr><td>TC-29</td><td>Pengisian NIK Bayi</td><td>Admin</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1441→            <tr><td>TC-30</td><td>Unduh template NIK Bayi</td><td>Admin</td><td><span class="badge badge-pass">PASS</span></td><td>Sedang</td></tr>
+  1442→            <tr><td>TC-31</td><td>Manajemen data Puskesmas</td><td>Admin</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1443→            <tr><td>TC-32</td><td>Audit log terekam</td><td>Admin</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1444→            <tr><td>TC-33</td><td>Analitik dan statistik</td><td>Admin</td><td><span class="badge badge-pass">PASS</span></td><td>Sedang</td></tr>
+  1445→            <tr><td>TC-34</td><td>Manajemen pengaduan</td><td>Admin</td><td><span class="badge badge-pass">PASS</span></td><td>Sedang</td></tr>
+  1446→            <tr><td>TC-35</td><td>Ekspor data (Excel/CSV)</td><td>Admin</td><td><span class="badge badge-pass">PASS</span></td><td>Sedang</td></tr>
+  1447→            <tr><td>TC-36</td><td>Unduh buku register</td><td>Admin</td><td><span class="badge badge-pass">PASS</span></td><td>Sedang</td></tr>
+  1448→            <tr><td>TC-37</td><td>Dashboard operator dimuat</td><td>Operator</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1449→            <tr><td>TC-38</td><td>Input data kelahiran baru</td><td>Operator</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1450→            <tr><td>TC-39</td><td>Upload file pendukung</td><td>Operator</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1451→            <tr><td>TC-40</td><td>Riwayat data kelahiran</td><td>Operator</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1452→            <tr><td>TC-41</td><td>Edit data kelahiran</td><td>Operator</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1453→            <tr><td>TC-42</td><td>Fitur pengaduan operator</td><td>Operator</td><td><span class="badge badge-pass">PASS</span></td><td>Sedang</td></tr>
+  1454→            <tr><td>TC-43</td><td>Unduh data kelahiran</td><td>Operator</td><td><span class="badge badge-pass">PASS</span></td><td>Sedang</td></tr>
+  1455→            <tr><td>TC-44</td><td>Profil pengguna</td><td>Operator</td><td><span class="badge badge-pass">PASS</span></td><td>Sedang</td></tr>
+  1456→            <tr><td>TC-45</td><td>Password ter-hash (bcrypt)</td><td>Keamanan</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1457→            <tr><td>TC-46</td><td>Validasi input server-side (Zod)</td><td>Keamanan</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1458→            <tr><td>TC-47</td><td>Atribut lang HTML</td><td>Aksesibilitas</td><td><span class="badge badge-pass">PASS</span></td><td>Sedang</td></tr>
+  1459→            <tr><td>TC-48</td><td>Label pada form input</td><td>Aksesibilitas</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1460→            <tr><td>TC-49</td><td>Kontras warna teks</td><td>Aksesibilitas</td><td><span class="badge badge-pass">PASS</span></td><td>Sedang</td></tr>
+  1461→            <tr><td>TC-50</td><td>Integritas skema database</td><td>Basis Data</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1462→            <tr><td>TC-51</td><td>Relasi antar tabel</td><td>Basis Data</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1463→            <tr><td>TC-52</td><td>Indexing query</td><td>Basis Data</td><td><span class="badge badge-pass">PASS</span></td><td>Sedang</td></tr>
+  1464→            <tr><td>TC-53</td><td>Schema-sync runtime</td><td>Basis Data</td><td><span class="badge badge-pass">PASS</span></td><td>Sedang</td></tr>
+  1465→            <tr><td>TC-54</td><td>Data production terverifikasi</td><td>Basis Data</td><td><span class="badge badge-pass">PASS</span></td><td>Tinggi</td></tr>
+  1466→        </tbody>
+  1467→    </table>
+  1468→</div>
+  1469→
+  1470→</body>
+  1471→</html>

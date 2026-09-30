@@ -1,0 +1,1102 @@
+     1→<!DOCTYPE html>
+     2→<html lang="id">
+     3→<head>
+     4→<meta charset="UTF-8">
+     5→<meta name="viewport" content="width=device-width, initial-scale=1.0">
+     6→<title>Draft Skema dan Catatan Teknis Operasional - Sistem Pencatatan Bayi Baru Lahir</title>
+     7→<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+     8→<style>
+     9→@page {
+    10→    size: 720px 1020px;
+    11→    margin: 0;
+    12→}
+    13→:root {
+    14→    --c-bg: #f8fafc;
+    15→    --c-dark: #0f172a;
+    16→    --c-primary: #0d9488;
+    17→    --c-primary-light: #ccfbf1;
+    18→    --c-primary-dark: #064e3b;
+    19→    --c-text: #1e293b;
+    20→    --c-text-secondary: #475569;
+    21→    --c-border: #e2e8f0;
+    22→    --c-card-bg: #ffffff;
+    23→    --c-accent: #f59e0b;
+    24→    --c-code-bg: #f1f5f9;
+    25→}
+    26→* { box-sizing: border-box; margin: 0; padding: 0; }
+    27→html, body {
+    28→    margin: 0; padding: 0;
+    29→    width: 720px;
+    30→    background: var(--c-bg);
+    31→    color: var(--c-text);
+    32→    font-family: 'Inter', sans-serif;
+    33→    font-size: 13px;
+    34→    line-height: 1.65;
+    35→    -webkit-font-smoothing: antialiased;
+    36→}
+    37→@media screen {
+    38→    html { height: auto; display: flex; justify-content: center; background: #94a3b8; }
+    39→    body { transform-origin: top center; margin: 20px auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    40→}
+    41→
+    42→/* ====== COVER ====== */
+    43→.cover {
+    44→    width: 720px; height: 1020px;
+    45→    background: linear-gradient(160deg, #064e3b 0%, #0d9488 50%, #14b8a6 100%);
+    46→    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    47→    padding: 70px 65px;
+    48→    gap: 0;
+    49→    break-after: page;
+    50→    overflow: hidden;
+    51→    position: relative;
+    52→    color: #ffffff;
+    53→}
+    54→.cover::before {
+    55→    content: none;
+    56→}
+    57→.cover::after {
+    58→    content: none;
+    59→}
+    60→.cover-badge {
+    61→    display: inline-block;
+    62→    background: rgba(255,255,255,0.15);
+    63→    border: 1px solid rgba(255,255,255,0.3);
+    64→    border-radius: 24px;
+    65→    padding: 8px 24px;
+    66→    font-size: 11px;
+    67→    font-weight: 600;
+    68→    letter-spacing: 2px;
+    69→    text-transform: uppercase;
+    70→    margin-bottom: 44px;
+    71→    z-index: 1;
+    72→}
+    73→.cover-line {
+    74→    width: 80px; height: 3px;
+    75→    background: var(--c-accent);
+    76→    margin: 44px auto;
+    77→    border-radius: 2px;
+    78→    z-index: 1;
+    79→}
+    80→.cover h1 {
+    81→    font-family: 'Playfair Display', serif;
+    82→    font-size: 36px;
+    83→    font-weight: 800;
+    84→    text-align: center;
+    85→    line-height: 1.2;
+    86→    z-index: 1;
+    87→    margin: 0;
+    88→    padding: 0;
+    89→}
+    90→.cover h2 {
+    91→    font-size: 18px;
+    92→    font-weight: 400;
+    93→    text-align: center;
+    94→    opacity: 0.9;
+    95→    z-index: 1;
+    96→    margin: 0;
+    97→    padding: 0;
+    98→}
+    99→.cover .subtitle {
+   100→    font-size: 14px;
+   101→    text-align: center;
+   102→    opacity: 0.8;
+   103→    z-index: 1;
+   104→    max-width: 480px;
+   105→    line-height: 1.6;
+   106→    margin: 0;
+   107→    padding: 0;
+   108→}
+   109→.cover-footer {
+   110→    position: absolute;
+   111→    bottom: 50px;
+   112→    text-align: center;
+   113→    font-size: 11px;
+   114→    opacity: 0.7;
+   115→    z-index: 1;
+   116→}
+   117→
+   118→/* ====== MAIN CONTENT ====== */
+   119→.main-content {
+   120→    padding: 50px 60px 40px 60px;
+   121→}
+   122→
+   123→/* Chapter header */
+   124→.chapter-header {
+   125→    break-after: avoid;
+   126→    break-inside: avoid;
+   127→    margin-top: 28px;
+   128→}
+   129→.chapter-number {
+   130→    display: inline-block;
+   131→    background: var(--c-primary);
+   132→    color: #fff;
+   133→    font-size: 11px;
+   134→    font-weight: 700;
+   135→    padding: 4px 14px;
+   136→    border-radius: 12px;
+   137→    letter-spacing: 1px;
+   138→    margin-bottom: 10px;
+   139→}
+   140→.chapter-title {
+   141→    font-family: 'Playfair Display', serif;
+   142→    font-size: 24px;
+   143→    font-weight: 800;
+   144→    color: var(--c-dark);
+   145→    line-height: 1.3;
+   146→    margin-bottom: 6px;
+   147→}
+   148→.chapter-divider {
+   149→    width: 50px; height: 3px;
+   150→    background: var(--c-primary);
+   151→    border-radius: 2px;
+   152→    margin-bottom: 16px;
+   153→}
+   154→
+   155→/* Sub-section */
+   156→.sub-title {
+   157→    font-size: 16px;
+   158→    font-weight: 700;
+   159→    color: var(--c-dark);
+   160→    margin-top: 20px;
+   161→    margin-bottom: 8px;
+   162→    display: flex;
+   163→    align-items: center;
+   164→    gap: 8px;
+   165→}
+   166→.sub-title::before {
+   167→    content: '';
+   168→    width: 4px; height: 18px;
+   169→    background: var(--c-primary);
+   170→    border-radius: 2px;
+   171→    flex-shrink: 0;
+   172→}
+   173→.sub-sub-title {
+   174→    font-size: 14px;
+   175→    font-weight: 600;
+   176→    color: var(--c-primary-dark);
+   177→    margin-top: 16px;
+   178→    margin-bottom: 6px;
+   179→}
+   180→
+   181→/* Body text */
+   182→.body-text {
+   183→    font-size: 13px;
+   184→    line-height: 1.7;
+   185→    color: var(--c-text);
+   186→    margin-bottom: 10px;
+   187→    text-align: justify;
+   188→}
+   189→
+   190→/* Tables */
+   191→.table-wrapper {
+   192→    break-inside: avoid;
+   193→    margin: 14px 0;
+   194→    border-radius: 8px;
+   195→    overflow: hidden;
+   196→    border: 1px solid var(--c-border);
+   197→}
+   198→table {
+   199→    width: 100%;
+   200→    border-collapse: collapse;
+   201→    font-size: 11px;
+   202→}
+   203→thead {
+   204→    background: var(--c-primary-dark);
+   205→    color: #fff;
+   206→}
+   207→thead th {
+   208→    padding: 10px 12px;
+   209→    text-align: left;
+   210→    font-weight: 600;
+   211→    font-size: 11px;
+   212→    white-space: nowrap;
+   213→}
+   214→tbody td {
+   215→    padding: 8px 12px;
+   216→    border-bottom: 1px solid var(--c-border);
+   217→    vertical-align: top;
+   218→    word-wrap: break-word;
+   219→    overflow-wrap: break-word;
+   220→}
+   221→tbody tr:last-child td { border-bottom: none; }
+   222→tbody tr:nth-child(even) { background: #f8fafc; }
+   223→
+   224→/* Info box / callout */
+   225→.callout {
+   226→    break-inside: avoid;
+   227→    background: var(--c-primary-light);
+   228→    border-left: 4px solid var(--c-primary);
+   229→    border-radius: 0 8px 8px 0;
+   230→    padding: 14px 16px;
+   231→    margin: 12px 0;
+   232→    font-size: 12px;
+   233→    line-height: 1.6;
+   234→}
+   235→.callout-label {
+   236→    font-weight: 700;
+   237→    color: var(--c-primary-dark);
+   238→    margin-bottom: 4px;
+   239→    font-size: 11px;
+   240→    text-transform: uppercase;
+   241→    letter-spacing: 0.5px;
+   242→}
+   243→
+   244→/* Code block */
+   245→.code-block {
+   246→    break-inside: avoid;
+   247→    background: #1e293b;
+   248→    color: #e2e8f0;
+   249→    padding: 14px 16px;
+   250→    border-radius: 8px;
+   251→    font-family: 'Courier New', monospace;
+   252→    font-size: 10px;
+   253→    line-height: 1.6;
+   254→    margin: 12px 0;
+   255→    overflow-wrap: break-word;
+   256→}
+   257→
+   258→/* Card */
+   259→.card {
+   260→    break-inside: avoid;
+   261→    background: var(--c-card-bg);
+   262→    border: 1px solid var(--c-border);
+   263→    border-radius: 10px;
+   264→    padding: 16px;
+   265→    margin: 10px 0;
+   266→}
+   267→.card-title {
+   268→    font-weight: 700;
+   269→    font-size: 13px;
+   270→    color: var(--c-dark);
+   271→    margin-bottom: 6px;
+   272→}
+   273→
+   274→/* List */
+   275→ul, ol {
+   276→    margin: 8px 0 12px 20px;
+   277→    font-size: 13px;
+   278→    line-height: 1.7;
+   279→}
+   280→li { margin-bottom: 3px; }
+   281→
+   282→/* Simple flow diagram */
+   283→.flow-diagram {
+   284→    break-inside: avoid;
+   285→    display: flex;
+   286→    flex-wrap: wrap;
+   287→    align-items: center;
+   288→    justify-content: center;
+   289→    gap: 6px;
+   290→    margin: 14px 0;
+   291→    padding: 16px;
+   292→    background: #f1f5f9;
+   293→    border-radius: 10px;
+   294→}
+   295→.flow-box {
+   296→    background: var(--c-primary-dark);
+   297→    color: #fff;
+   298→    padding: 8px 14px;
+   299→    border-radius: 8px;
+   300→    font-size: 11px;
+   301→    font-weight: 600;
+   302→    text-align: center;
+   303→    min-width: 70px;
+   304→}
+   305→.flow-arrow {
+   306→    color: var(--c-primary);
+   307→    font-size: 18px;
+   308→    font-weight: 700;
+   309→    flex-shrink: 0;
+   310→}
+   311→
+   312→/* ERD style entity */
+   313→.entity-box {
+   314→    break-inside: avoid;
+   315→    background: var(--c-card-bg);
+   316→    border: 2px solid var(--c-primary);
+   317→    border-radius: 10px;
+   318→    margin: 10px 0;
+   319→    overflow: hidden;
+   320→}
+   321→.entity-header {
+   322→    background: var(--c-primary-dark);
+   323→    color: #fff;
+   324→    padding: 10px 14px;
+   325→    font-weight: 700;
+   326→    font-size: 13px;
+   327→}
+   328→.entity-field {
+   329→    padding: 5px 14px;
+   330→    font-size: 11px;
+   331→    border-bottom: 1px solid #f1f5f9;
+   332→    display: flex;
+   333→    gap: 8px;
+   334→}
+   335→.entity-field:last-child { border-bottom: none; }
+   336→.field-type {
+   337→    color: var(--c-primary);
+   338→    font-weight: 600;
+   339→    min-width: 90px;
+   340→    font-size: 10px;
+   341→}
+   342→.field-name {
+   343→    color: var(--c-text);
+   344→    flex: 1;
+   345→    font-family: 'Courier New', monospace;
+   346→    font-size: 11px;
+   347→}
+   348→.field-pk { color: var(--c-accent); font-weight: 700; font-size: 10px; }
+   349→
+   350→/* Tag badges */
+   351→.tag {
+   352→    display: inline-block;
+   353→    background: var(--c-primary-light);
+   354→    color: var(--c-primary-dark);
+   355→    padding: 2px 10px;
+   356→    border-radius: 10px;
+   357→    font-size: 10px;
+   358→    font-weight: 600;
+   359→    margin: 2px;
+   360→}
+   361→.tag-warn {
+   362→    background: #fef3c7;
+   363→    color: #78350f;
+   364→}
+   365→.tag-danger {
+   366→    background: #fee2e2;
+   367→    color: #991b1b;
+   368→}
+   369→
+   370→/* Two column layout */
+   371→.two-col {
+   372→    display: flex;
+   373→    gap: 14px;
+   374→    margin: 10px 0;
+   375→}
+   376→.two-col > * { flex: 1; }
+   377→
+   378→/* Page footer note */
+   379→.page-note {
+   380→    margin-top: 24px;
+   381→    padding-top: 12px;
+   382→    border-top: 1px solid var(--c-border);
+   383→    font-size: 10px;
+   384→    color: var(--c-text-secondary);
+   385→    text-align: center;
+   386→}
+   387→
+   388→/* Diagram container */
+   389→.diagram-box {
+   390→    break-inside: avoid;
+   391→    background: #f8fafc;
+   392→    border: 1px solid var(--c-border);
+   393→    border-radius: 10px;
+   394→    padding: 20px;
+   395→    margin: 14px 0;
+   396→    text-align: center;
+   397→}
+   398→.diagram-title {
+   399→    font-size: 11px;
+   400→    font-weight: 600;
+   401→    color: var(--c-text-secondary);
+   402→    margin-bottom: 12px;
+   403→    text-transform: uppercase;
+   404→    letter-spacing: 1px;
+   405→}
+   406→
+   407→/* Architecture layers */
+   408→.arch-layer {
+   409→    border: 2px solid;
+   410→    border-radius: 10px;
+   411→    padding: 12px 16px;
+   412→    margin: 8px 0;
+   413→}
+   414→.arch-layer-frontend { border-color: #0d9488; background: #f0fdfa; }
+   415→.arch-layer-api { border-color: #f59e0b; background: #fffbeb; }
+   416→.arch-layer-data { border-color: #6366f1; background: #eef2ff; }
+   417→.arch-layer-infra { border-color: #64748b; background: #f8fafc; }
+   418→.arch-label {
+   419→    font-weight: 700;
+   420→    font-size: 11px;
+   421→    margin-bottom: 6px;
+   422→    text-transform: uppercase;
+   423→    letter-spacing: 0.5px;
+   424→}
+   425→.arch-layer-frontend .arch-label { color: #064e3b; }
+   426→.arch-layer-api .arch-label { color: #92400e; }
+   427→.arch-layer-data .arch-label { color: #3730a3; }
+   428→.arch-layer-infra .arch-label { color: #334155; }
+   429→.arch-items {
+   430→    display: flex;
+   431→    flex-wrap: wrap;
+   432→    gap: 6px;
+   433→}
+   434→.arch-item {
+   435→    background: rgba(255,255,255,0.7);
+   436→    padding: 4px 10px;
+   437→    border-radius: 6px;
+   438→    font-size: 10px;
+   439→    font-weight: 500;
+   440→}
+   441→</style>
+   442→</head>
+   443→<body>
+   444→
+   445→<!-- ====== COVER PAGE ====== -->
+   446→<div class="cover">
+   447→    <div class="cover-badge">Dokumen Teknis</div>
+   448→    <h1 style="margin-top: 16px;">Draft Skema dan Catatan Teknis Operasional</h1>
+   449→    <h2 style="margin-top: 44px;">Sistem Informasi Pencatatan Nama Bayi Baru Lahir</h2>
+   450→    <p class="subtitle" style="margin-top: 16px;">Dinas Kependudukan dan Pencatatan Sipil Kabupaten Ngada,<br>Provinsi Nusa Tenggara Timur</p>
+   451→    <div style="height: 48px;"></div>
+   452→    <p class="subtitle" style="font-size: 12px; opacity: 0.7;">Bukti Dukung Laporan<br>Draft Teknis Versi 1.0</p>
+   453→    <div class="cover-footer">
+   454→        Disusun sebagai bahan pelengkap dokumen laporan resmi<br>
+   455→        Dokumen ini bersifat rahasia dan hanya untuk keperluan internal instansi
+   456→    </div>
+   457→</div>
+   458→
+   459→<!-- ====== MAIN CONTENT ====== -->
+   460→<div class="main-content">
+   461→
+   462→    <!-- BAB 1 -->
+   463→    <div class="chapter-header">
+   464→        <div class="chapter-number">BAB 1</div>
+   465→        <div class="chapter-title">Pendahuluan</div>
+   466→        <div class="chapter-divider"></div>
+   467→    </div>
+   468→
+   469→    <div class="body-text">
+   470→        Dokumen ini menyajikan draft skema teknis dan catatan operasional dari Sistem Informasi Pencatatan Nama Bayi Baru Lahir yang dikembangkan untuk mendukung operasional Dinas Kependudukan dan Pencatatan Sipil (Disdukcapil) Kabupaten Ngada, Provinsi Nusa Tenggara Timur. Sistem ini dirancang untuk mengoptimalkan proses pencatatan kelahiran yang melibatkan tiga pihak utama, yaitu Puskesmas sebagai penyedia data awal, Disdukcapil sebagai verifikator dan penerbit NIK, serta BPJS Kesehatan sebagai pengakses data NIK bayi untuk keperluan jaminan kesehatan nasional.
+   471→    </div>
+   472→    <div class="body-text">
+   473→        Tujuan utama penyusunan dokumen ini adalah memberikan gambaran menyeluruh mengenai arsitektur teknis, skema basis data, spesifikasi antarmuka pemrograman aplikasi (API), mekanisme keamanan, serta catatan operasional yang diperlukan sebagai bahan pertimbangan dalam pengambilan keputusan terkait pengembangan, pemeliharaan, dan pengelolaan sistem secara berkelanjutan. Dokumen ini disusun berdasarkan analisis langsung terhadap kode sumber dan konfigurasi sistem yang telah diimplementasikan.
+   474→    </div>
+   475→    <div class="body-text">
+   476→        Sistem dibangun menggunakan arsitektur modern berbasis web dengan teknologi Next.js 16 sebagai framework utama, PostgreSQL (Supabase) sebagai basis data produksi, serta di-deploy pada platform Vercel sebagai infrastruktur serverless. Desain sistem mengadopsi pola soft-delete, role-based access control (RBAC), dan audit logging yang komprehensif untuk menjaga integritas dan akuntabilitas data.
+   477→    </div>
+   478→
+   479→    <div class="sub-title">1.1 Ruang Lingkup Dokumen</div>
+   480→    <div class="body-text">Dokumen ini mencakup aspek-aspek teknis berikut:</div>
+   481→    <ul>
+   482→        <li>Arsitektur sistem dan teknologi yang digunakan</li>
+   483→        <li>Skema basis data relasional beserta relasi antar entitas</li>
+   484→        <li>Spesifikasi API endpoint yang tersedia</li>
+   485→        <li>Mekanisme autentikasi, otorisasi, dan keamanan data</li>
+   486→        <li>Proses bisnis dan alur kerja sistem</li>
+   487→        <li>Catatan operasional dan prosedur deployment</li>
+   488→        <li>Infrastruktur hosting dan konfigurasi lingkungan</li>
+   489→    </ul>
+   490→
+   491→    <!-- BAB 2 -->
+   492→    <div class="chapter-header">
+   493→        <div class="chapter-number">BAB 2</div>
+   494→        <div class="chapter-title">Arsitektur Sistem</div>
+   495→        <div class="chapter-divider"></div>
+   496→    </div>
+   497→
+   498→    <div class="sub-title">2.1 Gambaran Umum Arsitektur</div>
+   499→    <div class="body-text">
+   500→        Sistem ini menggunakan arsitektur three-tier yang terdiri dari laporan presentasi (frontend), lapisan logika bisnis (API routes), dan lapisan data (database). Seluruh komponen diintegrasikan dalam satu monorepo Next.js yang memanfaatkan fitur App Router untuk routing dan React Server Components untuk optimalisasi performa. Berikut adalah representasi arsitektur berlapis dari sistem ini:
+   501→    </div>
+   502→
+   503→    <div class="diagram-box">
+   504→        <div class="diagram-title">Arsitektur Berlapis Sistem</div>
+   505→        <div class="arch-layer arch-layer-frontend">
+   506→            <div class="arch-label">Lapisan Presentasi (Frontend)</div>
+   507→            <div class="arch-items">
+   508→                <div class="arch-item">Next.js 16 App Router</div>
+   509→                <div class="arch-item">React 19</div>
+   510→                <div class="arch-item">TypeScript 5</div>
+   511→                <div class="arch-item">Tailwind CSS 4</div>
+   512→                <div class="arch-item">shadcn/ui</div>
+   513→                <div class="arch-item">Recharts</div>
+   514→                <div class="arch-item">next-themes</div>
+   515→                <div class="arch-item">Zustand</div>
+   516→                <div class="arch-item">TanStack Query</div>
+   517→            </div>
+   518→        </div>
+   519→        <div style="text-align:center; color: var(--c-text-secondary); font-size: 18px; margin: 4px 0;">&#9660;</div>
+   520→        <div class="arch-layer arch-layer-api">
+   521→            <div class="arch-label">Lapisan Logika Bisnis (API Routes)</div>
+   522→            <div class="arch-items">
+   523→                <div class="arch-item">NextAuth.js v4 (JWT)</div>
+   524→                <div class="arch-item">Prisma ORM v6</div>
+   525→                <div class="arch-item">Zod Validation</div>
+   526→                <div class="arch-item">bcryptjs</div>
+   527→                <div class="arch-item">SheetJS (xlsx)</div>
+   528→                <div class="arch-item">sharp</div>
+   529→            </div>
+   530→        </div>
+   531→        <div style="text-align:center; color: var(--c-text-secondary); font-size: 18px; margin: 4px 0;">&#9660;</div>
+   532→        <div class="arch-layer arch-layer-data">
+   533→            <div class="arch-label">Lapisan Data</div>
+   534→            <div class="arch-items">
+   535→                <div class="arch-item">PostgreSQL (Supabase)</div>
+   536→                <div class="arch-item">Prisma Client</div>
+   537→                <div class="arch-item">pg (direct pool)</div>
+   538→                <div class="arch-item">Schema Sync Engine</div>
+   539→            </div>
+   540→        </div>
+   541→        <div style="text-align:center; color: var(--c-text-secondary); font-size: 18px; margin: 4px 0;">&#9660;</div>
+   542→        <div class="arch-layer arch-layer-infra">
+   543→            <div class="arch-label">Infrastruktur</div>
+   544→            <div class="arch-items">
+   545→                <div class="arch-item">Vercel Serverless</div>
+   546→                <div class="arch-item">Supabase Cloud</div>
+   547→                <div class="arch-item">Caddy Reverse Proxy</div>
+   548→            </div>
+   549→        </div>
+   550→    </div>
+   551→
+   552→    <div class="sub-title">2.2 Teknologi Utama</div>
+   553→    <div class="table-wrapper">
+   554→        <table>
+   555→            <thead>
+   556→                <tr>
+   557→                    <th>Komponen</th>
+   558→                    <th>Teknologi</th>
+   559→                    <th>Versi</th>
+   560→                    <th>Fungsi</th>
+   561→                </tr>
+   562→            </thead>
+   563→            <tbody>
+   564→                <tr><td>Framework</td><td>Next.js</td><td>16.1.1</td><td>Full-stack web framework dengan App Router dan RSC</td></tr>
+   565→                <tr><td>Bahasa</td><td>TypeScript</td><td>5.x</td><td>Type safety pada seluruh lapisan aplikasi</td></tr>
+   566→                <tr><td>UI Library</td><td>React</td><td>19.0</td><td>Komponen UI deklaratif dengan hooks</td></tr>
+   567→                <tr><td>Styling</td><td>Tailwind CSS</td><td>4.x</td><td>Utility-first CSS framework</td></tr>
+   568→                <tr><td>Komponen UI</td><td>shadcn/ui</td><td>Latest</td><td>Komponen UI aksesibel (Radix UI primitives)</td></tr>
+   569→                <tr><td>ORM</td><td>Prisma</td><td>6.11.1</td><td>Object-Relational Mapping untuk database</td></tr>
+   570→                <tr><td>Database</td><td>PostgreSQL</td><td>-</td><td>Relational database (hosting Supabase)</td></tr>
+   571→                <tr><td>Autentikasi</td><td>NextAuth.js</td><td>4.24.11</td><td>JWT-based session management</td></tr>
+   572→                <tr><td>Validasi</td><td>Zod</td><td>4.0.2</td><td>Schema validation untuk input data</td></tr>
+   573→                <tr><td>Grafik</td><td>Recharts</td><td>2.15.4</td><td>Komponen visualisasi data (chart)</td></tr>
+   574→                <tr><td>Excel</td><td>SheetJS (xlsx)</td><td>0.18.5</td><td>Import/export data format Excel</td></tr>
+   575→                <tr><td>State</td><td>Zustand</td><td>Latest</td><td>Client-side state management</td></tr>
+   576→                <tr><td>Server State</td><td>TanStack Query</td><td>5.82.0</td><td>Data fetching, caching, dan synchronization</td></tr>
+   577→            </tbody>
+   578→        </table>
+   579→    </div>
+   580→
+   581→    <div class="sub-title">2.3 Pola Desain Sistem</div>
+   582→    <div class="body-text">
+   583→        Sistem ini mengadopsi beberapa pola desain (design pattern) yang telah terbukti efektif dalam pengembangan aplikasi web modern. Pertama, pola <strong>Serverless Functions</strong> digunakan melalui Vercel deployment di mana setiap API route berjalan sebagai fungsi serverless yang independent, memungkinkan scaling otomatis berdasarkan beban permintaan. Kedua, pola <strong>Soft Delete</strong> diterapkan pada tabel birth_records dengan kolom is_deleted, sehingga data yang dihapus tidak benar-benar hilang dari database namun ditandai sebagai tidak aktif, menjaga traceability data untuk keperluan audit. Ketiga, pola <strong>Schema Synchronization</strong> yang unik digunakan untuk mengelola evolusi skema database secara runtime tanpa perlu menjalankan migration tradisional, menggunakan direct PostgreSQL connection untuk menambahkan kolom secara idempotent.
+   584→    </div>
+   585→
+   586→    <!-- BAB 3 -->
+   587→    <div class="chapter-header">
+   588→        <div class="chapter-number">BAB 3</div>
+   589→        <div class="chapter-title">Skema Basis Data</div>
+   590→        <div class="chapter-divider"></div>
+   591→    </div>
+   592→
+   593→    <div class="sub-title">3.1 Gambaran Relasional</div>
+   594→    <div class="body-text">
+   595→        Basis data sistem menggunakan PostgreSQL yang di-hosting pada layanan Supabase Cloud. Skema terdiri dari 6 tabel utama yang saling berelasi melalui foreign key constraints. Desain normalisasi mencapai bentuk normal ketiga (3NF) dengan pemisahan yang jelas antara entitas pengguna, entitas fasilitas kesehatan, entitas data kelahiran, entitas berkas pendukung, entitas log audit, dan entitas pengaduan. Berikut adalah diagram relasi antar entitas secara konseptual:
+   596→    </div>
+   597→
+   598→    <div class="flow-diagram" style="flex-direction: column; align-items: flex-start; gap: 10px;">
+   599→        <div style="display: flex; flex-wrap: wrap; gap: 8px; width: 100%;">
+   600→            <div class="flow-box" style="background: #064e3b;">Puskesmas</div>
+   601→            <span class="flow-arrow">1:N</span>
+   602→            <div class="flow-box">BirthRecord</div>
+   603→            <span class="flow-arrow">1:N</span>
+   604→            <div class="flow-box" style="background: #92400e;">BirthRecordFile</div>
+   605→        </div>
+   606→        <div style="display: flex; flex-wrap: wrap; gap: 8px; width: 100%;">
+   607→            <div class="flow-box" style="background: #3730a3;">User</div>
+   608→            <span class="flow-arrow">1:N</span>
+   609→            <div class="flow-box">BirthRecord</div>
+   610→            <span class="flow-arrow" style="font-size: 11px;">(created / verified)</span>
+   611→        </div>
+   612→        <div style="display: flex; flex-wrap: wrap; gap: 8px; width: 100%;">
+   613→            <div class="flow-box" style="background: #3730a3;">User</div>
+   614→            <span class="flow-arrow">1:N</span>
+   615→            <div class="flow-box">AuditLog</div>
+   616→        </div>
+   617→        <div style="display: flex; flex-wrap: wrap; gap: 8px; width: 100%;">
+   618→            <div class="flow-box" style="background: #3730a3;">User</div>
+   619→            <span class="flow-arrow">1:N</span>
+   620→            <div class="flow-box">Pengaduan</div>
+   621→        </div>
+   622→    </div>
+   623→
+   624→    <div class="sub-title">3.2 Detail Tabel: puskesmas</div>
+   625→    <div class="body-text">Tabel ini menyimpan data fasilitas kesehatan (Puskesmas) yang beroperasi di wilayah Kabupaten Ngada. Setiap Puskesmas memiliki kode wilayah unik yang digunakan untuk identifikasi administratif. Terdapat 25 Puskesmas yang terdaftar dalam sistem, mencakup seluruh wilayah kecamatan di Kabupaten Ngada dengan kode wilayah 530601 hingga 530625.</div>
+   626→    <div class="table-wrapper">
+   627→        <table>
+   628→            <thead><tr><th>Kolom</th><th>Tipe Data</th><th>Constraint</th><th>Keterangan</th></tr></thead>
+   629→            <tbody>
+   630→                <tr><td>id</td><td>TEXT (cuid)</td><td>PRIMARY KEY</td><td>Identifier unik</td></tr>
+   631→                <tr><td>nama</td><td>VARCHAR(150)</td><td>NOT NULL</td><td>Nama Puskesmas</td></tr>
+   632→                <tr><td>kode_wilayah</td><td>VARCHAR(10)</td><td>NOT NULL</td><td>Kode wilayah administratif</td></tr>
+   633→                <tr><td>alamat</td><td>TEXT</td><td>NULLABLE</td><td>Alamat lengkap</td></tr>
+   634→                <tr><td>telepon</td><td>VARCHAR(20)</td><td>NULLABLE</td><td>Nomor telepon</td></tr>
+   635→                <tr><td>created_at</td><td>TIMESTAMP(3)</td><td>DEFAULT now()</td><td>Waktu pembuatan</td></tr>
+   636→                <tr><td>updated_at</td><td>TIMESTAMP(3)</td><td>DEFAULT now()</td><td>Waktu terakhir diperbarui</td></tr>
+   637→            </tbody>
+   638→        </table>
+   639→    </div>
+   640→
+   641→    <div class="sub-title">3.3 Detail Tabel: users</div>
+   642→    <div class="body-text">Tabel ini menyimpan data seluruh pengguna sistem yang terdiri dari tiga peran: ADMIN (Admin Dukcapil), OPERATOR (Operator Puskesmas), dan BPJS (Petugas BPJS Kesehatan). Setiap pengguna dihubungkan ke Puskesmas tertentu melalui relasi opsional puskesmas_id, kecuali Admin Dukcapil dan BPJS yang tidak terikat pada Puskesmas tertentu.</div>
+   643→    <div class="table-wrapper">
+   644→        <table>
+   645→            <thead><tr><th>Kolom</th><th>Tipe Data</th><th>Constraint</th><th>Keterangan</th></tr></thead>
+   646→            <tbody>
+   647→                <tr><td>id</td><td>TEXT (cuid)</td><td>PRIMARY KEY</td><td>Identifier unik</td></tr>
+   648→                <tr><td>username</td><td>VARCHAR(50)</td><td>UNIQUE, NOT NULL</td><td>Username untuk login</td></tr>
+   649→                <tr><td>password</td><td>VARCHAR(255)</td><td>NOT NULL</td><td>Password (bcrypt hash, 10 salt rounds)</td></tr>
+   650→                <tr><td>nama_lengkap</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>Nama lengkap pengguna</td></tr>
+   651→                <tr><td>role</td><td>VARCHAR(20)</td><td>NOT NULL</td><td>Peran: ADMIN / OPERATOR / BPJS</td></tr>
+   652→                <tr><td>is_active</td><td>BOOLEAN</td><td>DEFAULT true</td><td>Status akun aktif/nonaktif</td></tr>
+   653→                <tr><td>puskesmas_id</td><td>TEXT</td><td>FK, NULLABLE</td><td>Relasi ke tabel puskesmas</td></tr>
+   654→                <tr><td>created_at</td><td>TIMESTAMP(3)</td><td>DEFAULT now()</td><td>Waktu pembuatan akun</td></tr>
+   655→                <tr><td>updated_at</td><td>TIMESTAMP(3)</td><td>DEFAULT now()</td><td>Waktu terakhir diperbarui</td></tr>
+   656→            </tbody>
+   657→        </table>
+   658→    </div>
+   659→    <div class="callout">
+   660→        <div class="callout-label">Indeks</div>
+   661→        <div>username (UNIQUE), role, relasi FK ke puskesmas (ON DELETE SET NULL)</div>
+   662→    </div>
+   663→
+   664→    <div class="sub-title">3.4 Detail Tabel: birth_records</div>
+   665→    <div class="body-text">Tabel ini merupakan inti dari sistem yang menyimpan seluruh data pencatatan kelahiran bayi baru lahir. Setiap record merepresentasikan satu kelahiran yang dicatat oleh Operator Puskesmas, kemudian diverifikasi oleh Admin Dukcapil, dan akhirnya diberikan NIK bayi. Tabel ini memiliki 17 kolom data yang mencakup informasi identitas orang tua, data bayi, status verifikasi, serta metadata operasional seperti waktu download dan waktu pemberian NIK.</div>
+   666→    <div class="table-wrapper">
+   667→        <table>
+   668→            <thead><tr><th>Kolom</th><th>Tipe Data</th><th>Constraint</th><th>Keterangan</th></tr></thead>
+   669→            <tbody>
+   670→                <tr><td>id</td><td>TEXT (cuid)</td><td>PRIMARY KEY</td><td>Identifier unik record</td></tr>
+   671→                <tr><td>nik_ibu</td><td>VARCHAR(16)</td><td>NOT NULL</td><td>NIK ibu (16 digit)</td></tr>
+   672→                <tr><td>nama_ibu</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>Nama lengkap ibu (otomatis UPPERCASE)</td></tr>
+   673→                <tr><td>nama_ayah</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>Nama lengkap ayah (otomatis UPPERCASE)</td></tr>
+   674→                <tr><td>nama_bayi</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>Nama bayi (otomatis UPPERCASE)</td></tr>
+   675→                <tr><td>nik_bayi</td><td>VARCHAR(16)</td><td>NULLABLE</td><td>NIK bayi, diisi oleh Admin</td></tr>
+   676→                <tr><td>tanggal_lahir</td><td>TIMESTAMP(3)</td><td>NOT NULL</td><td>Tanggal kelahiran bayi</td></tr>
+   677→                <tr><td>tempat_lahir</td><td>VARCHAR(150)</td><td>NOT NULL</td><td>Tempat kelahiran</td></tr>
+   678→                <tr><td>jenis_kelamin</td><td>VARCHAR(15)</td><td>NOT NULL</td><td>LAKI-LAKI / PEREMPUAN</td></tr>
+   679→                <tr><td>berat_badan</td><td>DOUBLE PRECISION</td><td>NULLABLE</td><td>Berat badan bayi (gram)</td></tr>
+   680→                <tr><td>panjang_badan</td><td>DOUBLE PRECISION</td><td>NULLABLE</td><td>Panjang badan bayi (cm)</td></tr>
+   681→                <tr><td>no_hp</td><td>VARCHAR(20)</td><td>NULLABLE</td><td>Nomor HP orang tua</td></tr>
+   682→                <tr><td>email_ortu</td><td>VARCHAR(100)</td><td>NULLABLE</td><td>Email orang tua</td></tr>
+   683→                <tr><td>status</td><td>VARCHAR(20)</td><td>DEFAULT PENDING</td><td>PENDING / VERIFIED / REJECTED</td></tr>
+   684→                <tr><td>alasan_penolakan</td><td>TEXT</td><td>NULLABLE</td><td>Alasan penolakan (jika REJECTED)</td></tr>
+   685→                <tr><td>is_deleted</td><td>BOOLEAN</td><td>DEFAULT false</td><td>Soft delete marker</td></tr>
+   686→                <tr><td>puskesmas_id</td><td>TEXT</td><td>FK, NOT NULL</td><td>Relasi ke puskesmas (ON DELETE CASCADE)</td></tr>
+   687→                <tr><td>created_by</td><td>TEXT</td><td>FK, NOT NULL</td><td>User yang membuat record</td></tr>
+   688→                <tr><td>verified_by</td><td>TEXT</td><td>FK, NULLABLE</td><td>Admin yang memverifikasi</td></tr>
+   689→                <tr><td>verified_at</td><td>TIMESTAMP(3)</td><td>NULLABLE</td><td>Waktu verifikasi</td></tr>
+   690→                <tr><td>nik_bayi_updated_at</td><td>TIMESTAMP(3)</td><td>NULLABLE</td><td>Waktu NIK bayi diperbarui</td></tr>
+   691→                <tr><td>downloaded_at</td><td>TIMESTAMP(3)</td><td>NULLABLE</td><td>Waktu data didownload Admin</td></tr>
+   692→                <tr><td>created_at</td><td>TIMESTAMP(3)</td><td>DEFAULT now()</td><td>Waktu pembuatan record</td></tr>
+   693→                <tr><td>updated_at</td><td>TIMESTAMP(3)</td><td>DEFAULT now()</td><td>Waktu terakhir diperbarui</td></tr>
+   694→            </tbody>
+   695→        </table>
+   696→    </div>
+   697→    <div class="callout">
+   698→        <div class="callout-label">Indeks dan Relasi</div>
+   699→        <div>Indeks: puskesmas_id, status, tanggal_lahir, created_at. Relasi: FK ke puskesmas (CASCADE), FK ke users sebagai creator (CASCADE), FK ke users sebagai verifier (SET NULL).</div>
+   700→    </div>
+   701→
+   702→    <div class="sub-title">3.5 Detail Tabel: birth_record_files</div>
+   703→    <div class="body-text">Tabel ini menyimpan berkas pendukung kelahiran yang diunggah oleh Operator Puskesmas. Setiap record kelahiran dapat memiliki dua jenis berkas: Surat Keterangan Lahir (SKL) dari Puskesmas dan Kartu Keluarga (KK) dari keluarga. Berkas disimpan dalam format base64-encoded string langsung di kolom file_data pada database, tanpa menggunakan layanan penyimpanan eksternal seperti S3 atau Google Cloud Storage. Pendekatan ini dipilih untuk menyederhanakan arsitektur dan menghindari ketergantungan pada layanan pihak ketiga, meskipun memiliki implikasi terhadap ukuran database.</div>
+   704→    <div class="table-wrapper">
+   705→        <table>
+   706→            <thead><tr><th>Kolom</th><th>Tipe Data</th><th>Constraint</th><th>Keterangan</th></tr></thead>
+   707→            <tbody>
+   708→                <tr><td>id</td><td>TEXT (cuid)</td><td>PRIMARY KEY</td><td>Identifier unik berkas</td></tr>
+   709→                <tr><td>birth_record_id</td><td>TEXT</td><td>FK, NOT NULL</td><td>Relasi ke birth_records (CASCADE)</td></tr>
+   710→                <tr><td>file_type</td><td>VARCHAR(30)</td><td>NOT NULL</td><td>SURAT_KELAHIRAN / KARTU_KELUARGA</td></tr>
+   711→                <tr><td>file_name</td><td>VARCHAR(255)</td><td>NOT NULL</td><td>Nama asli berkas</td></tr>
+   712→                <tr><td>file_mime</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>Tipe MIME (image/*, application/pdf)</td></tr>
+   713→                <tr><td>file_size</td><td>INTEGER</td><td>NOT NULL</td><td>Ukuran berkas dalam bytes (maks 5MB)</td></tr>
+   714→                <tr><td>file_data</td><td>TEXT</td><td>NOT NULL</td><td>Isi berkas (base64 encoded)</td></tr>
+   715→                <tr><td>uploaded_by</td><td>TEXT</td><td>FK, NOT NULL</td><td>User yang mengunggah (CASCADE)</td></tr>
+   716→                <tr><td>created_at</td><td>TIMESTAMP(3)</td><td>DEFAULT now()</td><td>Waktu unggah</td></tr>
+   717→            </tbody>
+   718→        </table>
+   719→    </div>
+   720→
+   721→    <div class="sub-title">3.6 Detail Tabel: audit_logs</div>
+   722→    <div class="body-text">Tabel ini mencatat seluruh aktivitas pengguna dalam sistem sebagai dasar audit trail. Setiap aksi penting seperti login, logout, pembuatan data, verifikasi, penolakan, ekspor, dan penghapusan dicatat secara otomatis. Sistem menggunakan pola fire-and-forget pada pencatatan log, artinya proses logging tidak memblokir respons API sehingga tidak mempengaruhi performa respons terhadap pengguna.</div>
+   723→    <div class="table-wrapper">
+   724→        <table>
+   725→            <thead><tr><th>Kolom</th><th>Tipe Data</th><th>Constraint</th><th>Keterangan</th></tr></thead>
+   726→            <tbody>
+   727→                <tr><td>id</td><td>TEXT (cuid)</td><td>PRIMARY KEY</td><td>Identifier unik log</td></tr>
+   728→                <tr><td>user_id</td><td>TEXT</td><td>FK, NOT NULL</td><td>Pengguna yang melakukan aksi</td></tr>
+   729→                <tr><td>action</td><td>VARCHAR(20)</td><td>NOT NULL</td><td>LOGIN, LOGOUT, CREATE, UPDATE, DELETE, VERIFY, REJECT, EXPORT, VIEW</td></tr>
+   730→                <tr><td>entity</td><td>VARCHAR(50)</td><td>NOT NULL</td><td>BirthRecord, User, Puskesmas, Auth, Pengaduan, System</td></tr>
+   731→                <tr><td>entity_id</td><td>TEXT</td><td>NULLABLE</td><td>ID entitas yang terkait</td></tr>
+   732→                <tr><td>details</td><td>TEXT</td><td>NULLABLE</td><td>Detail tambahan (JSON string)</td></tr>
+   733→                <tr><td>ip_address</td><td>VARCHAR(45)</td><td>NULLABLE</td><td>Alamat IP klien (mendukung IPv6)</td></tr>
+   734→                <tr><td>user_agent</td><td>VARCHAR(500)</td><td>NULLABLE</td><td>User agent browser klien</td></tr>
+   735→                <tr><td>created_at</td><td>TIMESTAMP(3)</td><td>DEFAULT now()</td><td>Waktu pencatatan</td></tr>
+   736→            </tbody>
+   737→        </table>
+   738→    </div>
+   739→
+   740→    <div class="sub-title">3.7 Detail Tabel: pengaduan</div>
+   741→    <div class="body-text">Tabel ini menyimpan data pengaduan atau keluhan yang disampaikan oleh Operator Puskesmas kepada Admin Dukcapil. Sistem pengaduan mendukung empat kategori masalah (SISTEM, DATA, PROSES, LAINNYA), tiga level prioritas (RENDAH, SEDANG, TINGGI), dan empat tahap status (TERBUKA, DIPROSES, SELESAI, DITUTUP). Ketika Admin memberikan balasan terhadap pengaduan dengan status TERBUKA, sistem secara otomatis mengubah status menjadi DIPROSES.</div>
+   742→    <div class="table-wrapper">
+   743→        <table>
+   744→            <thead><tr><th>Kolom</th><th>Tipe Data</th><th>Constraint</th><th>Keterangan</th></tr></thead>
+   745→            <tbody>
+   746→                <tr><td>id</td><td>TEXT (cuid)</td><td>PRIMARY KEY</td><td>Identifier unik pengaduan</td></tr>
+   747→                <tr><td>user_id</td><td>TEXT</td><td>FK, NOT NULL</td><td>Operator yang membuat pengaduan</td></tr>
+   748→                <tr><td>subjek</td><td>VARCHAR(200)</td><td>NOT NULL</td><td>Subjek pengaduan (5-200 karakter)</td></tr>
+   749→                <tr><td>pesan</td><td>TEXT</td><td>NOT NULL</td><td>Isi pengaduan (min 10 karakter)</td></tr>
+   750→                <tr><td>kategori</td><td>VARCHAR(30)</td><td>NOT NULL</td><td>SISTEM / DATA / PROSES / LAINNYA</td></tr>
+   751→                <tr><td>prioritas</td><td>VARCHAR(15)</td><td>DEFAULT SEDANG</td><td>RENDAH / SEDANG / TINGGI</td></tr>
+   752→                <tr><td>status</td><td>VARCHAR(20)</td><td>DEFAULT TERBUKA</td><td>TERBUKA / DIPROSES / SELESAI / DITUTUP</td></tr>
+   753→                <tr><td>balasan</td><td>TEXT</td><td>NULLABLE</td><td>Balasan dari Admin</td></tr>
+   754→                <tr><td>balasan_oleh</td><td>TEXT</td><td>NULLABLE</td><td>ID Admin yang membalas</td></tr>
+   755→                <tr><td>balasan_pada</td><td>TIMESTAMP(3)</td><td>NULLABLE</td><td>Waktu balasan diberikan</td></tr>
+   756→                <tr><td>created_at</td><td>TIMESTAMP(3)</td><td>DEFAULT now()</td><td>Waktu pembuatan</td></tr>
+   757→                <tr><td>updated_at</td><td>TIMESTAMP(3)</td><td>DEFAULT now()</td><td>Waktu terakhir diperbarui</td></tr>
+   758→            </tbody>
+   759→        </table>
+   760→    </div>
+   761→
+   762→    <!-- BAB 4 -->
+   763→    <div class="chapter-header">
+   764→        <div class="chapter-number">BAB 4</div>
+   765→        <div class="chapter-title">Spesifikasi API dan Proses Bisnis</div>
+   766→        <div class="chapter-divider"></div>
+   767→    </div>
+   768→
+   769→    <div class="sub-title">4.1 Struktur Endpoint API</div>
+   770→    <div class="body-text">
+   771→        Sistem menyediakan lebih dari 55 endpoint API yang terorganisir dalam 4 grup utama berdasarkan peran pengguna. Setiap endpoint dilindungi oleh autentikasi JWT dan otorisasi berbasis peran. Berikut adalah ringkasan struktur endpoint API berdasarkan grup fungsional:
+   772→    </div>
+   773→    <div class="table-wrapper">
+   774→        <table>
+   775→            <thead><tr><th>Grup</th><th>Jumlah Endpoint</th><th>Peran Akses</th><th>Fungsi Utama</th></tr></thead>
+   776→            <tbody>
+   777→                <tr><td>/api/auth/*</td><td>4</td><td>Semua pengguna</td><td>Login, logout, profil, ganti password</td></tr>
+   778→                <tr><td>/api/admin/*</td><td>28</td><td>ADMIN</td><td>Dashboard, verifikasi, kelola user, puskesmas, NIK, audit, analitik, pengaduan, ekspor</td></tr>
+   779→                <tr><td>/api/operator/*</td><td>11</td><td>OPERATOR</td><td>Input data, riwayat, unggah berkas, import Excel, pengaduan, ekspor</td></tr>
+   780→                <tr><td>/api/bpjs/*</td><td>3</td><td>BPJS</td><td>Lihat data dengan NIK, statistik, ekspor</td></tr>
+   781→                <tr><td>/api/setup + /api/seed</td><td>2</td><td>Super Admin</td><td>Setup database awal dan seeder data</td></tr>
+   782→            </tbody>
+   783→        </table>
+   784→    </div>
+   785→
+   786→    <div class="sub-title">4.2 Alur Bisnis Utama</div>
+   787→    <div class="body-text">
+   788→        Alur bisnis sistem mengikuti proses pencatatan kelahiran yang melibatkan tiga pihak utama. Berikut adalah alur kerja utama dari input data hingga penerbitan NIK:
+   789→    </div>
+   790→    <div class="diagram-box">
+   791→        <div class="diagram-title">Alur Bisnis Pencatatan Kelahiran</div>
+   792→        <div class="flow-diagram">
+   793→            <div class="flow-box">Operator Input Data</div>
+   794→            <span class="flow-arrow">&#8594;</span>
+   795→            <div class="flow-box">Unggah SKL + KK</div>
+   796→            <span class="flow-arrow">&#8594;</span>
+   797→            <div class="flow-box">Status: PENDING</div>
+   798→        </div>
+   799→        <div style="text-align: center; color: var(--c-text-secondary); font-size: 16px; margin: 6px 0;">&#9660;</div>
+   800→        <div class="flow-diagram">
+   801→            <div class="flow-box">Admin Review Data</div>
+   802→            <span class="flow-arrow">&#8594;</span>
+   803→            <div class="flow-box">Verifikasi / Tolak</div>
+   804→            <span class="flow-arrow">&#8594;</span>
+   805→            <div class="flow-box">Status: VERIFIED</div>
+   806→        </div>
+   807→        <div style="text-align: center; color: var(--c-text-secondary); font-size: 16px; margin: 6px 0;">&#9660;</div>
+   808→        <div class="flow-diagram">
+   809→            <div class="flow-box">Admin Isi NIK Bayi</div>
+   810→            <span class="flow-arrow">&#8594;</span>
+   811→            <div class="flow-box">Download Data Baru</div>
+   812→            <span class="flow-arrow">&#8594;</span>
+   813→            <div class="flow-box">BPJS Akses NIK</div>
+   814→        </div>
+   815→    </div>
+   816→
+   817→    <div class="sub-title">4.3 Detail Endpoint API Penting</div>
+   818→
+   819→    <div class="sub-sub-title">4.3.1 Endpoint Autentikasi</div>
+   820→    <div class="table-wrapper">
+   821→        <table>
+   822→            <thead><tr><th>Method</th><th>Endpoint</th><th>Deskripsi</th><th>Input</th></tr></thead>
+   823→            <tbody>
+   824→                <tr><td>POST</td><td>/api/auth/[...nextauth]</td><td>Login dan session management</td><td>username, password</td></tr>
+   825→                <tr><td>POST</td><td>/api/auth/change-password</td><td>Ubah password pengguna</td><td>currentPassword, newPassword (min 8 char)</td></tr>
+   826→                <tr><td>GET</td><td>/api/auth/profile</td><td>Ambil data profil pengguna</td><td>-</td></tr>
+   827→                <tr><td>PUT</td><td>/api/auth/profile</td><td>Update nama lengkap</td><td>namaLengkap (3-100 char)</td></tr>
+   828→                <tr><td>GET</td><td>/api/auth/activity</td><td>5 aktivitas terakhir pengguna</td><td>-</td></tr>
+   829→            </tbody>
+   830→        </table>
+   831→    </div>
+   832→
+   833→    <div class="sub-sub-title">4.3.2 Endpoint Admin (Pencatatan Kelahiran)</div>
+   834→    <div class="table-wrapper">
+   835→        <table>
+   836→            <thead><tr><th>Method</th><th>Endpoint</th><th>Deskripsi</th></tr></thead>
+   837→            <tbody>
+   838→                <tr><td>GET</td><td>/api/admin/stats</td><td>Statistik dashboard: total, pending, verified, rejected, NIK status</td></tr>
+   839→                <tr><td>GET</td><td>/api/admin/birth-records</td><td>Daftar semua record dengan filter, sort, paginasi</td></tr>
+   840→                <tr><td>POST</td><td>/api/admin/birth-records/[id]/verify</td><td>Verifikasi satu record (PENDING ke VERIFIED)</td></tr>
+   841→                <tr><td>POST</td><td>/api/admin/birth-records/[id]/reject</td><td>Tolak record dengan alasan (min 5 char)</td></tr>
+   842→                <tr><td>POST</td><td>/api/admin/birth-records/verify-all</td><td>Verifikasi semua record pending sekaligus</td></tr>
+   843→                <tr><td>GET</td><td>/api/admin/birth-records/[id]/files</td><td>Daftar berkas suatu record</td></tr>
+   844→                <tr><td>GET</td><td>/api/admin/birth-records/[id]/files/[fid]/download</td><td>Download berkas biner</td></tr>
+   845→                <tr><td>GET</td><td>/api/admin/download-new</td><td>Download data baru (XLSX) + auto-verifikasi</td></tr>
+   846→                <tr><td>GET</td><td>/api/admin/download-register</td><td>Download register yang sudah didownload</td></tr>
+   847→                <tr><td>GET</td><td>/api/admin/register</td><td>Download seluruh register non-deleted</td></tr>
+   848→            </tbody>
+   849→        </table>
+   850→    </div>
+   851→
+   852→    <div class="sub-sub-title">4.3.3 Endpoint Operator</div>
+   853→    <div class="table-wrapper">
+   854→        <table>
+   855→            <thead><tr><th>Method</th><th>Endpoint</th><th>Deskripsi</th></tr></thead>
+   856→            <tbody>
+   857→                <tr><td>GET</td><td>/api/operator/stats</td><td>Statistik Puskesmas: total bulan ini, verified, all-time, NIK</td></tr>
+   858→                <tr><td>POST</td><td>/api/operator/birth-records</td><td>Input data kelahiran baru (Zod validated)</td></tr>
+   859→                <tr><td>GET</td><td>/api/operator/birth-records</td><td>Daftar record Puskesmas dengan filter dan sort</td></tr>
+   860→                <tr><td>PUT</td><td>/api/operator/birth-records/[id]</td><td>Edit data (hanya field tertentu, belum didownload)</td></tr>
+   861→                <tr><td>DELETE</td><td>/api/operator/birth-records/[id]</td><td>Soft delete (is_deleted = true)</td></tr>
+   862→                <tr><td>POST</td><td>/api/operator/birth-records/[id]/files</td><td>Unggah berkas SKL dan KK (maks 5MB)</td></tr>
+   863→                <tr><td>POST</td><td>/api/operator/birth-records/import</td><td>Import data dari file Excel (.xlsx)</td></tr>
+   864→                <tr><td>GET</td><td>/api/operator/birth-records/download</td><td>Download data Puskesmas (XLSX)</td></tr>
+   865→                <tr><td>POST</td><td>/api/operator/pengaduan</td><td>Buat pengaduan baru</td></tr>
+   866→            </tbody>
+   867→        </table>
+   868→    </div>
+   869→
+   870→    <div class="sub-sub-title">4.3.4 Endpoint BPJS Kesehatan</div>
+   871→    <div class="table-wrapper">
+   872→        <table>
+   873→            <thead><tr><th>Method</th><th>Endpoint</th><th>Deskripsi</th></tr></thead>
+   874→            <tbody>
+   875→                <tr><td>GET</td><td>/api/bpjs/records</td><td>Daftar record yang sudah memiliki NIK bayi</td></tr>
+   876→                <tr><td>GET</td><td>/api/bpjs/stats</td><td>Statistik: total records, dengan/without NIK</td></tr>
+   877→                <tr><td>GET</td><td>/api/bpjs/export</td><td>Ekspor data dengan NIK bayi (XLSX)</td></tr>
+   878→            </tbody>
+   879→        </table>
+   880→    </div>
+   881→
+   882→    <div class="sub-title">4.4 Fitur Import dan Ekspor Excel</div>
+   883→    <div class="body-text">
+   884→        Sistem menyediakan kemampuan import data kelahiran dari file Excel (.xlsx/.xls) yang sangat fleksibel. Operator dapat mengunduh template import yang telah disediakan, mengisi data sesuai format, kemudian mengunggah kembali ke sistem. Proses import menggunakan pemetaan kolom yang fleksibel, artinya sistem dapat mengenali berbagai variasi nama kolom seperti "NIK Ibu", "nikIbu", "NIK_IBU", atau "nik_ibu" sebagai kolom yang sama. Validasi dilakukan per baris dengan error reporting yang detail, termasuk deteksi NIK yang tidak valid (bukan 16 digit), format tanggal yang salah, dan nama yang terlalu pendek.
+   885→    </div>
+   886→    <div class="body-text">
+   887→        Untuk ekspor, sistem menyediakan enam varian download Excel yang masing-masing memiliki cakupan dan kegunaan berbeda: (1) Ekspor data terverifikasi oleh Admin, (2) Download data baru yang belum pernah didownload, (3) Download register yang sudah pernah didownload, (4) Download seluruh register non-deleted, (5) Download data per Puskesmas oleh Operator, dan (6) Ekspor data dengan NIK bayi oleh BPJS. Seluruh proses ekspor menggunakan library SheetJS (xlsx) untuk menghasilkan file XLSX yang kompatibel dengan Microsoft Excel dan Google Sheets.
+   888→    </div>
+   889→
+   890→    <!-- BAB 5 -->
+   891→    <div class="chapter-header">
+   892→        <div class="chapter-number">BAB 5</div>
+   893→        <div class="chapter-title">Keamanan dan Autentikasi</div>
+   894→        <div class="chapter-divider"></div>
+   895→    </div>
+   896→
+   897→    <div class="sub-title">5.1 Mekanisme Autentikasi</div>
+   898→    <div class="body-text">
+   899→        Sistem menggunakan NextAuth.js v4 dengan Credentials Provider untuk autentikasi berbasis username dan password. Mekanisme ini menghasilkan token JWT (JSON Web Token) yang disimpan sebagai cookie HTTP-only pada browser klien. Durasi sesi diatur selama 15 menit dengan mekanisme refresh otomatis setiap 5 menit melalui konfigurasi TanStack Query refetchInterval. Sebelum sesi kedaluwarsa, sistem menampilkan peringatan 2 menit sebelum timeout, memberikan kesempatan kepada pengguna untuk memperpanjang sesi tanpa kehilangan data yang belum disimpan.
+   900→    </div>
+   901→    <div class="table-wrapper">
+   902→        <table>
+   903→            <thead><tr><th>Parameter</th><th>Nilai</th><th>Keterangan</th></tr></thead>
+   904→            <tbody>
+   905→                <tr><td>Session Duration</td><td>15 menit (900 detik)</td><td>JWT maxAge setting</td></tr>
+   906→                <tr><td>Auto-Refresh</td><td>Setiap 5 menit</td><td>TanStack Query refetchInterval</td></tr>
+   907→                <tr><td>Timeout Warning</td><td>2 menit sebelum expiry</td><td>Toast notification + modal</td></tr>
+   908→                <tr><td>Password Hashing</td><td>bcryptjs (10 salt rounds)</td><td>One-way hash, tidak reversible</td></tr>
+   909→                <tr><td>Session Storage</td><td>HTTP-only cookie</td><td>Tidak bisa diakses via JavaScript</td></tr>
+   910→                <tr><td>JWT Custom Fields</td><td>id, username, role, puskesmasId, puskesmasNama</td><td>Informasi pengguna dalam token</td></tr>
+   911→            </tbody>
+   912→        </table>
+   913→    </div>
+   914→
+   915→    <div class="sub-title">5.2 Otorisasi Berbasis Peran (RBAC)</div>
+   916→    <div class="body-text">
+   917→        Sistem mengimplementasikan Role-Based Access Control (RBAC) ketat dengan tiga peran yang masing-masing memiliki akses terbatas sesuai fungsinya. Otorisasi diterapkan pada dua lapisan: lapisan middleware untuk proteksi rute halaman, dan lapisan API route untuk proteksi endpoint data. Middleware hanya memeriksa keberadaan cookie sesi, sedangkan validasi peran yang sesungguhnya dilakukan pada setiap endpoint API melalui fungsi getCurrentUser() yang memanggil getServerSession() dan memverifikasi role pengguna.
+   918→    </div>
+   919→    <div class="table-wrapper">
+   920→        <table>
+   921→            <thead><tr><th>Peran</th><th>Deskripsi</th><th>Akses Halaman</th><th>Akses API</th></tr></thead>
+   922→            <tbody>
+   923→                <tr><td><span class="tag">ADMIN</span></td><td>Admin Dukcapil, verifikator data dan pengelola sistem</td><td>/admin/*, /profile</td><td>Seluruh endpoint /api/admin/*</td></tr>
+   924→                <tr><td><span class="tag">OPERATOR</span></td><td>Operator Puskesmas, penginput data kelahiran</td><td>/operator/*, /profile</td><td>Seluruh endpoint /api/operator/* (terbatas puskesmas sendiri)</td></tr>
+   925→                <tr><td><span class="tag">BPJS</span></td><td>Petugas BPJS Kesehatan, pengakses data NIK</td><td>/bpjs, /profile</td><td>Seluruh endpoint /api/bpjs/* (hanya data dengan NIK)</td></tr>
+   926→            </tbody>
+   927→        </table>
+   928→    </div>
+   929→
+   930→    <div class="sub-title">5.3 Proteksi Rute (Middleware)</div>
+   931→    <div class="body-text">
+   932→    Middleware Next.js diimplementasikan pada file src/middleware.ts yang berfungsi sebagai gatekeeper pertama sebelum pengguna mengakses halaman yang dilindungi. Middleware ini mencocokkan pola rute /admin/:path*, /operator/:path*, /bpjs/:path*, /profile/:path*, dan /dashboard/:path*. Jika cookie sesi (next-auth.session-token atau __Secure-next-auth.session-token) tidak ditemukan, pengguna akan diarahkan ke halaman login dengan menyimpan URL asli sebagai callback URL untuk redirect setelah login berhasil. Perlu dicatat bahwa middleware hanya memeriksa keberadaan cookie, bukan validitas token atau peran pengguna. Validasi penuh dilakukan pada level API route.</div>
+   933→
+   934→    <div class="sub-title">5.4 Validasi Input Data</div>
+   935→    <div class="body-text">
+   936→    Seluruh input data dari pengguna divalidasi menggunakan library Zod sebelum diproses lebih lanjut. Validasi ini mencakup panjang karakter minimum dan maksimum, format NIK (tepat 16 digit angka), format tanggal kelahiran, jenis kelamin yang valid, serta pembersihan nama (trim dan konversi ke UPPERCASE). Validasi berlaku pada semua endpoint yang menerima data dari pengguna, baik melalui form submission maupun file upload, sehingga mencegah serangan injection dan memastikan konsistensi data di dalam database.</div>
+   937→
+   938→    <div class="sub-title">5.5 Audit Logging</div>
+   939→    <div class="body-text">
+   940→    Sistem mencatat seluruh aktivitas kritis ke dalam tabel audit_logs dengan informasi yang mencakup: pengguna yang bertindak, jenis aksi, entitas yang terpengaruh, alamat IP klien, dan user agent browser. Sembilan jenis aksi dicatat: LOGIN, LOGOUT, CREATE, UPDATE, DELETE, VERIFY, REJECT, EXPORT, dan VIEW. Pencatatan log menggunakan pola fire-and-forget (.catch(() => {})) yang berarti proses logging tidak menghambat atau memperlambat respons API terhadap pengguna. Admin dapat melihat seluruh log audit dengan fitur filter berdasarkan jenis aksi, entitas, dan rentang tanggal, serta memiliki kemampuan untuk menghapus seluruh log audit (setelah sebelumnya menyimpan satu entri CLEAR_AUDIT_LOGS sebagai catatan).</div>
+   941→
+   942→    <!-- BAB 6 -->
+   943→    <div class="chapter-header">
+   944→        <div class="chapter-number">BAB 6</div>
+   945→        <div class="chapter-title">Catatan Operasional</div>
+   946→        <div class="chapter-divider"></div>
+   947→    </div>
+   948→
+   949→    <div class="sub-title">6.1 Manajemen Sesi dan Timeout</div>
+   950→    <div class="body-text">
+   951→        Sistem menerapkan kebijakan sesi ketat dengan durasi 15 menit untuk menjaga keamanan data, terutama mengingat sifat sensitif data kependudukan yang ditangani. Ketika sesi hampir kedaluwarsa, sistem menampilkan peringatan berupa toast notification 2 menit sebelum timeout dan modal dialog saat sesi benar-benar berakhir. Pengguna diberikan opsi "Perpanjang Sesi" yang memanggil session update melalui API. Pendekatan ini menyeimbangkan antara keamanan (sesi pendek) dan pengalaman pengguna (peringatan dini dan opsi perpanjangan). Konfigurasi refetchInterval 5 menit pada TanStack Query SessionProvider memastikan sesi tetap aktif selama pengguna berinteraksi dengan sistem.
+   952→    </div>
+   953→
+   954→    <div class="sub-title">6.2 Schema Synchronization Engine</div>
+   955→    <div class="body-text">
+   956→        Sistem menggunakan mekanisme unik yang disebut Schema Synchronization Engine untuk mengelola evolusi skema database tanpa menggunakan Prisma migration tradisional. Komponen ini diimplementasikan dalam file src/lib/schema-sync.ts dan bekerja dengan koneksi PostgreSQL langsung (bukan melalui Prisma Client) untuk menjamin keandalan bahkan ketika Prisma client mengalami masalah. Mesin ini beroperasi dengan dua mekanisme penting: pertama, time-based cache selama 10 menit yang mencegah sinkronisasi berulang dalam waktu singkat, dan kedua, deduplication yang memastikan hanya satu proses sinkronisasi yang berjalan pada satu waktu meskipun ada panggilan bersamaan.
+   957→    </div>
+   958→    <div class="body-text">
+   959→    Proses sinkronisasi melakukan langkah-langkah berikut secara berurutan: (1) menambahkan kolom yang belum ada menggunakan ALTER TABLE ADD COLUMN IF NOT EXISTS, (2) memastikan kolom nullable benar menggunakan DROP NOT NULL, (3) memperbaiki nilai NULL pada kolom is_deleted, (4) memastikan keberadaan tabel audit_logs, birth_record_files, dan pengaduan beserta constraint dan indeksnya, serta (5) menambahkan foreign key yang mungkin belum ada. Pendekatan idempotent ini memungkinkan sinkronisasi dijalankan berkali-kali tanpa menyebabkan error, sehingga aman dipanggil pada setiap request API.
+   960→    </div>
+   961→
+   962→    <div class="sub-title">6.3 Penyimpanan Berkas</div>
+   963→    <div class="body-text">
+   964→    Berkas pendukung kelahiran (Surat Keterangan Lahir dan Kartu Keluarga) disimpan dalam format base64-encoded string langsung di kolom file_data pada tabel birth_record_files. Pendekatan ini memiliki kelebihan berupa kesederhanaan arsitektur, tidak memerlukan konfigurasi layanan penyimpanan eksternal, dan memastikan konsistensi antara data dan berkas dalam satu transaksi database. Namun, pendekatan ini memiliki konsekuensi terhadap ukuran database yang lebih besar dibandingkan penyimpanan berkas di layanan object storage terpisah. Setiap berkas dibatasi maksimal 5MB dengan tipe yang diizinkan hanya image/* (JPG, PNG, dll.) dan application/pdf.
+   965→    </div>
+   966→    <div class="callout">
+   967→        <div class="callout-label">Kebijakan Unggah Berkas</div>
+   968→        <div>Tipe diizinkan: image/* dan application/pdf. Ukuran maksimal: 5MB per berkas. Jumlah per record: 1 SKL + 1 KK (mengganti jika sudah ada). Kebijakan replace: setiap tipe berkas hanya boleh satu, unggahan baru menggantikan yang lama.</div>
+   969→    </div>
+   970→
+   971→    <div class="sub-title">6.4 Manajemen Data dan Soft Delete</div>
+   972→    <div class="body-text">
+   973→    Sistem menerapkan pola soft-delete pada data kelahiran melalui kolom is_deleted. Ketika Operator menghapus data kelahiran, record tidak benar-benar dihapus dari database melainkan ditandai sebagai is_deleted = true. Pendekatan ini menjaga traceability data untuk keperluan audit dan investigasi. Data yang telah ditandai sebagai dihapus tidak ditampilkan pada daftar aktif namun tetap ada di database. Beberapa batasan diterapkan pada aksi hapus dan edit: data yang sudah didownload oleh Admin tidak dapat diedit atau dihapus oleh Operator, melainkan harus melalui koordinasi langsung dengan Admin Dukcapil.
+   974→    </div>
+   975→
+   976→    <div class="sub-title">6.5 Fitur Dark/Light Mode</div>
+   977→    <div class="body-text">
+   978→    Sistem mendukung tema gelap (dark mode) dan terang (light mode) yang diimplementasikan menggunakan library next-themes v0.4.6. Strategi yang digunakan adalah class-based (menambah/menghapus class "dark" pada elemen HTML), dengan tema default adalah "light". Sistem juga mengaktifkan deteksi preferensi OS melalui konfigurasi enableSystem, sehingga pengguna yang mengatur sistem operasinya dalam mode gelap akan otomatis melihat aplikasi dalam tema gelap saat pertama kali mengakses. Toggle tema tersedia pada navigasi bar setiap dashboard (Admin, Operator, BPJS) dan halaman profil. Transisi antar tema menggunakan animasi CSS rotation dan scale pada ikon matahari/bulan untuk pengalaman visual yang halus.</div>
+   979→
+   980→    <!-- BAB 7 -->
+   981→    <div class="chapter-header">
+   982→        <div class="chapter-number">BAB 7</div>
+   983→        <div class="chapter-title">Infrastruktur dan Deployment</div>
+   984→        <div class="chapter-divider"></div>
+   985→    </div>
+   986→
+   987→    <div class="sub-title">7.1 Lingkungan Hosting</div>
+   988→    <div class="body-text">
+   989→    Sistem di-deploy pada infrastruktur Vercel sebagai platform serverless yang menyediakan auto-scaling, CDN global, dan SSL certificate otomatis. URL produksi sistem adalah https://pencatatan-bayi.vercel.app. Proses deployment dilakukan melalui Vercel CLI dengan perintah vercel --prod yang melakukan build (prisma generate + next build), upload artefak, dan deploy ke edge network Vercel secara otomatis. Tidak terdapat file vercel.json khusus, sehingga sistem menggunakan konfigurasi default Vercel yang sudah dioptimalkan untuk aplikasi Next.js.</div>
+   990→
+   991→    <div class="sub-title">7.2 Konfigurasi Database</div>
+   992→    <div class="body-text">
+   993→    Basis data PostgreSQL di-hosting pada layanan Supabase Cloud dengan dua jenis koneksi yang dikonfigurasi melalui environment variable. DATABASE_URL menggunakan Supabase Session Pooler (port 6543) yang dioptimalkan untuk koneksi serverless, sedangkan DIRECT_DATABASE_URL menggunakan koneksi langsung untuk keperluan migration saja. Prisma Client dikonfigurasi menggunakan adapter-pg untuk kompatibilitas penuh dengan environment serverless Vercel, mengatasi keterbatasan koneksi tradisional yang tidak mendukung environment serverless.</div>
+   994→
+   995→    <div class="sub-title">7.3 Variabel Lingkungan</div>
+   996→    <div class="body-text">Berikut adalah daftar variabel lingkungan yang dikonfigurasi pada sistem:</div>
+   997→    <div class="table-wrapper">
+   998→        <table>
+   999→            <thead><tr><th>Variabel</th><th>Fungsi</th><th>Keterangan</th></tr></thead>
+  1000→            <tbody>
+  1001→                <tr><td>DATABASE_URL</td><td>Koneksi database (session pooler)</td><td>Supabase PostgreSQL, wajib diisi</td></tr>
+  1002→                <tr><td>DIRECT_DATABASE_URL</td><td>Koneksi database (direct)</td><td>Untuk migration, wajib diisi</td></tr>
+  1003→                <tr><td>NEXTAUTH_SECRET</td><td>Secret key JWT signing</td><td>Minimal 32 karakter, wajib diisi</td></tr>
+  1004→                <tr><td>NEXTAUTH_URL</td><td>Base URL aplikasi</td><td>Auto-detect pada Vercel, fallback localhost:3000</td></tr>
+  1005→            </tbody>
+  1006→        </table>
+  1007→    </div>
+  1008→
+  1009→    <div class="sub-title">7.4 Konfigurasi Next.js</div>
+  1010→    <div class="body-text">Konfigurasi next.config.ts mencakup beberapa pengaturan kritis untuk operasional sistem pada environment serverless:</div>
+  1011→    <div class="table-wrapper">
+  1012→        <table>
+  1013→            <thead><tr><th>Konfigurasi</th><th>Nilai</th><th>Alasan</th></tr></thead>
+  1014→            <tbody>
+  1015→                <tr><td>reactStrictMode</td><td>false</td><td>Menghindari double render di development</td></tr>
+  1016→                <tr><td>serverExternalPackages</td><td>pg, @prisma/adapter-pg, xlsx, bcryptjs</td><td>Bundling native modules untuk serverless</td></tr>
+  1017→                <tr><td>poweredByHeader</td><td>false</td><td>Menyembunyikan identitas teknologi</td></tr>
+  1018→                <tr><td>compress</td><td>true</td><td>Kompresi respons untuk bandwidth optimal</td></tr>
+  1019→                <tr><td>image.formats</td><td>avif, webp</td><td>Format gambar modern yang efisien</td></tr>
+  1020→            </tbody>
+  1021→        </table>
+  1022→    </div>
+  1023→
+  1024→    <div class="sub-title">7.5 Akun Default Sistem</div>
+  1025→    <div class="body-text">Sistem menyediakan mekanisme seeding untuk menginisialisasi data awal termasuk akun pengguna dan data Puskesmas. Terdapat satu akun Admin utama, satu akun BPJS, dan 25 akun Operator (satu per Puskesmas). Password default menggunakan pola {nama_puskesmas_lowercase}123 untuk Operator, admin123 untuk Admin di lingkungan seeding, dengan password produksi yang lebih kuat untuk lingkungan live.</div>
+  1026→    <div class="callout">
+  1027→        <div class="callout-label">Catatan Keamanan</div>
+  1028→        <div>Password default HANYA untuk lingkungan seeding/development. Pada lingkungan produksi, password Admin menggunakan kombinasi yang lebih kuat. Disarankan untuk segera mengubah password default setelah deployment pertama.</div>
+  1029→    </div>
+  1030→
+  1031→    <!-- BAB 8 -->
+  1032→    <div class="chapter-header">
+  1033→        <div class="chapter-number">BAB 8</div>
+  1034→        <div class="chapter-title">Halaman dan Komponen Antarmuka</div>
+  1035→        <div class="chapter-divider"></div>
+  1036→    </div>
+  1037→
+  1038→    <div class="sub-title">8.1 Daftar Halaman Aplikasi</div>
+  1039→    <div class="body-text">Sistem memiliki 17 halaman yang terorganisir berdasarkan peran pengguna. Berikut adalah daftar lengkap halaman beserta fungsinya:</div>
+  1040→    <div class="table-wrapper">
+  1041→        <table>
+  1042→            <thead><tr><th>Rute</th><th>Peran</th><th>Fungsi</th></tr></thead>
+  1043→            <tbody>
+  1044→                <tr><td>/</td><td>Publik</td><td>Landing page, ditampilkan ketika belum login</td></tr>
+  1045→                <tr><td>/login</td><td>Publik</td><td>Halaman login dengan form username dan password</td></tr>
+  1046→                <tr><td>/dashboard</td><td>Semua</td><td>Redirector berbasis peran ke dashboard masing-masing</td></tr>
+  1047→                <tr><td>/profile</td><td>Semua</td><td>Profil pengguna, ubah nama, ganti password, riwayat aktivitas</td></tr>
+  1048→                <tr><td>/admin</td><td>ADMIN</td><td>Dashboard utama: statistik, grafik, tabel kelahiran</td></tr>
+  1049→                <tr><td>/admin/users</td><td>ADMIN</td><td>Kelola pengguna: CRUD, toggle status aktif</td></tr>
+  1050→                <tr><td>/admin/puskesmas</td><td>ADMIN</td><td>Kelola Puskesmas: CRUD dengan kode wilayah</td></tr>
+  1051→                <tr><td>/admin/nik-bayi</td><td>ADMIN</td><td>Manajemen NIK bayi: tambah, ubah, hapus NIK</td></tr>
+  1052→                <tr><td>/admin/audit-log</td><td>ADMIN</td><td>Log audit: filter aksi, entitas, tanggal</td></tr>
+  1053→                <tr><td>/admin/analytics</td><td>ADMIN</td><td>Analitik: tren bulanan, distribusi Puskesmas, progress NIK</td></tr>
+  1054→                <tr><td>/admin/dokumen</td><td>ADMIN</td><td>Manajemen dokumen: lihat semua berkas yang diunggah</td></tr>
+  1055→                <tr><td>/admin/pengaduan</td><td>ADMIN</td><td>Kelola pengaduan: balas, ubah status, filter</td></tr>
+  1056→                <tr><td>/admin/settings</td><td>ADMIN</td><td>Pengaturan sistem</td></tr>
+  1057→                <tr><td>/operator</td><td>OPERATOR</td><td>Dashboard Operator: statistik, grafik, record terbaru</td></tr>
+  1058→                <tr><td>/operator/input</td><td>OPERATOR</td><td>Form input data kelahiran dengan unggah berkas</td></tr>
+  1059→                <tr><td>/operator/riwayat</td><td>OPERATOR</td><td>Riwayat data: tabel, edit, hapus, import, download</td></tr>
+  1060→                <tr><td>/operator/pengaduan</td><td>OPERATOR</td><td>Pengaduan: buat, lihat balasan, hapus (TERBUKA saja)</td></tr>
+  1061→                <tr><td>/bpjs</td><td>BPJS</td><td>Dashboard BPJS: statistik, tabel data dengan NIK</td></tr>
+  1062→            </tbody>
+  1063→        </table>
+  1064→    </div>
+  1065→
+  1066→    <div class="sub-title">8.2 Komponen Kustom Utama</div>
+  1067→    <div class="body-text">
+  1068→    Di samping komponen shadcn/ui yang digunakan secara luas, sistem memiliki beberapa komponen kustom yang dikembangkan khusus untuk kebutuhan aplikasi. Komponen SessionProvider membungkus NextAuth dengan konfigurasi refetchInterval dan refetchOnWindowFocus untuk menjaga sesi tetap segar. Komponen SessionTimeoutWarning menangani logika peringatan timeout sesi yang mendekati masa berlaku. Komponen ThemeToggle menyediakan toggle tema gelap/terang dengan animasi CSS, sementara SortableHeader menyediakan header tabel yang dapat diurutkan dengan indikator arah sorting. Selain itu, terdapat custom hooks seperti useTableSort untuk sorting tabel dengan persistensi URL, useMobile untuk deteksi viewport mobile, dan useClientSort sebagai alternatif sorting di sisi klien.</div>
+  1069→
+  1070→    <!-- BAB 9 -->
+  1071→    <div class="chapter-header">
+  1072→        <div class="chapter-number">BAB 9</div>
+  1073→        <div class="chapter-title">Ringkasan dan Rekomendasi</div>
+  1074→        <div class="chapter-divider"></div>
+  1075→    </div>
+  1076→
+  1077→    <div class="sub-title">9.1 Ringkasan Teknis</div>
+  1078→    <div class="body-text">
+  1079→        Sistem Informasi Pencatatan Nama Bayi Baru Lahir yang dibangun untuk Disdukcapil Kabupaten Ngada merupakan aplikasi web modern dengan arsitektur three-tier yang menghubungkan tiga pihak utama dalam proses pencatatan kelahiran. Sistem menggunakan 6 tabel database relasional, lebih dari 55 API endpoint, dan 17 halaman antarmuka yang mencakup fungsi input data, verifikasi, penerbitan NIK, audit logging, pengaduan, analitik, dan ekspor-impor data Excel. Keamanan dijaga melalui autentikasi JWT, RBAC ketat, validasi input Zod, dan audit trail yang komprehensif.
+  1080→    </div>
+  1081→
+  1082→    <div class="sub-title">9.2 Catatan untuk Pengembangan Selanjutnya</div>
+  1083→    <div class="body-text">Beberapa aspek yang perlu diperhatikan untuk pengembangan dan pemeliharaan ke depan meliputi pertimbangan migrasi penyimpanan berkas dari base64 di database ke object storage (seperti Supabase Storage) untuk efisiensi ukuran database, implementasi rate limiting pada endpoint API untuk pencegahan brute force, penambahan notifikasi email atau WhatsApp untuk pemberitahuan status verifikasi kepada Operator Puskesmas, serta pengembangan fitur pencarian lanjutan dan pelaporan yang lebih komprehensif untuk mendukung pengambilan keputusan berbasis data di tingkat manajerial.</div>
+  1084→
+  1085→    <div class="card" style="margin-top: 20px; border-color: var(--c-primary);">
+  1086→        <div class="card-title" style="color: var(--c-primary-dark);">Dokumen ini disusun sebagai bahan bukti dukung laporan resmi</div>
+  1087→        <div style="font-size: 12px; color: var(--c-text-secondary); line-height: 1.6;">
+  1088→            Seluruh informasi dalam dokumen ini diambil langsung dari analisis kode sumber sistem yang telah diimplementasikan. Data teknis, skema database, spesifikasi API, dan catatan arsitektur yang disajikan mencerminkan kondisi aktual sistem pada saat dokumen ini disusun. Untuk informasi terbaru, silakan merujuk pada repositori kode sumber dan dokumentasi sistem yang terupdate.
+  1089→        </div>
+  1090→    </div>
+  1091→
+  1092→    <div class="page-note">
+  1093→        Draft Skema dan Catatan Teknis Operasional - Sistem Informasi Pencatatan Nama Bayi Baru Lahir<br>
+  1094→        Dinas Kependudukan dan Pencatatan Sipil Kabupaten Ngada<br>
+  1095→        Dokumen Bersifat Rahasia - Untuk Keperluan Internal Instansi
+  1096→    </div>
+  1097→
+  1098→</div>
+  1099→
+  1100→</body>
+  1101→</html>
+  1102→

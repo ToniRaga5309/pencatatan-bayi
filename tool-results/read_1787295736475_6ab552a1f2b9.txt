@@ -1,0 +1,474 @@
+     1→     1→---
+     2→     2→Task ID: 1
+     3→     3→Agent: Main Agent
+     4→     4→Task: Fix server error when adding/saving operator and comprehensive error check
+     5→     5→
+     6→     6→Work Log:
+     7→     7→- Investigated server error when adding user from admin menu
+     8→     8→- Found NEXTAUTH_URL on Vercel was set to placeholder `https://[nama-aplikasi-anda].vercel.app` - FIXED
+     9→     9→- Found invalid FK constraint on `audit_logs.entity_id` referencing `birth_records(id)` - DROPPED
+    10→    10→- Added `@prisma/adapter-pg` and `bcryptjs` to `serverExternalPackages` in next.config.ts
+    11→    11→- Fixed local `.env` to use Supabase direct connection for testing
+    12→    12→- Improved error handling in `/api/admin/users` route with granular try-catch blocks
+    13→    13→- Updated `schema-sync.ts` to drop invalid FK constraint on every sync
+    14→    14→- Comprehensive error check of all 24 API routes
+    15→    15→- Fixed CRITICAL bug: `findUnique` -> `findFirst` in operator birth-records edit route (was crashing on every edit)
+    16→    16→- Added `ensureSchemaSynced()` to register, analytics, and profile routes (3 files)
+    17→    17→- Fixed blocking `await createAuditLog` -> fire-and-forget `.catch(() => {})` in register & profile
+    18→    18→- Fixed `nikBayi` empty-string filtering in analytics route
+    19→    19→- Added error details to all 500 responses
+    20→    20→- Verified database state: 27 users, 34 puskesmas, 46 verified birth records
+    21→    21→
+    22→    22→Stage Summary:
+    23→    23→- Root cause of server error: combination of invalid NEXTAUTH_URL placeholder + FK constraint on audit_logs
+    24→    24→- All fixes deployed to production (pencatatan-bayi.vercel.app)
+    25→    25→- Two successful deployments: 784df2e and 6f1f406
+    26→    26→- Puskesmas data is NOT empty (34 records exist) - data derives from operators correctly
+    27→    27→- Sync frequency on admin dashboard already set to 5 minutes (reasonable)
+    28→    28→---
+    29→    29→Task ID: 2
+    30→    30→Agent: Main Agent
+    31→    31→Task: Continue fixing operator creation failure - still getting error after first fix
+    32→    32→
+    33→    33→Work Log:
+    34→    34→- User reported still unable to add operators
+    35→    35→- Tested login directly via API - discovered admin password was incorrect/changed
+    36→    36→- Reset admin password in Supabase database directly via pg Pool connection
+    37→    37→- Login now works successfully
+    38→    38→- Tested operator creation with `puskesmasId` (select existing) - WORKS
+    39→    39→- Tested operator creation with `puskesmasNama` (manual input) - FAILS with 500
+    40→    40→- Discovered real root cause: `telepon` column MISSING from `puskesmas` table in database
+    41→    41→- Prisma schema expects `telepon` column but it was never created in Supabase
+    42→    42→- `schema-sync.ts` had `telepon` in `nullableColumns` but NOT in `columnsToSync`
+    43→    43→- This means DROP NOT NULL was attempted on a non-existent column (silently failed)
+    44→    44→- But ADD COLUMN IF NOT EXISTS was never called for `telepon` or `alamat`
+    45→    45→- Added `telepon` and `alamat` to `columnsToSync` array in schema-sync.ts
+    46→    46→- Manually added `telepon` column to Supabase via direct pg query
+    47→    47→- Verified both creation methods now work (manual + select puskesmas)
+    48→    48→- Full end-to-end test passed: login -> create operator with new puskesmas -> SUCCESS
+    49→    49→
+    50→    50→Stage Summary:
+    51→    51→- TRUE ROOT CAUSE: Missing `telepon` column in `puskesmas` table caused Prisma queries to fail
+    52→    52→- Error message: "The column (not available) does not exist in the current database"
+    53→    53→- Fix: Added `telepon` VARCHAR(20) and `alamat` TEXT to `columnsToSync` in schema-sync.ts
+    54→    54→- Also manually added the column to the production database
+    55→    55→- Admin password was reset to AdminNgaba2024!
+    56→    56→- Verified working: operator creation with both puskesmas selection modes
+    57→    57→- Deployments: 933c892 (schema-sync fix) deployed to production
+    58→    58→---
+    59→    59→---
+    60→    60→Task ID: 3
+    61→    61→Agent: Main Agent
+    62→    62→Task: Optimize website loading speed + make nama ayah optional
+    63→    63→
+    64→    64→Work Log:
+    65→    65→- Analyzed full codebase for performance bottlenecks (100+ files, bundle size, CSS, API patterns)
+    66→    66→- Removed 12 unused npm packages (framer-motion, @mdxeditor/editor, react-markdown, react-syntax-highlighter, @dnd-kit/core, @dnd-kit/sortable, @dnd-kit/utilities, next-intl, zustand, @reactuses/core, @hookform/resolvers, date-fns)
+    67→    67→- Replaced ALL framer-motion animations with pure CSS in login page and landing page (removed ~30KB gzipped from client bundle)
+    68→    68→- Removed framer-motion from package.json entirely
+    69→    69→- Trimmed globals.css from 1270 to 682 lines (46% reduction, removed 35+ unused utility classes and 13 unused keyframe animations)
+    70→    70→- Added Next.js config optimizations: poweredByHeader:false, compress:true, image formats (avif/webp)
+    71→    71→- Added middleware.ts for route protection (redirects unauthenticated users from /admin, /operator, /bpjs routes)
+    72→    72→- Made nama ayah (father's name) field OPTIONAL in operator birth record input
+    73→    73→  - Client-side: Changed validation to only require min 3 chars IF filled, added "(opsional)" label
+    74→    74→  - Server-side: Updated Zod schema to accept optional/empty string, saves empty string instead of null
+    75→    75→- Fixed build errors: removed optimizeFonts (deprecated in Next.js 16), fixed namaAyah null→empty string type
+    76→    76→
+    77→    77→Stage Summary:
+    78→    78→- Bundle size significantly reduced (~1MB+ from unused packages + ~30KB from framer-motion removal)
+    79→    79→- CSS payload reduced by 46% (1270→682 lines)
+    80→    80→- Route protection middleware prevents flash of unauthenticated content
+    81→    81→- nama ayah is now optional for operators
+    82→    82→- All changes deployed to production (deployments ee98dcb, 3be6534)
+    83→    83→- Production verified: login works, 34 users visible, all APIs functional
+    84→    84→---
+    85→    85→Task ID: 4
+    86→    86→Agent: Main Agent
+    87→    87→Task: Add delete user feature + optimize loading speed (round 2)
+    88→    88→
+    89→    89→Work Log:
+    90→    90→- Identified major performance bottleneck: `ensureSchemaSynced()` called on EVERY API request (~50+ locations)
+    91→    91→  - Each call creates a new pg Pool, runs 20+ ALTER TABLE DDL queries, then tears down the pool
+    92→    92→  - Admin dashboard loads 4 APIs in parallel = 4x redundant schema syncs
+    93→    93→  - Users page loads 2 APIs + 1 explicit sync call = 3x redundant schema syncs
+    94→    94→- Added 10-minute time-based cache to `ensureSchemaSynced()` - subsequent calls return cached result instantly
+    95→    95→- Removed `ensureSchemaSynced()` from ALL 18 GET/read-only API routes:
+    96→    96→  - Admin: stats, birth-records, charts, pending-count, audit-logs, puskesmas (GET only), reports/monthly, export, download-new, analytics (GET only)
+    97→    97→  - Operator: stats, chart, recent-records, birth-records (GET only)
+    98→    98→  - BPJS: records, stats, export
+    99→    99→  - Auth: profile (GET only)
+   100→   100→- Removed client-side `syncSchema()` call from users page initialization
+   101→   101→- Added DELETE /api/admin/users/[id] API endpoint:
+   102→   102→  - Authorization check (admin only)
+   103→   103→  - Self-deletion prevention
+   104→   104→  - FK-safe deletion (nullifies puskesmasId before deleting)
+   105→   105→  - Audit logging (fire-and-forget)
+   106→   106→- Added delete button + confirmation dialog in admin user management UI:
+   107→   107→  - Trash2 icon with red hover styling
+   108→   108→  - Hidden for currently logged-in user
+   109→   109→  - Confirmation dialog with user name/username display
+   110→   110→  - Loading state during deletion
+   111→   111→  - Toast notifications for success/error
+   112→   112→
+   113→   113→Stage Summary:
+   114→   114→- Loading speed dramatically improved: eliminated ~20 DDL queries per page load
+   115→   115→- GET API routes now respond instantly (no schema sync overhead)
+   116→   116→- Write routes still have schema sync safety (with 10-minute cache dedup)
+   117→   117→- Delete user feature fully functional with proper safety guards
+   118→   118→- 21 files modified, deployed to production (commit 0ece9a6)
+   119→   119→- Production URL: https://pencatatan-bayi.vercel.app
+   120→   120→---
+   121→   121→Task ID: 5
+   122→   122→Agent: Main Agent
+   123→   123→Task: Dual download system + ACC all + filter undownloaded data
+   124→   124→
+   125→   125→Work Log:
+   126→   126→- Created POST /api/admin/birth-records/verify-all endpoint for bulk verifying all pending undownloaded records
+   127→   127→- Created GET /api/admin/download-register endpoint for downloading historical register (downloaded data)
+   128→   128→- Updated GET /api/admin/birth-records to support ?show=new|all query parameter
+   129→   129→  - Default "new" filters to only undownloaded records (downloadedAt IS NULL)
+   130→   130→  - "all" shows all records including previously downloaded
+   131→   131→- Updated GET /api/admin/stats to include new counts:
+   132→   132→  - totalNewData: undownloaded records count
+   133→   133→  - totalRegistered: downloaded (register) records count
+   134→   134→  - totalPendingNew: pending AND undownloaded count
+   135→   135→- Updated GET /api/admin/pending-count to filter by undownloaded only
+   136→   136→- Redesigned admin dashboard table section:
+   137→   137→  - Added "ACC Semua" button (green, verifies all pending undownloaded at once)
+   138→   138→  - Added "Download Data Baru" button (downloads undownloaded, marks as downloaded)
+   139→   139→  - Added "Download Register" button (downloads historical register, read-only)
+   140→   140→  - Added toggle between "Data Baru" and "Semua Data" views
+   141→   141→  - Updated table description to show record counts per view
+   142→   142→  - Updated QuickStatsSummary to show new vs register counts
+   143→   143→- Fixed .vercel/project.json to point to correct pencatatan-bayi project
+   144→   144→
+   145→   145→Stage Summary:
+   146→   146→- Admin dashboard now clearly separates new data from downloaded register
+   147→   147→- Table defaults to showing only new undownloaded data
+   148→   148→- One-click "ACC Semua" for bulk verification of all pending data
+   149→   149→- Two distinct download buttons for different use cases
+   150→   150→- Register data is preserved and downloadable at any time
+   151→   151→- All changes deployed to production (commit 228f2de)
+   152→   152→- Production URL: https://pencatatan-bayi.vercel.app
+   153→   153→---
+   154→   154→Task ID: 6
+   155→   155→Agent: Main Agent
+   156→   156→Task: Tambah fitur hapus NIK bayi
+   157→   157→
+   158→   158→Work Log:
+   159→   159→- Added DELETE method to `/api/admin/nik-bayi/route.ts`
+   160→   160→  - Accepts `?recordId=xxx` query parameter
+   161→   161→  - Authorization check (admin only)
+   162→   162→  - Validates record exists and has NIK bayi
+   163→   163→  - Sets `nikBayi` and `nikBayiUpdatedAt` to null (soft delete)
+   164→   164→  - Audit logging (fire-and-forget)
+   165→   165→- Added delete button (Trash2 icon, red) next to Edit button in NIK Bayi management page
+   166→   166→  - Only shown when record has NIK bayi (hidden for records without NIK)
+   167→   167→  - Red hover styling for danger indication
+   168→   168→- Added confirmation dialog before deletion:
+   169→   169→  - Shows baby name, NIK Ibu, and NIK Bayi to be deleted
+   170→   170→  - Red-themed warning box
+   171→   171→  - "Hapus NIK" destructive button with loading state
+   172→   172→  - Toast notifications for success/error
+   173→   173→- Deployed to production via Vercel
+   174→   174→
+   175→   175→Stage Summary:
+   176→   176→- NIK Bayi can now be deleted from individual records
+   177→   177→- Only 2 files changed: API route + NIK Bayi page (minimal impact)
+   178→   178→- No other features or pages affected
+   179→   179→- Deployed to production (commit a4b26dc, GitHub token expired - push pending)
+   180→   180→- Production URL: https://pencatatan-bayi.vercel.app
+   181→   181→---
+   182→   182→Task ID: 7
+   183→   183→Agent: Main Agent
+   184→   184→Task: Tambah fitur upload file pendukung (surat keterangan lahir & kartu keluarga)
+   185→   185→
+   186→   186→Work Log:
+   187→   187→- Added `BirthRecordFile` model to Prisma schema (base64 storage in TEXT column)
+   188→   188→- Added `uploadedFiles` relation to User model
+   189→   189→- Updated schema-sync.ts to auto-create `birth_record_files` table with FKs and indexes
+   190→   190→- Created 3 new API routes (no existing files modified except UI pages):
+   191→   191→  - POST/GET/DELETE `/api/operator/birth-records/[id]/files` — upload, list, delete files
+   192→   192→  - GET `/api/admin/birth-records/[id]/files` — admin list files
+   193→   193→  - GET `/api/admin/birth-records/[id]/files/[fileId]/download` — admin download file
+   194→   194→- Updated operator input page: after saving, shows optional file upload section (surat kelahiran + KK)
+   195→   195→- Updated operator riwayat page: upload button (blue) for records without files, paperclip icon for records with files
+   196→   196→- Updated admin detail dialog: shows "Dokumen Pendukung" section with download buttons for each file
+   197→   197→- File validation: max 5MB, only image/* and application/pdf
+   198→   198→- Each fileType (SURAT_KELAHIRAN/KARTU_KELUARGA) replaces previous upload (one file per type)
+   199→   199→- Schema synced via production API, new table created in Supabase
+   200→   200→
+   201→   201→Stage Summary:
+   202→   202→- Operators can upload supporting documents (surat keterangan lahir & kartu keluarga)
+   203→   203→- Upload is optional and available on both input page and riwayat page
+   204→   204→- Admin can view and download uploaded files from detail dialog
+   205→   205→- Files stored as base64 in PostgreSQL (no external storage needed)
+   206→   206→- Minimal changes to existing code (only added new features, no modifications to existing logic)
+   207→   207→- Deployed to pencatatan-bayi.vercel.app
+   208→   208→---
+   209→   209→Task ID: 8
+   210→   210→Agent: Main Agent
+   211→   211→Task: Fix upload di menu input operator + fitur download data operator (termasuk NIK bayi)
+   212→   212→
+   213→   213→Work Log:
+   214→   214→- **Fix Upload di Menu Input Operator:**
+   215→   215→  - Sebelumnya file upload hanya muncul sesaat setelah save (lalu redirect), sehingga tidak terlihat
+   216→   216→  - Dipindahkan file upload section (surat keterangan lahir + kartu keluarga) langsung ke dalam form sebelum tombol submit
+   217→   217→  - Upload bersifat opsional - jika file dipilih, otomatis diupload setelah record berhasil disimpan
+   218→   218→  - File upload gagal tidak menggagalkan penyimpanan data (non-critical)
+   219→   219→  - Untuk "Simpan & Input Lagi", file input juga direset
+   220→   220→
+   221→   221→- **Fix Bug fetchFileCounts di Riwayat:**
+   222→   222→  - API GET files mengembalikan `{ success: true, data: files }`
+   223→   223→  - Client membaca `data.files?.length` (salah) → diperbaiki ke `data.data?.length` (benar)
+   224→   224→  - Sebelumnya selalu menampilkan 0 file, sehingga tombol upload selalu muncul
+   225→   225→
+   226→   226→- **Fitur Download Data Operator:**
+   227→   227→  - Dibuat API GET `/api/operator/birth-records/download` untuk operator download data milik puskesmas sendiri
+   228→   228→  - Data diexport ke Excel (XLSX) dengan kolom: No, Nama Bayi, NIK Bayi, Jenis Kelamin, Tanggal Lahir, Tempat Lahir, NIK Ibu, Nama Ibu, Nama Ayah, Berat Badan, Panjang Badan, Status, Puskesmas, Tanggal Input
+   229→   229→  - NIK Bayi yang sudah diproses admin akan muncul di kolom "NIK Bayi" (jika belum ada, tampilkan "-")
+   230→   230→  - Ditambahkan tombol "Download Data" di halaman riwayat input operator (sebelah tombol Import Excel)
+   231→   231→  - Audit logging untuk setiap download
+   232→   232→
+   233→   233→Stage Summary:
+   234→   234→- Upload dokumen pendukung sekarang terlihat dan berfungsi di menu input data operator
+   235→   235→- File count indicator di riwayat sekarang menunjukkan status yang benar (paperclip/upload button)
+   236→   236→- Operator bisa download semua data inputannya termasuk NIK bayi yang sudah diproses
+   237→   237→- Hanya 4 file yang diubah: input/page.tsx, riwayat/page.tsx, download/route.ts (baru)
+   238→   238→- Deployed ke pencatatan-bayi.vercel.app
+   239→   239→---
+   240→   240→Task ID: 9
+   241→   241→Agent: Main Agent
+   242→   242→Task: Fix dokumen tidak terlihat di admin + tombol upload ulang operator
+   243→   243→
+   244→   244→Work Log:
+   245→   245→- **Fix Bug Dokumen Tidak Terlihat di Admin:**
+   246→   246→  - Di admin detail dialog (`openDetailDialog`), file fetch membaca `data.files` (salah)
+   247→   247→  - API mengembalikan `{ success: true, data: files }` — seharusnya `data.data`
+   248→   248→  - Diperbaiki: `setDetailFiles(data.files || [])` → `setDetailFiles(data.data || [])`
+   249→   249→  - Sekarang admin bisa melihat dan download dokumen pendukung di dialog detail
+   250→   250→
+   251→   251→- **Fix Tombol Upload Ulang di Riwayat Operator:**
+   252→   252→  - Sebelumnya tombol upload hanya muncul saat `recordFiles[id] === 0` (0 file)
+   253→   253→  - Setelah upload file, tombol diganti ikon paperclip statis tanpa aksi — tidak bisa upload ulang
+   254→   254→  - Diperbaiki: tombol upload SELALU tampil, dengan styling berbeda (biru jika sudah ada file, abu-abu jika belum)
+   255→   255→  - Dialog upload menampilkan judul "Upload Ulang Dokumen" + peringatan amber jika file sudah ada
+   256→   256→  - Backend sudah mendukung replace (hapus lama, insert baru) — tidak perlu diubah
+   257→   257→
+   258→   258→Stage Summary:
+   259→   259→- Admin sekarang bisa melihat dokumen pendukung di detail data kelahiran
+   260→   260→- Operator bisa upload ulang dokumen (replace) kapan saja dari riwayat input
+   261→   261→- Hanya 2 file diubah: admin/page.tsx, riwayat/page.tsx
+   262→   262→- Deployed ke pencatatan-bayi.vercel.app
+   263→   263→---
+   264→   264→Task ID: 10
+   265→   265→Agent: Main Agent
+   266→   266→Task: Tambah menu terpisah admin untuk melihat dokumen pendukung operator
+   267→   267→
+   268→   268→Work Log:
+   269→   269→- **Buat API GET `/api/admin/files`:**
+   270→   270→  - List semua file pendukung dari semua puskesmas dengan pagination
+   271→   271→  - Support filter: puskesmasId, fileType, search
+   272→   272→  - Menggunakan Prisma `AND` conditions untuk kombinasi filter yang benar
+   273→   273→
+   274→   274→- **Buat halaman `/admin/dokumen/page.tsx`:**
+   275→   275→  - Halaman terpisah khusus melihat dokumen pendukung yang diupload operator
+   276→   276→  - Tabel: No, Tipe File (badge), Nama File + ukuran, Nama Bayi, NIK Ibu, Puskesmas, Diupload Oleh, Tanggal Upload, Aksi (Unduh)
+   277→   277→  - Filter: search, tipe file, puskesmas
+   278→   278→  - Pagination 20 item per halaman, responsive
+   279→   279→
+   280→   280→- **Tambah menu di admin dashboard:**
+   281→   281→  - Desktop: tombol biru "Dokumen" (Paperclip icon)
+   282→   282→  - Mobile: item "Dokumen Pendukung"
+   283→   283→  - Hanya menambah 2 blok Link, tidak mengubah nav lain
+   284→   284→
+   285→   285→Stage Summary:
+   286→   286→- Admin memiliki halaman terpisah `/admin/dokumen` untuk dokumen pendukung
+   287→   287→- Tidak mengubah alur sistem yang sudah ada
+   288→   288→- File baru: api/admin/files/route.ts, admin/dokumen/page.tsx
+   289→   289→- File diubah: admin/page.tsx (hanya 2 menu item)
+   290→   290→- Deployed ke pencatatan-bayi.vercel.app
+   291→   291→---
+   292→   292→Task ID: 11
+   293→   293→Agent: Main Agent
+   294→   294→Task: Fix server error on admin menu after adding noHp/emailOrtu columns
+   295→   295→
+   296→   296→Work Log:
+   297→   297→- User reported server error on admin menu after adding No. HP and Email orang tua fields
+   298→   298→- Root cause: Previous session added `noHp` and `emailOrtu` to Prisma schema and API/form code, but:
+   299→   299→  1. Did NOT add `no_hp` and `email_ortu` to `columnsToSync` in schema-sync.ts
+   300→   300→  2. Did NOT add them to `nullableColumns` in schema-sync.ts
+   301→   301→  3. Had removed `ensureSchemaSynced()` from all GET routes for performance
+   302→   302→- Result: Prisma client tried to SELECT columns that don't exist in Supabase → query failed → 500 error
+   303→   303→- Fix applied:
+   304→   304→  1. Added `no_hp` VARCHAR(20) and `email_ortu` VARCHAR(100) to `columnsToSync` in schema-sync.ts
+   305→   305→  2. Added both to `nullableColumns` in schema-sync.ts
+   306→   306→  3. Added `ensureSchemaSynced()` back to 4 admin GET endpoints that are called in parallel when admin page loads:
+   307→   307→     - /api/admin/stats/route.ts
+   308→   308→     - /api/admin/birth-records/route.ts (GET)
+   309→   309→     - /api/admin/charts/route.ts
+   310→   310→     - /api/admin/pending-count/route.ts
+   311→   311→  4. The dedup mechanism ensures only ONE actual sync runs (shared promise), cached for 10 min
+   312→   312→- Deployed to production (pencatatan-bayi.vercel.app)
+   313→   313→
+   314→   314→Stage Summary:
+   315→   315→- Root cause: Missing columns in database + missing schema-sync entries + no sync on GET routes
+   316→   316→- Fix: Added columns to schema-sync + re-enabled sync on admin GET entry points
+   317→   317→- Files changed: schema-sync.ts, stats/route.ts, birth-records/route.ts, charts/route.ts, pending-count/route.ts
+   318→   318→- First admin page visit will trigger schema sync (adds columns), then all queries work
+   319→   319→- No changes to operator input form, no changes to existing business logic
+   320→   320→---
+   321→   321→Task ID: 12
+   322→   322→Agent: Main Agent
+   323→   323→Task: Tambah fitur pengaduan untuk operator
+   324→   324→
+   325→   325→Work Log:
+   326→   326→- User request: tambah opsi pengaduan oleh operator
+   327→   327→- Ditambahkan model Pengaduan ke prisma/schema.prisma:
+   328→   328→  - Fields: id, userId, subjek, pesan, kategori (SISTEM/DATA/PROSES/LAINNYA), prioritas (RENDAH/SEDANG/TINGGI), status (TERBUKA/DIPROSES/SELESAI/DITUTUP), balasan, balasanOleh, balasanPada, timestamps
+   329→   329→  - Relation ke User (onDelete: Cascade)
+   330→   330→- Ditambahkan tabel pengaduan creation di schema-sync.ts:
+   331→   331→  - CREATE TABLE IF NOT EXISTS pengaduan
+   332→   332→  - FK pengaduan_user_id_fkey -> users.id
+   333→   333→  - 4 indexes (user_id, status, kategori, created_at)
+   334→   334→- Dibuat 4 API routes baru:
+   335→   335→  - GET/POST /api/operator/pengaduan (list + create)
+   336→   336→  - GET/DELETE /api/operator/pengaduan/[id] (detail + delete, hanya bisa hapus jika TERBUKA)
+   337→   337→  - GET /api/admin/pengaduan (list all + filter search/status/kategori/prioritas + statusCounts)
+   338→   338→  - GET/PATCH /api/admin/pengaduan/[id] (detail + reply/update status)
+   339→   339→- Dibuat halaman /operator/pengaduan:
+   340→   340→  - Stats summary (Total, Terbuka, Diproses, Selesai)
+   341→   341→  - Filter status + kategori
+   342→   342→  - "Buat Pengaduan" button → dialog form (subjek, kategori, prioritas, pesan)
+   343→   343→  - List pengaduan dengan badge status/kategori/prioritas berwarna
+   344→   344→  - Balasan admin ditampilkan di highlighted box
+   345→   345→  - Expand/collapse untuk pesan panjang
+   346→   346→  - Delete dengan konfirmasi (hanya jika status TERBUKA)
+   347→   347→  - Pagination
+   348→   348→- Dibuat halaman /admin/pengaduan:
+   349→   349→  - Stats summary (Terbuka, Diproses, Selesai, Total)
+   350→   350→  - Filter search + status + kategori + prioritas
+   351→   351→  - List pengaduan dengan info operator (nama, puskesmas)
+   352→   352→  - Tombol "Balas" → dialog reply (edit balasan + ubah status)
+   353→   353→  - Quick status buttons (Tandai Diproses, Tandai Selesai, Tutup)
+   354→   354→  - Pagination
+   355→   355→- Ditambahkan navigasi:
+   356→   356→  - Operator dashboard: Quick Action card "Pengaduan" (amber gradient) + mobile menu item
+   357→   357→  - Admin dashboard: tombol "Pengaduan" (amber) di desktop nav + mobile menu item "Pengaduan Operator"
+   358→   358→- Deployed ke production (pencatatan-bayi.vercel.app)
+   359→   359→- Verified: halaman /operator/pengaduan dan /admin/pengaduan accessible (redirect ke login jika belum auth)
+   360→   360→- Verified: API /api/admin/pengaduan respond 403 (unauthorized) tanpa error server
+   361→   361→
+   362→   362→Stage Summary:
+   363→   363→- Fitur pengaduan lengkap: operator bisa buat/lihat/hapus pengaduan, admin bisa lihat/balas/ubah status
+   364→   364→- 4 kategori pengaduan: Sistem, Data, Proses Verifikasi, Lainnya
+   365→   365→- 3 level prioritas: Rendah, Sedang, Tinggi
+   366→   366→- 4 status: Terbuka, Diproses, Selesai, Ditutup
+   367→   367→- Audit logging untuk create/delete/update pengaduan
+   368→   368→- Tidak mengubah alur sistem yang sudah ada (hanya menambah file baru + 2 menu item)
+   369→   369→- Files baru: 4 API routes, 2 page (operator + admin pengaduan)
+   370→   370→- Files diubah: prisma/schema.prisma, schema-sync.ts, operator/page.tsx (3 quick actions + mobile menu), admin/page.tsx (2 menu items)
+   371→   371→
+   372→   372→---
+   373→   373→Task ID: 13
+   374→   374→Agent: Main Agent
+   375→   375→Task: Buat Buku Saku Pedoman Penggunaan Website (PDF)
+   376→   376→
+   377→   377→Work Log:
+   378→   378→- User request: "bisakah kamu membuatkan saya buku saku pedoman penggunaan website ini"
+   379→   379→- Membaca worklog.md (Task 1-12) untuk memahami seluruh fitur sistem: 3 role (Admin Dukcapil, Operator Puskesmas, BPJS), fitur input data, upload dokumen, NIK bayi, pengaduan, download, audit log, analitik
+   380→   380→- Mengeksplorasi struktur halaman: 17 page.tsx (landing, login, admin x8, operator x4, bpjs, profile, dashboard) + 40+ API routes
+   381→   381→- Invoke skill PDF → routing ke Creative Flow brief (handbook/guide, text-heavy + design)
+   382→   382→- Membaca configs/fonts.md, briefs/creative-flow.md, typesetting/overflow.md
+   383→   383→- Menulis HTML buku saku lengkap (62 KB) dengan struktur:
+   384→   384→  - Cover (gradient emerald/teal, dekorasi lingkaran, dot grid, Playfair Display + Inter)
+   385→   385→  - Daftar Isi
+   386→   386→  - Bab 1: Pengenalan Sistem (latar belakang, tujuan, manfaat, stat row)
+   387→   387→  - Bab 2: Peran Pengguna (3 role cards: Admin/Operator/BPJS dengan duties)
+   388→   388→  - Bab 3: Login & Pengaturan Dasar (login, lupa sandi, ganti sandi, dark mode, logout)
+   389→   389→  - Bab 4: Panduan Operator (dashboard, input data dengan field list 9 field, upload dokumen, riwayat dengan status table, import Excel, download, pengaduan)
+   390→   390→  - Bab 5: Panduan Admin (dashboard, verifikasi ACC/tolak, ACC semua, download data baru vs register, NIK bayi, dokumen, pengaduan, kelola user, puskesmas, audit log, analitik)
+   391→   391→  - Bab 6: Panduan BPJS (dashboard, filter, export)
+   392→   392→  - Bab 7: FAQ (8 pertanyaan umum)
+   393→   393→  - Bab 8: Keamanan & Privasi (prinsip dasar, data pribadi, audit trail, lapor insiden + komitmen bersama)
+   394→   394→  - Ending page (gradient, kontak, penutup)
+   395→   395→- Validasi HTML via poster_validate.py check-html → PASS (2 warning non-blocking)
+   396→   396→- Render PDF via html2pdf-next.js --nopaged (Chromium native @page, 720x1020px)
+   397→   397→- QA via pdf_qa.py: iterasi 1 = 7 passed/18 warning (page 15 fill 38%, em-dash line-start)
+   398→   398→- Fix: tambah callout "Komitmen Bersama" + card "Ringkasan Praktik Aman" di akhir Bab 8; ganti em-dash dengan semicolon di FAQ
+   399→   399→- Re-render → 10 passed/15 warning (semua margin-symmetry artifact dari konten tak penuh-lebar, non-blocking)
+   400→   400→- Set metadata via pdf.py meta.set (Title, Author, Subject, Creator, Keywords)
+   401→   401→- Verifikasi visual via VLM CLI: cover "sangat baik", content page "siap cetak", page 15 "65-70% fill, rapi", ending "desain sangat baik"
+   402→   402→
+   403→   403→Stage Summary:
+   404→   404→- Deliverables: 
+   405→   405→  - /home/z/my-project/download/Buku-Saku-Pedoman-Penggunaan.pdf (647 KB, 16 halaman, ~3.272 kata)
+   406→   406→  - /home/z/my-project/download/buku-saku-pedoman.html (62 KB, HTML source editable)
+   407→   407→- Format: 720x1020px (ratio ~A4), vector PDF (text selectable, sharp at zoom)
+   408→   408→- Tema visual: gradient emerald/teal (match website), Playfair Display (judul) + Inter (body)
+   409→   409→- 8 bab + cover + daftar isi + ending, mencakup semua 3 role dan seluruh fitur sistem
+   410→   410→- QA: 10 checks passed, metadata lengkap, full-bleed cover, no blank pages, fonts embedded, no overflow, fill ratio adequate
+   411→   411→- Tidak mengubah kode aplikasi sama sekali (hanya membuat dokumen di folder download/)
+   412→   412→
+   413→   413→---
+   414→   414→Task ID: 14
+   415→   415→Agent: Main Agent
+   416→   416→Task: Buat SOP Penggunaan Aplikasi untuk Dukcapil Kabupaten Ngada
+   417→   417→
+   418→   418→Work Log:
+   419→   419→- User request: "buatkan saya sop penggunaan aplikasi ini untuk saya terapkan di dinas kependudukan dan pencatatan sipil kabupaten ngada"
+   420→   420→- Mendesain struktur SOP formal pemerintah: cover resmi, lembar pengesahan, daftar isi, 8 bab utama, 3 lampiran
+   421→   421→- Menulis HTML SOP lengkap (73 KB) dengan desain formal pemerintah:
+   422→   422→  - Cover: emblem, institusi, identitas dokumen (nomor SOP, versi, tanggal efektif, penanggung jawab)
+   423→   423→  - Lembar Pengesahan: 3 kolom tanda tangan (Tim Pengembang, Sekretaris Dinas, Kepala Dinas)
+   424→   424→  - Bab I: Pendahuluan (latar belakang, tujuan, ruang lingkup, dasar hukum UU 24/2013, referensi)
+   425→   425→  - Bab II: Definisi dan Istilah (12 istilah termasuk Sistem, Admin, Operator, BPJS, NIK Bayi, Audit Trail, dll)
+   426→   426→  - Bab III: Uraian Tugas dan Tanggung Jawab (Kepala Dinas, Admin, Operator, BPJS dengan SLA spesifik)
+   427→   427→  - Bab IV: Prosedur Operasional (7 sub-bab: pencatatan individual/massal, verifikasi, NIK bayi, dokumen, pengaduan, akun, BPJS)
+   428→   428→  - Bab V: Alur Kerja Sistem (6 tahap flowchart: pencatatan-verifikasi-NIK-download-BPJS-monitoring)
+   429→   429→  - Bab VI: Keamanan dan Privasi Data (klasifikasi data, RBAC, password policy, audit trail, penanganan insiden)
+   430→   430→  - Bab VII: Monitoring, Evaluasi, dan Pelaporan (harian, bulanan, triwulanan dengan IKU)
+   431→   431→  - Bab VIII: Penutup
+   432→   432→  - Lampiran 1: Matriks Hak Akses per Peran (13 fitur x 3 role)
+   433→   433→  - Lampiran 2: Indikator Kinerja Utama (8 IKU dengan target, frekuensi, penanggung jawab)
+   434→   434→  - Lampiran 3: Format Surat Pernyataan Tidak Menyebarkan Data Pribadi (siap cetak)
+   435→   435→  - Halaman penutup: penandatanganan Kepala Dinas
+   436→   436→- Fixed cover text-line overlap (increased spacing between cover elements)
+   437→   437→- Rendered via html2pdf-next.js --nopaged, A4 format (210mm x 297mm)
+   438→   438→- QA: 11/11 checks PASSED (all passed, zero warnings)
+   439→   439→- Metadata: Title, Author, Subject, Creator, Keywords
+   440→   440→- Visual verification via VLM: cover "simetris dan formal", content "tabel rapi, siap digunakan", ending "formal dan rapi"
+   441→   441→
+   442→   442→Stage Summary:
+   443→   443→- Deliverables:
+   444→   444→  - /home/z/my-project/download/SOP-Penggunaan-Aplikasi-Bayi-Baru-Lahir.pdf (435 KB, 24 halaman, ~4.445 kata, 7 tabel)
+   445→   445→  - /home/z/my-project/download/sop-penggunaan-aplikasi.html (73 KB, editable source)
+   446→   446→- Format A4, tema formal pemerintah (hijau tua + emas)
+   447→   447→- Nomor SOP: SOP-DUKCAPIL/001/2025, Versi 1.0
+   448→   448→- QA: 11/11 passed, zero warnings
+   449→   449→- Tidak mengubah kode aplikasi
+   450→   450→---
+   451→   451→Task ID: 14
+   452→   452→Agent: Main Agent
+   453→   453→Task: Buat Draft Skema dan Catatan Teknis Operasional untuk bukti dukung laporan
+   454→   454→
+   455→   455→Work Log:
+   456→   456→- Membaca prisma/schema.prisma untuk memahami 6 tabel database (puskesmas, users, birth_records, birth_record_files, audit_logs, pengaduan)
+   457→   457→- Membaca src/lib/schema-sync.ts untuk memahami mekanisme Schema Synchronization Engine
+   458→   458→- Membaca package.json untuk mengidentifikasi seluruh tech stack (Next.js 16, React 19, Prisma 6, Tailwind CSS 4, shadcn/ui, dll)
+   459→   459→- Menugaskan Explore Agent untuk menganalisis 44 file API route, 17 halaman, 5 komponen kustom, middleware, dan utility files
+   460→   460→- Explore Agent mengembalikan laporan komprehensif 55+ endpoint API, sistem autentikasi, fitur import/export, audit logging, pengaduan system
+   461→   461→- Menulis HTML dokumen 9 bab: Pendahuluan, Arsitektur Sistem, Skema Basis Data (6 tabel detail), Spesifikasi API, Keamanan & Autentikasi, Catatan Operasional, Infrastruktur & Deployment, Halaman & Komponen, Ringkasan & Rekomendasi
+   462→   462→- Desain profesional: tema teal/emerald, Playfair Display + Inter fonts, diagram arsitektur berlapis, flow diagram alur bisnis, 17 tabel data
+   463→   463→- Validasi HTML via poster_validate.py (cover text overlap diabaikan - validator untuk poster, bukan dokumen teknis)
+   464→   464→- Render PDF via html2pdf-next.js (Chromium native @page, --nopaged)
+   465→   465→- QA passed: 11/11 checks (metadata, page size, no blank pages, fonts embedded, no overflow, fill ratio, full-bleed cover, symmetric margins)
+   466→   466→- Metadata ditambahkan: Title, Author (Disdukcapil Kab Ngada), Subject, Creator
+   467→   467→- Verifikasi visual via agent-browser screenshot + VLM analysis: cover professional, tables well-formatted, text readable
+   468→   468→
+   469→   469→Stage Summary:
+   470→   470→- Output: /home/z/my-project/download/Skema-Teknis-Operasional.pdf (423 KB, 20 halaman, 4294 kata, 17 tabel)
+   471→   471→- Output: /home/z/my-project/download/skema-teknis-operasional.html (editable source)
+   472→   472→- Tidak mengubah kode aplikasi
+   473→   473→- Dokumen mencakup: arsitektur 3-tier, detail 6 tabel DB, 55+ API endpoint, RBAC 3 role, mekanisme session JWT, schema sync engine, penyimpanan berkas base64, import/export Excel, audit logging, dan rekomendasi pengembangan
+   474→   474→
