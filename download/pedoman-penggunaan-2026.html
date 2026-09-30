@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedoman Penggunaan Sistem Informasi Pencatatan Nama Bayi Baru Lahir 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        @page { size: 720px 1020px; margin: 0; }
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; background: #f8fafc; font-family: 'Inter', sans-serif; font-size: 13px; line-height: 1.7; color: #1e293b; }
+        .cover-page { width: 720px; height: 1020px; background: linear-gradient(160deg, #064e3b 0%, #0d9488 50%, #14b8a6 100%); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 50px; position: relative; break-after: page; overflow: hidden; }
+        .cover-page::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); opacity: 0.6; }
+        .cover-content { position: relative; z-index: 1; }
+        .cover-badge { display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 24px; padding: 8px 24px; font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 40px; }
+        .cover-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 800; line-height: 1.3; margin-bottom: 20px; color: #ffffff; }
+        .cover-subtitle { font-size: 16px; font-weight: 400; opacity: 0.9; margin-bottom: 12px; line-height: 1.6; }
+        .cover-year { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 700; margin: 30px 0; opacity: 0.95; }
+        .cover-label { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 6px; padding: 10px 28px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-top: 20px; }
+        .cover-divider { width: 80px; height: 3px; background: rgba(255,255,255,0.5); margin: 24px auto; border-radius: 2px; }
+        .main-content { width: 720px; margin: 0 auto; background: #ffffff; padding: 50px 55px; }
+        .chapter-header { margin-top: 40px; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 3px solid #0d9488; }
+        .chapter-header:first-child { margin-top: 0; }
+        .chapter-number { font-family: 'Playfair Display', serif; font-size: 12px; font-weight: 700; color: #0d9488; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px; }
+        .chapter-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: #064e3b; margin: 0; line-height: 1.3; }
+        .section-header { margin-top: 28px; margin-bottom: 14px; }
+        .section-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: #0f766e; margin: 0; line-height: 1.4; }
+        .subsection-title { font-size: 14px; font-weight: 600; color: #115e59; margin: 18px 0 8px 0; }
+        p { margin: 0 0 10px 0; text-align: justify; }
+        ul, ol { margin: 8px 0 12px 0; padding-left: 24px; }
+        li { margin-bottom: 5px; }
+        .screenshot-container { break-inside: avoid; margin: 16px 0 8px 0; }
+        .screenshot-container img { display: block; width: 100%; max-width: 100%; border-radius: 8px; border: 1px solid #e2e8f0; margin: 0 0 6px 0; }
+        .screenshot-caption { font-size: 11px; color: #64748b; text-align: center; font-style: italic; margin: 0; }
+        .callout-steps { margin: 12px 0 16px 0; padding: 0; list-style: none; counter-reset: callout-counter; }
+        .callout-steps li { position: relative; padding-left: 36px; margin-bottom: 10px; min-height: 24px; }
+        .callout-steps li::before { counter-increment: callout-counter; content: counter(callout-counter); position: absolute; left: 0; top: 1px; width: 22px; height: 22px; background: #0d9488; color: white; border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; line-height: 1; }
+        .info-box { break-inside: avoid; background: #f0fdfa; border-left: 4px solid #0d9488; border-radius: 0 8px 8px 0; padding: 14px 16px; margin: 14px 0; font-size: 12px; line-height: 1.7; }
+        .info-box-title { font-weight: 700; color: #0d9488; margin-bottom: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .warning-box { break-inside: avoid; background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 0 8px 8px 0; padding: 14px 16px; margin: 14px 0; font-size: 12px; line-height: 1.7; }
+        .warning-box-title { font-weight: 700; color: #d97706; margin-bottom: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .danger-box { break-inside: avoid; background: #fef2f2; border-left: 4px solid #ef4444; border-radius: 0 8px 8px 0; padding: 14px 16px; margin: 14px 0; font-size: 12px; line-height: 1.7; }
+        .danger-box-title { font-weight: 700; color: #dc2626; margin-bottom: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .data-table { width: 100%; border-collapse: collapse; margin: 12px 0 16px 0; font-size: 12px; }
+        .data-table th { background: #0d9488; color: white; font-weight: 600; padding: 10px 12px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .data-table th:first-child { border-radius: 6px 0 0 0; }
+        .data-table th:last-child { border-radius: 0 6px 0 0; }
+        .data-table td { padding: 9px 12px; border-bottom: 1px solid #e2e8f0; }
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table tr:nth-child(even) { background: #f8fafc; }
+        .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+        .badge-teal { background: #ccfbf1; color: #0d9488; }
+        .badge-green { background: #dcfce7; color: #166534; }
+        .badge-amber { background: #fef3c7; color: #92400e; }
+        .badge-red { background: #fee2e2; color: #991b1b; }
+        .step-block { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; margin: 10px 0; break-inside: avoid; }
+        .step-block-title { font-weight: 600; color: #0f766e; font-size: 13px; margin-bottom: 6px; }
+        .toc { margin: 20px 0; }
+        .toc-item { display: flex; align-items: baseline; padding: 6px 0; border-bottom: 1px dotted #cbd5e1; }
+        .toc-chapter { font-weight: 600; color: #0d9488; min-width: 120px; }
+        strong { color: #115e59; }
+        code { background: #f1f5f9; padding: 2px 7px; border-radius: 4px; font-size: 12px; color: #0f766e; font-family: 'Courier New', monospace; }
+        .footer-note { margin-top: 40px; padding-top: 16px; border-top: 2px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8; }
+        @media screen { body { display: flex; flex-direction: column; align-items: center; } .main-content, .cover-page { box-shadow: 0 4px 24px rgba(0,0,0,0.08); } }
+    </style>
+</head>
+<body>
+
+<div class="cover-page">
+    <div class="cover-content">
+        <div class="cover-badge">Lampiran Laporan Resmi</div>
+        <div class="cover-title">Pedoman Penggunaan<br>Sistem Informasi<br>Pencatatan Nama<br>Bayi Baru Lahir</div>
+        <div class="cover-divider"></div>
+        <div class="cover-subtitle">Dinas Kependudukan dan<br>Pencatatan Sipil Kabupaten Ngada</div>
+        <div class="cover-year">2026</div>
+        <div class="cover-label">Dokumen Resmi &bull; Panduan Teknis</div>
+    </div>
+</div>
+
+<div class="main-content">
+
+    <div class="chapter-header" style="border-bottom-color: #064e3b;">
+        <div class="chapter-number">Daftar Isi</div>
+        <h1 class="chapter-title" style="font-size: 24px;">Daftar Isi</h1>
+    </div>
+    <div class="toc">
+        <div class="toc-item"><span class="toc-chapter">BAB 1</span><span>Pendahuluan</span></div>
+        <div class="toc-item"><span class="toc-chapter">BAB 2</span><span>Cara Mengakses Sistem</span></div>
+        <div class="toc-item"><span class="toc-chapter">BAB 3</span><span>Panduan Admin Dukcapil</span></div>
+        <div class="toc-item"><span class="toc-chapter">BAB 4</span><span>Panduan Operator Puskesmas</span></div>
+        <div class="toc-item"><span class="toc-chapter">BAB 5</span><span>Profil Pengguna</span></div>
+        <div class="toc-item"><span class="toc-chapter">BAB 6</span><span>Panduan Tema Tampilan</span></div>
+        <div class="toc-item"><span class="toc-chapter">BAB 7</span><span>Pengaduan Sistem</span></div>
+        <div class="toc-item"><span class="toc-chapter">BAB 8</span><span>Tips dan Troubleshooting</span></div>
+        <div class="toc-item"><span class="toc-chapter">BAB 9</span><span>Kontak dan Bantuan</span></div>
+    </div>
+
+    <!-- ======== BAB 1: PENDAHULUAN ======== -->
+    <div class="chapter-header">
+        <div class="chapter-number">BAB 1</div>
+        <h1 class="chapter-title">Pendahuluan</h1>
+    </div>
+
+    <div class="section-header"><h2 class="section-title">1.1 Tujuan Pedoman</h2></div>
+    <p>Pedoman penggunaan ini disusun sebagai panduan teknis resmi bagi seluruh pengguna <strong>Sistem Informasi Pencatatan Nama Bayi Baru Lahir</strong> di lingkungan Dinas Kependudukan dan Pencatatan Sipil (Dukcapil) Kabupaten Ngada. Dokumen ini memberikan penjelasan lengkap mengenai cara mengakses, mengoperasikan, dan memanfaatkan seluruh fitur yang tersedia dalam sistem sepanjang tahun 2026.</p>
+    <p>Pedoman ini ditujukan agar setiap pengguna dapat memahami alur kerja sistem, melakukan pencatatan data kelahiran dengan benar, serta memanfaatkan fitur-fitur pendukung seperti verifikasi data, pengelolaan dokumen, analitik, dan pengaduan secara efektif.</p>
+
+    <div class="section-header"><h2 class="section-title">1.2 Sasaran Pengguna</h2></div>
+    <p>Sistem ini dirancang untuk dua peran utama, yaitu:</p>
+    <table class="data-table">
+        <thead><tr><th>Peran</th><th>Deskripsi</th><th>Akses Utama</th></tr></thead>
+        <tbody>
+            <tr><td><span class="badge badge-teal">Admin Dukcapil</span></td><td>Petugas Dinas Dukcapil Kabupaten Ngada yang bertanggung jawab mengelola sistem secara keseluruhan</td><td>Verifikasi data, kelola pengguna, analitik, log audit, pengaduan, manajemen NIK</td></tr>
+            <tr><td><span class="badge badge-green">Operator Puskesmas</span></td><td>Petugas Puskesmas di wilayah Kabupaten Ngada yang bertugas mencatat data kelahiran bayi</td><td>Input data kelahiran, unggah dokumen, riwayat data, pengaduan</td></tr>
+        </tbody>
+    </table>
+
+    <div class="section-header"><h2 class="section-title">1.3 Deskripsi Singkat Sistem</h2></div>
+    <p><strong>Sistem Informasi Pencatatan Nama Bayi Baru Lahir</strong> merupakan aplikasi berbasis web yang dibangun untuk digitalisasi proses pencatatan nama bayi baru lahir di Kabupaten Ngada. Sistem ini menghubungkan petugas di Puskesmas (sebagai input data) dengan Dinas Dukcapil (sebagai pengelola dan verifikator data), sehingga proses pencatatan menjadi lebih efisien, akurat, dan terintegrasi.</p>
+    <p>Fitur utama sistem meliputi pencatatan data kelahiran, pengunggahan dokumen pendukung (SKL dan KK), verifikasi data oleh admin, manajemen NIK bayi, dashboard analitik, serta sistem pengaduan untuk menangani kendala operasional.</p>
+
+    <div class="screenshot-container">
+        <img src="screenshots/15-landing-page.png" alt="Halaman Utama">
+        <p class="screenshot-caption">Gambar 1.1 &mdash; Halaman Utama (Landing Page) Sistem Informasi Pencatatan Nama Bayi Baru Lahir</p>
+    </div>
+    <p>Tampilan halaman utama menunjukkan identitas resmi sistem dengan logo Dinas Dukcapil Kabupaten Ngada, deskripsi singkat layanan, serta tombol navigasi untuk masuk ke sistem.</p>
+
+    <!-- ======== BAB 2: CARA MENGAKSES SISTEM ======== -->
+    <div class="chapter-header">
+        <div class="chapter-number">BAB 2</div>
+        <h1 class="chapter-title">Cara Mengakses Sistem</h1>
+    </div>
+
+    <div class="section-header"><h2 class="section-title">2.1 Alamat URL Sistem</h2></div>
+    <p>Sistem Informasi Pencatatan Nama Bayi Baru Lahir dapat diakses melalui alamat URL berikut:</p>
+    <div class="step-block">
+        <div class="step-block-title">Alamat Akses Sistem</div>
+        <p style="margin:0;"><code>https://pencatatan-bayi.vercel.app</code></p>
+    </div>
+    <p>Pastikan Anda mengetikkan alamat URL dengan benar pada kolom alamat browser. Sistem ini bersifat cloud-based sehingga dapat diakses dari mana saja selama terhubung dengan internet.</p>
+
+    <div class="section-header"><h2 class="section-title">2.2 Browser yang Didukung</h2></div>
+    <p>Untuk pengalaman penggunaan yang optimal, sistem direkomendasikan untuk diakses menggunakan browser berikut:</p>
+    <table class="data-table">
+        <thead><tr><th>Browser</th><th>Versi Minimum</th><th>Status</th></tr></thead>
+        <tbody>
+            <tr><td>Google Chrome</td><td>90+</td><td><span class="badge badge-green">Didukung Penuh</span></td></tr>
+            <tr><td>Mozilla Firefox</td><td>88+</td><td><span class="badge badge-green">Didukung Penuh</span></td></tr>
+            <tr><td>Microsoft Edge</td><td>90+</td><td><span class="badge badge-green">Didukung Penuh</span></td></tr>
+            <tr><td>Safari</td><td>14+</td><td><span class="badge badge-green">Didukung Penuh</span></td></tr>
+        </tbody>
+    </table>
+    <div class="info-box"><div class="info-box-title">💡 Tips</div>Pastikan browser Anda selalu diperbarui ke versi terbaru untuk menghindari masalah kompatibilitas dengan fitur-fitur sistem.</div>
+
+    <div class="section-header"><h2 class="section-title">2.3 Halaman Login dan Penjelasan Komponen</h2></div>
+    <p>Berikut adalah tampilan halaman login yang akan muncul saat pengguna mengakses sistem:</p>
+    <div class="screenshot-container">
+        <img src="screenshots/01-login.png" alt="Halaman Login">
+        <p class="screenshot-caption">Gambar 2.1 &mdash; Halaman Login Sistem Informasi Pencatatan Nama Bayi Baru Lahir</p>
+    </div>
+    <p>Keterangan bagian-bagian pada halaman login:</p>
+    <ol class="callout-steps">
+        <li><strong>Logo dan Judul Sistem</strong> &mdash; Menampilkan identitas resmi aplikasi beserta nama sistem di bagian atas halaman login.</li>
+        <li><strong>Kolom Username</strong> &mdash; Masukkan nama pengguna (username) yang telah diberikan oleh Admin Dukcapil. Contoh: <code>admin_dukcapil</code> untuk admin, atau akun operator sesuai nama puskesmas.</li>
+        <li><strong>Kolom Password</strong> &mdash; Masukkan kata sandi yang sesuai dengan akun Anda. Kata sandi bersifat sensitif, pastikan tidak dibagikan kepada pihak lain.</li>
+        <li><strong>Tombol Masuk</strong> &mdash; Klik tombol &ldquo;Masuk&rdquo; untuk mengirimkan kredensial dan mengakses sistem.</li>
+    </ol>
+
+    <div class="section-header"><h2 class="section-title">2.4 Informasi Akun Default</h2></div>
+    <table class="data-table">
+        <thead><tr><th>Peran</th><th>Username</th><th>Keterangan</th></tr></thead>
+        <tbody>
+            <tr><td><span class="badge badge-teal">Admin Dukcapil</span></td><td><code>admin_dukcapil</code></td><td>Akun utama untuk mengelola seluruh fitur sistem</td></tr>
+            <tr><td><span class="badge badge-green">Operator Puskesmas</span></td><td>Disesuaikan per puskesmas</td><td>Akun dibuat oleh Admin untuk setiap Puskesmas</td></tr>
+        </tbody>
+    </table>
+    <div class="warning-box"><div class="warning-box-title">⚠️ Keamanan Akun</div>Jangan membagikan username dan password Anda kepada siapa pun. Ganti password default segera setelah login pertama kali melalui menu Profil Pengguna. Hubungi Admin Dukcapil jika Anda mengalami kendala akses.</div>
+
+    <div class="section-header"><h2 class="section-title">2.5 Langkah Login Step-by-Step</h2></div>
+    <ol class="callout-steps">
+        <li>Buka browser yang didukung (disarankan Google Chrome).</li>
+        <li>Ketikkan alamat <code>https://pencatatan-bayi.vercel.app</code> pada kolom alamat browser, lalu tekan Enter.</li>
+        <li>Halaman login akan ditampilkan. Masukkan <strong>username</strong> Anda pada kolom yang tersedia.</li>
+        <li>Masukkan <strong>password</strong> Anda pada kolom password.</li>
+        <li>Klik tombol <strong>&ldquo;Masuk&rdquo;</strong>.</li>
+        <li>Jika kredensial benar, Anda akan diarahkan ke halaman <strong>Dashboard</strong> sesuai peran Anda (Admin atau Operator).</li>
+        <li>Jika terjadi kesalahan, periksa kembali username dan password, lalu coba lagi.</li>
+    </ol>
+
+    <!-- ======== BAB 3: PANDUAN ADMIN DUKCAPIL ======== -->
+    <div class="chapter-header">
+        <div class="chapter-number">BAB 3</div>
+        <h1 class="chapter-title">Panduan Admin Dukcapil</h1>
+    </div>
+    <p>Peran <strong>Admin Dukcapil</strong> memiliki akses penuh terhadap seluruh fitur sistem. Admin bertanggung jawab untuk mengelola data pengguna, memverifikasi data kelahiran, mengelola puskesmas, serta memantau seluruh aktivitas sistem melalui log audit dan analitik.</p>
+
+    <div class="section-header"><h2 class="section-title">3.1 Dashboard Admin</h2></div>
+    <p>Dashboard Admin merupakan halaman utama yang ditampilkan setelah Admin Dukcapil berhasil login. Halaman ini menyajikan ringkasan statistik penting dan aksi cepat yang dibutuhkan admin dalam mengelola sistem sehari-hari.</p>
+    <div class="screenshot-container">
+        <img src="screenshots/02-admin-dashboard.png" alt="Dashboard Admin">
+        <p class="screenshot-caption">Gambar 3.1 &mdash; Tampilan Dashboard Admin Dukcapil dengan statistik ringkasan dan aksi cepat</p>
+    </div>
+    <p>Pada Dashboard Admin, Anda dapat melihat informasi berikut:</p>
+    <ul>
+        <li><strong>Statistik Ringkasan</strong> &mdash; Jumlah total data kelahiran, data yang sudah diverifikasi, data menunggu verifikasi, jumlah puskesmas terdaftar, dan jumlah pengguna aktif.</li>
+        <li><strong>Aksi Cepat</strong> &mdash; Tombol akses cepat untuk navigasi ke fitur yang sering digunakan, seperti verifikasi data, kelola pengguna, dan lihat laporan.</li>
+        <li><strong>Data Terbaru</strong> &mdash; Daftar data kelahiran terbaru yang masuk ke sistem untuk memantau aktivitas terkini.</li>
+    </ul>
+    <div class="info-box"><div class="info-box-title">💡 Tips</div>Dashboard Admin diperbarui secara otomatis. Refresh halaman jika ingin memastikan data yang ditampilkan adalah yang terbaru.</div>
+
+    <div class="section-header"><h2 class="section-title">3.2 Verifikasi Data Kelahiran</h2></div>
+    <p>Salah satu tugas utama Admin Dukcapil adalah melakukan verifikasi terhadap data kelahiran yang diinput oleh Operator Puskesmas. Proses ini memastikan data yang masuk sudah lengkap dan valid sebelum diproses lebih lanjut.</p>
+    <p class="subsection-title">Langkah Verifikasi Data:</p>
+    <ol class="callout-steps">
+        <li>Buka menu <strong>&ldquo;Data Kelahiran&rdquo;</strong> atau klik notifikasi data baru di dashboard.</li>
+        <li>Anda akan melihat daftar data dengan status <span class="badge badge-amber">Menunggu Verifikasi</span>.</li>
+        <li>Klik data yang ingin diperiksa untuk melihat detail lengkapnya.</li>
+        <li>Periksa kelengkapan data termasuk dokumen pendukung (SKL dan KK) yang diunggah.</li>
+        <li>Jika data benar dan lengkap, klik tombol <strong>&ldquo;Verifikasi&rdquo;</strong> untuk menyetujui.</li>
+        <li>Jika ada kesalahan, klik <strong>&ldquo;Tolak&rdquo;</strong> dan berikan keterangan alasan penolakan. Operator akan menerima notifikasi untuk memperbaiki data.</li>
+    </ol>
+    <div class="info-box"><div class="info-box-title">📋 Status Data</div>Setiap data kelahiran memiliki tiga status: <strong>Menunggu Verifikasi</strong> (baru diinput operator), <strong>Terferifikasi</strong> (disetujui admin), dan <strong>Ditolak</strong> (ada kesalahan yang perlu diperbaiki oleh operator).</div>
+
+    <div class="section-header"><h2 class="section-title">3.3 Download Data Baru dan Register</h2></div>
+    <p>Admin Dukcapil dapat mengunduh data kelahiran dalam format Excel untuk keperluan pelaporan, arsip, atau koordinasi dengan instansi terkait.</p>
+    <p class="subsection-title">Langkah Download Data:</p>
+    <ol class="callout-steps">
+        <li>Buka menu <strong>&ldquo;Data Kelahiran&rdquo;</strong> di sidebar navigasi.</li>
+        <li>Gunakan filter untuk memilih data yang ingin diunduh (berdasarkan tanggal, status, atau puskesmas).</li>
+        <li>Klik tombol <strong>&ldquo;Download Excel&rdquo;</strong> atau ikon unduh yang tersedia.</li>
+        <li>File Excel akan otomatis terunduh ke perangkat Anda.</li>
+        <li>Buka file Excel untuk melihat data dalam format tabel yang terstruktur dan siap cetak.</li>
+    </ol>
+    <div class="info-box"><div class="info-box-title">💡 Tips</div>Gunakan fitur filter sebelum mendownload agar data yang diunduh sesuai dengan kebutuhan laporan Anda.</div>
+
+    <div class="section-header"><h2 class="section-title">3.4 Kelola Pengguna (Users)</h2></div>
+    <p>Admin Dukcapil memiliki wewenang untuk mengelola akun pengguna sistem, termasuk membuat akun baru bagi Operator Puskesmas, mengubah informasi pengguna, serta menonaktifkan akun yang tidak lagi digunakan.</p>
+    <div class="screenshot-container">
+        <img src="screenshots/03-admin-users.png" alt="Kelola Pengguna">
+        <p class="screenshot-caption">Gambar 3.2 &mdash; Halaman Kelola Pengguna untuk menambah, mengedit, dan menghapus akun pengguna</p>
+    </div>
+    <p class="subsection-title">Fitur yang tersedia:</p>
+    <ul>
+        <li><strong>Tambah Pengguna</strong> &mdash; Klik tombol &ldquo;Tambah Pengguna&rdquo; untuk membuat akun baru. Isi formulir yang muncul termasuk nama lengkap, username, password, dan pilih peran serta puskesmas terkait.</li>
+        <li><strong>Edit Pengguna</strong> &mdash; Klik ikon edit pada baris pengguna yang ingin diubah informasinya.</li>
+        <li><strong>Hapus Pengguna</strong> &mdash; Klik ikon hapus untuk menghapus akun pengguna. Tindakan ini memerlukan konfirmasi.</li>
+        <li><strong>Pencarian</strong> &mdash; Gunakan kolom pencarian untuk menemukan pengguna tertentu berdasarkan nama atau username.</li>
+    </ul>
+    <div class="warning-box"><div class="warning-box-title">⚠️ Perhatian</div>Sebelum menghapus akun pengguna, pastikan tidak ada data kelahiran yang masih terkait dengan akun tersebut. Data yang terkait akun yang dihapus akan tetap tersimpan dalam sistem.</div>
+
+    <div class="section-header"><h2 class="section-title">3.5 Kelola Puskesmas</h2></div>
+    <p>Menu ini memungkinkan Admin Dukcapil untuk mengelola data Puskesmas yang terdaftar dalam sistem. Admin dapat menambahkan Puskesmas baru, mengedit informasi Puskesmas, serta menonaktifkan Puskesmas yang sudah tidak aktif.</p>
+    <div class="screenshot-container">
+        <img src="screenshots/04-admin-puskesmas.png" alt="Kelola Puskesmas">
+        <p class="screenshot-caption">Gambar 3.3 &mdash; Halaman Kelola Puskesmas untuk mengelola data fasilitas kesehatan terdaftar</p>
+    </div>
+    <p class="subsection-title">Langkah Mengelola Puskesmas:</p>
+    <ol class="callout-steps">
+        <li>Buka menu <strong>&ldquo;Kelola Puskesmas&rdquo;</strong> di sidebar navigasi.</li>
+        <li>Daftar seluruh Puskesmas yang terdaftar akan ditampilkan dalam tabel.</li>
+        <li>Klik <strong>&ldquo;Tambah Puskesmas&rdquo;</strong> untuk mendaftarkan Puskesmas baru dengan mengisi nama, alamat, dan kontak.</li>
+        <li>Klik ikon <strong>edit</strong> untuk mengubah informasi Puskesmas yang sudah terdaftar.</li>
+        <li>Klik ikon <strong>hapus</strong> untuk menghapus Puskesmas dari sistem (dengan konfirmasi).</li>
+    </ol>
+
+    <div class="section-header"><h2 class="section-title">3.6 Manajemen NIK Bayi</h2></div>
+    <p>Fitur Manajemen NIK Bayi memungkinkan Admin Dukcapil untuk menambahkan, memperbarui, atau menghapus Nomor Induk Kependudukan (NIK) yang terhubung dengan data bayi yang sudah terverifikasi. NIK bayi biasanya diperoleh setelah proses penerbitan dokumen kependudukan selesai.</p>
+    <div class="screenshot-container">
+        <img src="screenshots/05-admin-nik-bayi.png" alt="Manajemen NIK Bayi">
+        <p class="screenshot-caption">Gambar 3.4 &mdash; Halaman Manajemen NIK Bayi untuk menambah dan mengelola NIK bayi terverifikasi</p>
+    </div>
+    <p class="subsection-title">Langkah Mengelola NIK Bayi:</p>
+    <ol class="callout-steps">
+        <li>Buka menu <strong>&ldquo;Manajemen NIK Bayi&rdquo;</strong> di sidebar navigasi.</li>
+        <li>Daftar bayi yang sudah diverifikasi akan ditampilkan. Pilih bayi yang ingin ditambahkan NIK-nya.</li>
+        <li>Klik tombol <strong>&ldquo;Tambah NIK&rdquo;</strong> atau ikon edit pada baris data yang sesuai.</li>
+        <li>Masukkan NIK bayi yang telah diterbitkan oleh Dukcapil (16 digit angka).</li>
+        <li>Klik <strong>&ldquo;Simpan&rdquo;</strong> untuk menyimpan perubahan.</li>
+        <li>Untuk menghapus NIK yang salah, klik ikon hapus dan konfirmasi penghapusan.</li>
+    </ol>
+
+    <div class="section-header"><h2 class="section-title">3.7 Log Audit</h2></div>
+    <p>Log Audit menyajikan catatan seluruh aktivitas yang terjadi dalam sistem. Fitur ini sangat penting untuk transparansi, akuntabilitas, dan keamanan data. Admin dapat melihat siapa yang melakukan aksi apa, kapan, dan dari mana.</p>
+    <div class="screenshot-container">
+        <img src="screenshots/06-admin-audit-log.png" alt="Log Audit">
+        <p class="screenshot-caption">Gambar 3.5 &mdash; Halaman Log Audit yang mencatat seluruh aktivitas pengguna dalam sistem</p>
+    </div>
+    <p class="subsection-title">Informasi yang tercatat dalam Log Audit:</p>
+    <ul>
+        <li><strong>Waktu (Timestamp)</strong> &mdash; Tanggal dan jam presisi ketika aksi dilakukan.</li>
+        <li><strong>Pengguna</strong> &mdash; Nama pengguna yang melakukan aksi.</li>
+        <li><strong>Aksi (Action)</strong> &mdash; Jenis aktivitas seperti CREATE, UPDATE, DELETE, LOGIN, VERIFY, dan lainnya.</li>
+        <li><strong>Detail</strong> &mdash; Deskripsi lengkap tentang apa yang dilakukan pengguna.</li>
+        <li><strong>IP Address</strong> &mdash; Alamat IP perangkat yang digunakan untuk mengakses sistem.</li>
+    </ul>
+    <div class="info-box"><div class="info-box-title">💡 Tips</div>Gunakan filter berdasarkan tanggal, pengguna, atau jenis aksi untuk menemukan aktivitas spesifik yang Anda cari di log audit.</div>
+
+    <div class="section-header"><h2 class="section-title">3.8 Analitik dan Statistik</h2></div>
+    <p>Fitur Analitik menyajikan visualisasi data dalam bentuk grafik dan tabel statistik yang membantu Admin Dukcapil dalam mengambil keputusan berbasis data. Halaman ini menampilkan tren kelahiran, distribusi per puskesmas, dan ringkasan bulanan/tahunan.</p>
+    <div class="screenshot-container">
+        <img src="screenshots/07-admin-analytics.png" alt="Analitik dan Statistik">
+        <p class="screenshot-caption">Gambar 3.6 &mdash; Halaman Analitik dan Statistik dengan grafik tren kelahiran dan distribusi data</p>
+    </div>
+    <p class="subsection-title">Jenis analitik yang ditampilkan:</p>
+    <ul>
+        <li><strong>Grafik Tren Kelahiran</strong> &mdash; Menampilkan jumlah kelahiran per bulan dalam bentuk grafik batang atau garis.</li>
+        <li><strong>Distribusi per Puskesmas</strong> &mdash; Menampilkan persentase kontribusi masing-masing Puskesmas terhadap total data kelahiran.</li>
+        <li><strong>Statistik Status Verifikasi</strong> &mdash; Pie chart atau bar chart yang menunjukkan proporsi data berdasarkan status verifikasi.</li>
+        <li><strong>Ringkasan Angka</strong> &mdash; Total kelahiran, rata-rata per bulan, dan perbandingan dengan periode sebelumnya.</li>
+    </ul>
+
+    <div class="section-header"><h2 class="section-title">3.9 Kelola Dokumen</h2></div>
+    <p>Menu Kelola Dokumen memungkinkan Admin Dukcapil untuk melihat dan mengelola seluruh dokumen pendukung yang diunggah oleh Operator Puskesmas, termasuk Surat Keterangan Lahir (SKL) dan Kartu Keluarga (KK).</p>
+    <div class="screenshot-container">
+        <img src="screenshots/08-admin-dokumen.png" alt="Kelola Dokumen">
+        <p class="screenshot-caption">Gambar 3.7 &mdash; Halaman Kelola Dokumen untuk melihat dan mengunduh dokumen pendukung</p>
+    </div>
+    <p class="subsection-title">Fitur yang tersedia:</p>
+    <ul>
+        <li><strong>Daftar Dokumen</strong> &mdash; Tabel yang menampilkan seluruh dokumen yang diunggah, lengkap dengan nama file, jenis dokumen, pengunggah, dan tanggal unggah.</li>
+        <li><strong>Preview/Download</strong> &mdash; Klik pada dokumen untuk melihat preview atau mengunduh file ke perangkat Anda.</li>
+        <li><strong>Filter</strong> &mdash; Filter dokumen berdasarkan jenis (SKL/KK), puskesmas, atau rentang tanggal.</li>
+        <li><strong>Hapus Dokumen</strong> &mdash; Admin dapat menghapus dokumen yang tidak valid atau duplikat.</li>
+    </ul>
+
+    <div class="section-header"><h2 class="section-title">3.10 Kelola Pengaduan</h2></div>
+    <p>Admin Dukcapil dapat melihat dan merespons seluruh pengaduan yang diajukan oleh Operator Puskesmas. Fitur ini memungkinkan penanganan masalah operasional secara terstruktur dan terdokumentasi.</p>
+    <div class="screenshot-container">
+        <img src="screenshots/09-admin-pengaduan.png" alt="Kelola Pengaduan">
+        <p class="screenshot-caption">Gambar 3.8 &mdash; Halaman Kelola Pengaduan untuk merespons pengaduan dari Operator Puskesmas</p>
+    </div>
+    <p class="subsection-title">Langkah Merespons Pengaduan:</p>
+    <ol class="callout-steps">
+        <li>Buka menu <strong>&ldquo;Kelola Pengaduan&rdquo;</strong> di sidebar navigasi.</li>
+        <li>Daftar seluruh pengaduan akan ditampilkan beserta statusnya (Baru, Diproses, Selesai).</li>
+        <li>Klik pada pengaduan yang ingin ditangani untuk melihat detailnya.</li>
+        <li>Tuliskan <strong>balasan atau tanggapan</strong> Anda pada kolom respons yang tersedia.</li>
+        <li>Perbarui <strong>status pengaduan</strong> menjadi &ldquo;Diproses&rdquo; atau &ldquo;Selesai&rdquo; sesuai progres penanganan.</li>
+        <li>Klik <strong>&ldquo;Kirim Respons&rdquo;</strong> untuk menyimpan balasan Anda. Operator yang mengajukan pengaduan akan menerima notifikasi.</li>
+    </ol>
+    <div class="info-box"><div class="info-box-title">💡 Tips</div>Usahakan untuk merespons setiap pengaduan dalam waktu maksimal 2 hari kerja guna menjaga kepercayaan Operator Puskesmas terhadap sistem.</div>
+
+    <!-- ======== BAB 4: PANDUAN OPERATOR PUSKESMAS ======== -->
+    <div class="chapter-header">
+        <div class="chapter-number">BAB 4</div>
+        <h1 class="chapter-title">Panduan Operator Puskesmas</h1>
+    </div>
+    <p>Peran <strong>Operator Puskesmas</strong> merupakan pengguna utama yang bertugas mencatat data kelahiran bayi baru lahir di wilayah kerja masing-masing Puskesmas. Operator memiliki akses terbatas yang difokuskan pada fungsi pencatatan dan pelacakan data.</p>
+
+    <div class="section-header"><h2 class="section-title">4.1 Dashboard Operator</h2></div>
+    <p>Dashboard Operator menampilkan ringkasan data kelahiran yang dicatat oleh Puskesmas terkait, termasuk statistik singkat, data terbaru, dan visualisasi grafik sederhana.</p>
+    <div class="screenshot-container">
+        <img src="screenshots/11-operator-dashboard.png" alt="Dashboard Operator">
+        <p class="screenshot-caption">Gambar 4.1 &mdash; Tampilan Dashboard Operator Puskesmas dengan statistik dan grafik</p>
+    </div>
+    <p>Informasi yang ditampilkan pada Dashboard Operator:</p>
+    <ul>
+        <li><strong>Total Data Puskesmas</strong> &mdash; Jumlah seluruh data kelahiran yang telah diinput oleh Puskesmas Anda.</li>
+        <li><strong>Data Menunggu Verifikasi</strong> &mdash; Jumlah data yang sudah diinput namun belum diverifikasi oleh Admin Dukcapil.</li>
+        <li><strong>Data Terferifikasi</strong> &mdash; Jumlah data yang telah disetujui oleh Admin.</li>
+        <li><strong>Grafik Tren</strong> &mdash; Visualisasi tren kelahiran di Puskesmas Anda dalam beberapa bulan terakhir.</li>
+        <li><strong>Data Terbaru</strong> &mdash; Daftar 5 data kelahiran terakhir yang Anda input.</li>
+    </ul>
+
+    <div class="section-header"><h2 class="section-title">4.2 Input Data Kelahiran Baru</h2></div>
+    <p>Fitur Input Data Kelahiran merupakan fungsi utama bagi Operator Puskesmas. Melalui fitur ini, operator dapat mencatat data lengkap bayi baru lahir beserta informasi orang tua.</p>
+    <div class="screenshot-container">
+        <img src="screenshots/12-operator-input.png" alt="Input Data Kelahiran">
+        <p class="screenshot-caption">Gambar 4.2 &mdash; Formulir Input Data Kelahiran Baru dengan seluruh field yang harus diisi</p>
+    </div>
+    <p class="subsection-title">Field yang harus diisi pada formulir:</p>
+    <table class="data-table">
+        <thead><tr><th>No</th><th>Field</th><th>Keterangan</th></tr></thead>
+        <tbody>
+            <tr><td>1</td><td>Nama Bayi</td><td>Nama lengkap bayi sesuai yang tertera pada SKL</td></tr>
+            <tr><td>2</td><td>Tanggal Lahir</td><td>Tanggal kelahiran bayi (format: DD/MM/YYYY)</td></tr>
+            <tr><td>3</td><td>Jenis Kelamin</td><td>Laki-laki atau Perempuan</td></tr>
+            <tr><td>4</td><td>Berat Badan</td><td>Berat badan bayi saat lahir (dalam gram)</td></tr>
+            <tr><td>5</td><td>Panjang Badan</td><td>Panjang badan bayi saat lahir (dalam cm)</td></tr>
+            <tr><td>6</td><td>Nama Ibu</td><td>Nama lengkap ibu kandung sesuai KTP</td></tr>
+            <tr><td>7</td><td>NIK Ibu</td><td>Nomor Induk Kependudukan ibu (16 digit)</td></tr>
+            <tr><td>8</td><td>Nama Ayah</td><td>Nama lengkap ayah sesuai KTP</td></tr>
+            <tr><td>9</td><td>NIK Ayah</td><td>Nomor Induk Kependudukan ayah (16 digit)</td></tr>
+            <tr><td>10</td><td>Alamat</td><td>Alamat tempat tinggal keluarga</td></tr>
+        </tbody>
+    </table>
+    <p class="subsection-title">Langkah Input Data:</p>
+    <ol class="callout-steps">
+        <li>Buka menu <strong>&ldquo;Input Data Kelahiran&rdquo;</strong> di sidebar navigasi.</li>
+        <li>Isi seluruh field yang tersedia pada formulir dengan data yang akurat.</li>
+        <li>Periksa kembali semua data yang telah diisi sebelum menyimpan.</li>
+        <li>Klik tombol <strong>&ldquo;Simpan&rdquo;</strong> untuk menyimpan data.</li>
+        <li>Sistem akan menampilkan konfirmasi bahwa data berhasil disimpan.</li>
+        <li>Data akan muncul dengan status <span class="badge badge-amber">Menunggu Verifikasi</span> dan menunggu ditinjau oleh Admin Dukcapil.</li>
+    </ol>
+    <div class="info-box"><div class="info-box-title">💡 Tips</div>Pastikan semua data yang diinput sesuai dengan dokumen resmi (SKL dan KK) untuk mempercepat proses verifikasi oleh Admin Dukcapil.</div>
+
+    <div class="section-header"><h2 class="section-title">4.3 Unggah Dokumen Pendukung (SKL dan KK)</h2></div>
+    <p>Setelah berhasil menginput data kelahiran, Operator Puskesmas wajib mengunggah dokumen pendukung berupa Surat Keterangan Lahir (SKL) dan Kartu Keluarga (KK) sebagai bukti validitas data.</p>
+    <p class="subsection-title">Ketentuan unggah dokumen:</p>
+    <ul>
+        <li><strong>Format file</strong>: Gambar (JPG, PNG) atau PDF</li>
+        <li><strong>Ukuran maksimal</strong>: 5 MB per file</li>
+        <li><strong>Dokumen yang diperlukan</strong>: SKL (wajib) dan KK (wajib)</li>
+    </ul>
+    <p class="subsection-title">Langkah Unggah Dokumen:</p>
+    <ol class="callout-steps">
+        <li>Pada halaman detail data kelahiran atau saat input data, cari bagian <strong>&ldquo;Unggah Dokumen&rdquo;</strong>.</li>
+        <li>Klik tombol <strong>&ldquo;Pilih File&rdquo;</strong> atau seret dan lepas file ke area unggah.</li>
+        <li>Pilih file SKL dari perangkat Anda, lalu lakukan hal yang sama untuk file KK.</li>
+        <li>Tunggu proses unggah selesai. Indikator progres akan ditampilkan.</li>
+        <li>Pastikan kedua dokumen berhasil diunggah sebelum menutup halaman.</li>
+    </ol>
+    <div class="warning-box"><div class="warning-box-title">⚠️ Penting</div>Dokumen yang diunggah harus jelas dan dapat terbaca. Pastikan file tidak terlalu besar (maks 5 MB) dan dalam format yang didukung. Dokumen yang buram atau tidak lengkap dapat menyebabkan data ditolak oleh Admin.</div>
+
+    <div class="section-header"><h2 class="section-title">4.4 Riwayat Data</h2></div>
+    <p>Menu Riwayat Data menampilkan seluruh data kelahiran yang pernah diinput oleh Operator Puskesmas. Operator dapat melihat detail, mengedit, dan menghapus data melalui halaman ini.</p>
+    <div class="screenshot-container">
+        <img src="screenshots/13-operator-riwayat.png" alt="Riwayat Data">
+        <p class="screenshot-caption">Gambar 4.3 &mdash; Halaman Riwayat Data Operator dengan daftar seluruh data kelahiran yang pernah diinput</p>
+    </div>
+    <p class="subsection-title">Fitur yang tersedia:</p>
+    <ul>
+        <li><strong>Daftar Data</strong> &mdash; Tabel menampilkan seluruh data kelahiran dengan kolom nama bayi, tanggal lahir, status verifikasi, dan aksi.</li>
+        <li><strong>Detail</strong> &mdash; Klik ikon mata atau nama bayi untuk melihat detail lengkap data.</li>
+        <li><strong>Edit</strong> &mdash; Klik ikon edit untuk mengubah data yang masih berstatus &ldquo;Menunggu Verifikasi&rdquo; atau &ldquo;Ditolak&rdquo;.</li>
+        <li><strong>Hapus</strong> &mdash; Klik ikon hapus untuk menghapus data (hanya data yang belum diverifikasi).</li>
+        <li><strong>Filter dan Pencarian</strong> &mdash; Gunakan filter status dan kolom pencarian untuk menemukan data tertentu.</li>
+    </ul>
+    <div class="danger-box"><div class="danger-box-title">🚫 Batasan Penting</div>Data yang sudah berstatus <strong>Terferifikasi</strong> tidak dapat diubah atau dihapus oleh Operator. Jika ada kesalahan pada data yang sudah terverifikasi, hubungi Admin Dukcapil untuk melakukan koreksi.</div>
+
+    <div class="section-header"><h2 class="section-title">4.5 Import Data dari Excel</h2></div>
+    <p>Operator Puskesmas dapat mengimpor data kelahiran secara massal menggunakan file Excel. Fitur ini berguna jika Puskesmas memiliki catatan data kelahiran yang sudah tersimpan dalam format spreadsheet.</p>
+    <p class="subsection-title">Ketentuan format file Excel:</p>
+    <ul>
+        <li>Format file: <code>.xlsx</code> atau <code>.xls</code></li>
+        <li>Baris pertama merupakan header kolom sesuai template yang disediakan</li>
+        <li>Kolom yang wajib ada: Nama Bayi, Tanggal Lahir, Jenis Kelamin, Berat Badan, Panjang Badan, Nama Ibu, NIK Ibu, Nama Ayah, NIK Ayah, Alamat</li>
+        <li>Format tanggal: <code>DD/MM/YYYY</code></li>
+    </ul>
+    <p class="subsection-title">Langkah Import Data:</p>
+    <ol class="callout-steps">
+        <li>Buka menu <strong>&ldquo;Import Data&rdquo;</strong> di sidebar navigasi.</li>
+        <li>Download <strong>template Excel</strong> yang disediakan oleh sistem sebagai acuan format.</li>
+        <li>Isi data kelahiran ke dalam template sesuai format yang ditentukan.</li>
+        <li>Klik <strong>&ldquo;Pilih File&rdquo;</strong> dan unggah file Excel yang sudah diisi.</li>
+        <li>Sistem akan memvalidasi data. Jika ada kesalahan format, akan ditampilkan pesan error yang menjelaskan baris dan kolom bermasalah.</li>
+        <li>Jika validasi berhasil, klik <strong>&ldquo;Konfirmasi Import&rdquo;</strong> untuk menyimpan seluruh data.</li>
+    </ol>
+    <div class="warning-box"><div class="warning-box-title">⚠️ Perhatian</div>Data yang diimport akan otomatis berstatus &ldquo;Menunggu Verifikasi&rdquo;. Pastikan data yang diimport sudah akurat sebelum melakukan import massal untuk menghindari penolakan berulang oleh Admin.</div>
+
+    <div class="section-header"><h2 class="section-title">4.6 Download Data Puskesmas</h2></div>
+    <p>Operator Puskesmas dapat mengunduh data kelahiran milik Puskesmas-nya sendiri dalam format Excel. Fitur ini berguna untuk membuat laporan internal atau keperluan koordinasi.</p>
+    <p class="subsection-title">Langkah Download Data:</p>
+    <ol class="callout-steps">
+        <li>Buka menu <strong>&ldquo;Riwayat Data&rdquo;</strong> di sidebar navigasi.</li>
+        <li>Gunakan filter untuk menyaring data yang ingin diunduh (berdasarkan status atau rentang tanggal).</li>
+        <li>Klik tombol <strong>&ldquo;Download Excel&rdquo;</strong> yang tersedia di bagian atas tabel.</li>
+        <li>File Excel akan otomatis terunduh ke perangkat Anda.</li>
+    </ol>
+
+    <div class="section-header"><h2 class="section-title">4.7 Pengaduan</h2></div>
+    <p>Operator Puskesmas dapat mengajukan pengaduan jika mengalami kendala dalam menggunakan sistem. Pengaduan akan ditangani oleh Admin Dukcapil secara terstruktur.</p>
+    <div class="screenshot-container">
+        <img src="screenshots/14-operator-pengaduan.png" alt="Pengaduan Operator">
+        <p class="screenshot-caption">Gambar 4.4 &mdash; Halaman Pengaduan Operator untuk membuat dan melacak pengaduan</p>
+    </div>
+    <p class="subsection-title">Langkah Membuat Pengaduan:</p>
+    <ol class="callout-steps">
+        <li>Buka menu <strong>&ldquo;Pengaduan&rdquo;</strong> di sidebar navigasi.</li>
+        <li>Klik tombol <strong>&ldquo;Buat Pengaduan Baru&rdquo;</strong>.</li>
+        <li>Pilih <strong>kategori</strong> pengaduan (SISTEM, DATA, PROSES, atau LAINNYA).</li>
+        <li>Pilih <strong>tingkat prioritas</strong> (Rendah, Sedang, atau Tinggi).</li>
+        <li>Tuliskan <strong>subjek</strong> yang menjelaskan masalah secara singkat.</li>
+        <li>Tuliskan <strong>deskripsi lengkap</strong> mengenai masalah yang dialami, termasuk langkah-langkah yang sudah dilakukan.</li>
+        <li>Klik <strong>&ldquo;Kirim&rdquo;</strong> untuk mengajukan pengaduan.</li>
+    </ol>
+    <p class="subsection-title">Melacak Status Pengaduan:</p>
+    <p>Pada halaman Pengaduan, Anda dapat melihat daftar seluruh pengaduan yang pernah dibuat beserta statusnya:</p>
+    <ul>
+        <li><span class="badge badge-amber">Baru</span> &mdash; Pengaduan baru saja dikirim, menunggu ditinjau Admin.</li>
+        <li><span class="badge badge-teal">Diproses</span> &mdash; Admin sedang menangani pengaduan Anda.</li>
+        <li><span class="badge badge-green">Selesai</span> &mdash; Pengaduan telah ditangani dan ditutup oleh Admin.</li>
+    </ul>
+
+    <!-- ======== BAB 5: PROFIL PENGGUNA ======== -->
+    <div class="chapter-header">
+        <div class="chapter-number">BAB 5</div>
+        <h1 class="chapter-title">Profil Pengguna</h1>
+    </div>
+    <p>Setiap pengguna (baik Admin maupun Operator) dapat mengelola informasi profil pribadinya melalui menu Profil Pengguna. Halaman ini dapat diakses melalui ikon profil di pojok kanan atas halaman.</p>
+
+    <div class="screenshot-container">
+        <img src="screenshots/10-profile.png" alt="Profil Pengguna">
+        <p class="screenshot-caption">Gambar 5.1 &mdash; Halaman Profil Pengguna untuk melihat dan mengedit informasi akun</p>
+    </div>
+
+    <div class="section-header"><h2 class="section-title">5.1 Melihat Informasi Profil</h2></div>
+    <p>Halaman profil menampilkan informasi akun Anda meliputi:</p>
+    <ul>
+        <li><strong>Nama Lengkap</strong> &mdash; Nama yang terdaftar pada akun Anda.</li>
+        <li><strong>Username</strong> &mdash; Nama pengguna untuk login (tidak dapat diubah sendiri).</li>
+        <li><strong>Peran</strong> &mdash; Peran Anda dalam sistem (Admin Dukcapil atau Operator Puskesmas).</li>
+        <li><strong>Puskesmas</strong> &mdash; Nama Puskesmas tempat Anda bertugas (khusus Operator).</li>
+        <li><strong>Aktivitas Terbaru</strong> &mdash; Daftar 5 aktivitas terakhir yang Anda lakukan dalam sistem.</li>
+    </ul>
+
+    <div class="section-header"><h2 class="section-title">5.2 Mengedit Nama</h2></div>
+    <p>Anda dapat mengubah nama lengkap yang ditampilkan pada akun:</p>
+    <ol class="callout-steps">
+        <li>Buka halaman <strong>Profil Pengguna</strong>.</li>
+        <li>Klik tombol <strong>&ldquo;Edit Profil&rdquo;</strong> atau ikon edit.</li>
+        <li>Ubah nama pada kolom <strong>Nama Lengkap</strong>.</li>
+        <li>Klik <strong>&ldquo;Simpan&rdquo;</strong> untuk menyimpan perubahan.</li>
+    </ol>
+
+    <div class="section-header"><h2 class="section-title">5.3 Mengubah Password</h2></div>
+    <p>Untuk keamanan akun, disarankan untuk mengubah password secara berkala:</p>
+    <ol class="callout-steps">
+        <li>Buka halaman <strong>Profil Pengguna</strong>.</li>
+        <li>Temukan bagian <strong>&ldquo;Ubah Password&rdquo;</strong>.</li>
+        <li>Masukkan <strong>password lama</strong> Anda.</li>
+        <li>Masukkan <strong>password baru</strong> (minimal 8 karakter, disarankan kombinasi huruf dan angka).</li>
+        <li>Konfirmasi <strong>password baru</strong> dengan mengetik ulang.</li>
+        <li>Klik <strong>&ldquo;Simpan Password&rdquo;</strong> untuk menerapkan perubahan.</li>
+    </ol>
+    <div class="warning-box"><div class="warning-box-title">⚠️ Keamanan</div>Jika Anda lupa password, hubungi Admin Dukcapil untuk melakukan reset password. Sistem tidak menyediakan fitur reset password mandiri.</div>
+
+    <div class="section-header"><h2 class="section-title">5.4 Melihat Aktivitas Terbaru</h2></div>
+    <p>Bagian bawah halaman profil menampilkan daftar aktivitas terbaru yang Anda lakukan dalam sistem, seperti login terakhir, data yang diinput, dan perubahan yang dibuat. Informasi ini membantu Anda melacak riwayat penggunaan akun.</p>
+
+    <!-- ======== BAB 6: PANDUAN TEMA TAMPILAN ======== -->
+    <div class="chapter-header">
+        <div class="chapter-number">BAB 6</div>
+        <h1 class="chapter-title">Panduan Tema Tampilan</h1>
+    </div>
+    <p>Sistem menyediakan dua pilihan tema tampilan yang dapat disesuaikan dengan preferensi pengguna, yaitu mode <strong>Terang (Light)</strong> dan mode <strong>Gelap (Dark)</strong>.</p>
+
+    <div class="section-header"><h2 class="section-title">6.1 Lokasi Tombol Tema</h2></div>
+    <p>Tombol pengaturan tema (theme toggle) terletak di <strong>pojok kanan atas</strong> halaman, berdekatan dengan ikon profil pengguna. Tombol ini menampilkan ikon matahari (mode terang) atau ikon bulan (mode gelap) sesuai tema yang sedang aktif.</p>
+
+    <div class="section-header"><h2 class="section-title">6.2 Cara Mengganti Tema</h2></div>
+    <ol class="callout-steps">
+        <li>Temukan tombol <strong>toggle tema</strong> di pojok kanan atas halaman.</li>
+        <li>Klik tombol tersebut untuk beralih antara mode terang dan mode gelap.</li>
+        <li>Tema akan langsung berubah tanpa perlu memuat ulang halaman.</li>
+        <li>Pilihan tema Anda akan <strong>disimpan otomatis</strong> di browser, sehingga saat Anda login kembali, tema yang dipilih akan tetap digunakan.</li>
+    </ol>
+
+    <div class="info-box"><div class="info-box-title">💡 Tips</div>Mode gelap dapat mengurangi kelelahan mata saat bekerja di depan layar dalam waktu lama, terutama di lingkungan dengan pencahayaan redup.</div>
+
+    <!-- ======== BAB 7: PENGADUAN SISTEM ======== -->
+    <div class="chapter-header">
+        <div class="chapter-number">BAB 7</div>
+        <h1 class="chapter-title">Pengaduan Sistem</h1>
+    </div>
+    <p>Fitur pengaduan sistem memungkinkan komunikasi terstruktur antara Operator Puskesmas dan Admin Dukcapil dalam menangani kendala operasional. Sistem ini mencatat seluruh percakapan dan memastikan setiap masalah dapat dilacak penyelesaiannya.</p>
+
+    <div class="section-header"><h2 class="section-title">7.1 Kategori Pengaduan</h2></div>
+    <p>Setiap pengaduan harus dikategorikan agar Admin dapat menangani dengan tepat. Berikut adalah kategori yang tersedia:</p>
+    <table class="data-table">
+        <thead><tr><th>Kategori</th><th>Deskripsi</th><th>Contoh</th></tr></thead>
+        <tbody>
+            <tr><td><strong>SISTEM</strong></td><td>Masalah teknis atau bug pada aplikasi</td><td>Halaman error, tombol tidak berfungsi, sistem lambat</td></tr>
+            <tr><td><strong>DATA</strong></td><td>Masalah terkait data kelahiran</td><td>Data tidak ditemukan, NIK salah, duplikasi data</td></tr>
+            <tr><td><strong>PROSES</strong></td><td>Masalah terkait alur kerja atau prosedur</td><td>Verifikasi lambat, proses import gagal, format tidak sesuai</td></tr>
+            <tr><td><strong>LAINNYA</strong></td><td>Masalah yang tidak termasuk kategori di atas</td><td>Permintaan fitur baru, saran perbaikan, pertanyaan umum</td></tr>
+        </tbody>
+    </table>
+
+    <div class="section-header"><h2 class="section-title">7.2 Tingkat Prioritas</h2></div>
+    <table class="data-table">
+        <thead><tr><th>Prioritas</th><th>Keterangan</th><th>Waktu Respons Target</th></tr></thead>
+        <tbody>
+            <tr><td><span class="badge badge-red">Tinggi</span></td><td>Sistem tidak dapat digunakan sama sekali atau data penting hilang</td><td>1x24 jam</td></tr>
+            <tr><td><span class="badge badge-amber">Sedang</span></td><td>Beberapa fitur bermasalah namun sistem masih dapat digunakan sebagian</td><td>2x24 jam</td></tr>
+            <tr><td><span class="badge badge-green">Rendah</span></td><td>Pertanyaan umum, saran, atau masalah minor</td><td>5x24 jam</td></tr>
+        </tbody>
+    </table>
+
+    <div class="section-header"><h2 class="section-title">7.3 Alur Pengaduan</h2></div>
+    <ol class="callout-steps">
+        <li><strong>Operator</strong> membuat pengaduan baru melalui menu Pengaduan.</li>
+        <li>Pengaduan berstatus <span class="badge badge-amber">Baru</span> dan masuk ke antrian Admin.</li>
+        <li><strong>Admin</strong> meninjau pengaduan dan memberikan respons awal, status berubah menjadi <span class="badge badge-teal">Diproses</span>.</li>
+        <li>Operator dapat melihat respons Admin dan menambahkan balasan jika diperlukan.</li>
+        <li>Jika masalah sudah terselesaikan, Admin mengubah status menjadi <span class="badge badge-green">Selesai</span>.</li>
+    </ol>
+
+    <div class="section-header"><h2 class="section-title">7.4 Cara Admin Merespons Pengaduan</h2></div>
+    <p>Admin Dukcapil merespons pengaduan melalui menu <strong>&ldquo;Kelola Pengaduan&rdquo;</strong> (BAB 3.10). Berikut panduan merespons:</p>
+    <ul>
+        <li>Baca deskripsi pengaduan dengan saksama dan pahami masalah yang dilaporkan.</li>
+        <li>Periksa data terkait di log audit atau menu lain yang relevan.</li>
+        <li>Tuliskan respons yang jelas, informatif, dan solutif.</li>
+        <li>Perbarui status sesuai progres penanganan.</li>
+        <li>Jika masalah memerlukan waktu, berikan estimasi waktu penyelesaian.</li>
+    </ul>
+
+    <!-- ======== BAB 8: TIPS DAN TROUBLESHOOTING ======== -->
+    <div class="chapter-header">
+        <div class="chapter-number">BAB 8</div>
+        <h1 class="chapter-title">Tips dan Troubleshooting</h1>
+    </div>
+    <p>Bab ini menyajikan panduan untuk mengatasi masalah-masalah umum yang mungkin ditemui saat menggunakan sistem.</p>
+
+    <div class="section-header"><h2 class="section-title">8.1 Masalah Umum dan Solusinya</h2></div>
+    <table class="data-table">
+        <thead><tr><th>Masalah</th><th>Penyebab</th><th>Solusi</th></tr></thead>
+        <tbody>
+            <tr><td>Tidak bisa login</td><td>Username atau password salah</td><td>Periksa kembali kredensial. Jika lupa, hubungi Admin Dukcapil.</td></tr>
+            <tr><td>Halaman blank/putih</td><td>Browser tidak kompatibel atau cache rusak</td><td>Gunakan Chrome/Edge terbaru. Bersihkan cache browser (Ctrl+Shift+Delete).</td></tr>
+            <tr><td>Data tidak tersimpan</td><td>Koneksi internet terputus saat menyimpan</td><td>Periksa koneksi internet. Coba kembali simpan data.</td></tr>
+            <tr><td>Upload dokumen gagal</td><td>File terlalu besar atau format tidak didukung</td><td>Pastikan file maks 5MB dan berformat JPG/PNG/PDF.</td></tr>
+            <tr><td>Import Excel gagal</td><td>Format kolom tidak sesuai template</td><td>Download template terbaru, pastikan header kolom sama persis.</td></tr>
+            <tr><td>Sistem lambat</td><td>Koneksi internet lambat atau server sedang sibuk</td><td>Tunggu beberapa saat dan coba lagi. Gunakan koneksi yang stabil.</td></tr>
+            <tr><td>Sesi berakhir</td><td>Tidak ada aktivitas selama 15 menit</td><td>Login kembali. Data yang belum disimpan akan hilang.</td></tr>
+            <tr><td>Data tidak muncul di riwayat</td><td>Filter aktif atau data belum tersinkronisasi</td><td>Periksa filter. Refresh halaman dengan menekan F5.</td></tr>
+        </tbody>
+    </table>
+
+    <div class="section-header"><h2 class="section-title">8.2 Kompatibilitas Browser</h2></div>
+    <p>Jika Anda mengalami masalah tampilan atau fungsi yang tidak bekerja, hal pertama yang harus dilakukan adalah memastikan browser Anda kompatibel:</p>
+    <ul>
+        <li><strong>Disarankan</strong>: Google Chrome versi 90 ke atas (pengalaman terbaik).</li>
+        <li><strong>Alternatif</strong>: Mozilla Firefox 88+, Microsoft Edge 90+, atau Safari 14+.</li>
+        <li><strong>Tidak didukung</strong>: Internet Explorer (sudah tidak dikembangkan), versi browser yang sangat lama.</li>
+    </ul>
+
+    <div class="section-header"><h2 class="section-title">8.3 Session Timeout (15 Menit)</h2></div>
+    <p>Sistem memiliki keamanan berupa <strong>session timeout</strong> selama <strong>15 menit</strong> tanpa aktivitas. Jika Anda tidak melakukan aksi apa pun selama 15 menit, sesi akan otomatis berakhir dan Anda akan diminta untuk login kembali.</p>
+    <div class="info-box"><div class="info-box-title">💡 Tips</div>Agar sesi tidak berakhir saat Anda sedang mengisi formulir panjang, pastikan untuk menyimpan data secara berkala atau tetap aktif berinteraksi dengan halaman.</div>
+
+    <div class="section-header"><h2 class="section-title">8.4 Persyaratan Upload File</h2></div>
+    <table class="data-table">
+        <thead><tr><th>Spesifikasi</th><th>Ketentuan</th></tr></thead>
+        <tbody>
+            <tr><td>Format gambar</td><td>JPG, JPEG, PNG</td></tr>
+            <tr><td>Format dokumen</td><td>PDF</td></tr>
+            <tr><td>Ukuran maksimal per file</td><td>5 MB (5.000 KB)</td></tr>
+            <tr><td>Resolusi gambar</td><td>Minimal 300x400 piksel (agar teks terbaca)</td></tr>
+            <tr><td>Kualitas</td><td>Dokumen harus jelas terbaca, tidak buram, dan tidak terpotong</td></tr>
+        </tbody>
+    </table>
+
+    <div class="section-header"><h2 class="section-title">8.5 Persyaratan Format Import Excel</h2></div>
+    <p>Untuk berhasil melakukan import data dari Excel, pastikan file memenuhi ketentuan berikut:</p>
+    <ul>
+        <li>File berformat <code>.xlsx</code> (Excel 2007 ke atas) atau <code>.xls</code> (Excel 97-2003).</li>
+        <li>Baris pertama berisi header kolom yang sesuai dengan template resmi sistem.</li>
+        <li>Tidak ada kolom tambahan selain yang ada di template.</li>
+        <li>Format tanggal menggunakan format <code>DD/MM/YYYY</code> (contoh: 15/03/2026).</li>
+        <li>NIK ibu dan ayah harus berupa angka 16 digit tanpa spasi atau karakter khusus.</li>
+        <li>Berat badan dalam satuan gram (angka saja, tanpa &ldquo;gram&rdquo; atau &ldquo;g&rdquo;).</li>
+        <li>Panjang badan dalam satuan cm (angka saja, tanpa &ldquo;cm&rdquo;).</li>
+        <li>Tidak ada baris kosong di antara data.</li>
+    </ul>
+    <div class="danger-box"><div class="danger-box-title">🚫 Penting</div>Import data yang salah format dapat menyebabkan data tidak valid. Selalu gunakan template resmi dari sistem dan lakukan pengecekan data sebelum melakukan import massal.</div>
+
+    <!-- ======== BAB 9: KONTAK DAN BANTUAN ======== -->
+    <div class="chapter-header">
+        <div class="chapter-number">BAB 9</div>
+        <h1 class="chapter-title">Kontak dan Bantuan</h1>
+    </div>
+    <p>Jika Anda memerlukan bantuan tambahan yang tidak tercakup dalam pedoman ini, silakan hubungi pihak terkait berikut:</p>
+
+    <div class="section-header"><h2 class="section-title">9.1 Kontak Admin Dukcapil</h2></div>
+    <div class="step-block">
+        <div class="step-block-title">Dinas Kependudukan dan Pencatatan Sipil Kabupaten Ngada</div>
+        <p>Untuk pertanyaan teknis, permintaan akun baru, reset password, atau bantuan operasional sistem, silakan hubungi Admin Dukcapil melalui:</p>
+        <ul style="margin-top:8px;">
+            <li><strong>Akun Admin Sistem</strong>: <code>admin_dukcapil</code></li>
+            <li><strong>Jam Operasional</strong>: Senin &ndash; Jumat, pukul 08.00 &ndash; 16.00 WITA</li>
+        </ul>
+        <p style="margin-top:8px;">Atau gunakan fitur <strong>Pengaduan</strong> di dalam sistem untuk mengajukan pertanyaan secara terstruktur.</p>
+    </div>
+
+    <div class="section-header"><h2 class="section-title">9.2 Informasi Sistem</h2></div>
+    <table class="data-table">
+        <thead><tr><th>Item</th><th>Informasi</th></tr></thead>
+        <tbody>
+            <tr><td>Nama Sistem</td><td>Sistem Informasi Pencatatan Nama Bayi Baru Lahir</td></tr>
+            <tr><td>Instansi Pengelola</td><td>Dinas Kependudukan dan Pencatatan Sipil Kabupaten Ngada</td></tr>
+            <tr><td>Tahun Dokumen</td><td>2026</td></tr>
+            <tr><td>Versi Pedoman</td><td>1.0</td></tr>
+            <tr><td>Jenis Dokumen</td><td>Lampiran Laporan Resmi</td></tr>
+            <tr><td>Peran Pengguna</td><td>Admin Dukcapil, Operator Puskesmas</td></tr>
+        </tbody>
+    </table>
+
+    <div class="section-header"><h2 class="section-title">9.3 Panduan Tambahan</h2></div>
+    <ul>
+        <li>Pastikan selalu menggunakan versi terbaru dari browser yang didukung.</li>
+        <li>Simpan pedoman ini sebagai referensi saat menghadapi kendala.</li>
+        <li>Ajukan pengaduan melalui sistem untuk setiap masalah yang memerlukan bantuan Admin.</li>
+        <li>Laporkan setiap dugaan bug atau masalah keamanan segera kepada Admin.</li>
+    </ul>
+
+    <div class="footer-note">
+        <p style="margin:0 0 4px 0;"><strong>Pedoman Penggunaan Sistem Informasi Pencatatan Nama Bayi Baru Lahir</strong></p>
+        <p style="margin:0 0 4px 0;">Dinas Kependudukan dan Pencatatan Sipil Kabupaten Ngada &bull; Tahun 2026</p>
+        <p style="margin:0;">Dokumen ini bersifat rahasia dan hanya untuk pengguna yang berwenang.</p>
+    </div>
+
+</div>
+
+</body>
+</html>
