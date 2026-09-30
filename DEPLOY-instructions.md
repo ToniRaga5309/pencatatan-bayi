@@ -1,6 +1,4 @@
-# 🚀 Panduan Deployment
-
-## Deploy ke Vercel dengan Supabase
+# 🚀 Panduan Deployment ke Vercel + Supabase
 
 Panduan lengkap untuk mendeploy **Sistem Pencatatan Nama Bayi Baru Lahir** ke production.
 
@@ -30,21 +28,23 @@ Sebelum memulai, pastikan Anda memiliki:
 
 ### Langkah 2: Dapatkan Connection String
 
-1. Di dashboard project Supabase, buka **Settings** (gear icon) → **Database**
-2. Scroll ke bawah, temukan **Connection string**
-3. Copy kedua URL berikut:
+1. Di dashboard project Supabase, buka **Settings** → **Database**
+2. Scroll ke bawah, temukan bagian **Connection string**
+3. Pilih mode **URI** dan salin connection string
 
-**Transaction pooling (untuk aplikasi):**
-```
-postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres?pgbouncer=true
-```
+   **Untuk Transaction pooling (DATABASE_URL):**
+   ```
+   postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres?pgbouncer=true
+   ```
 
-**Direct connection (untuk migration):**
-```
-postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:5432/postgres
-```
+   **Untuk Direct connection (DIRECT_DATABASE_URL):**
+   ```
+   postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:5432/postgres
+   ```
 
-> ⚠️ Ganti `[PROJECT-REF]`, `[PASSWORD]`, dan `[REGION]` sesuai data dari Supabase Anda.
+   > ⚠️ Ganti `[PROJECT-REF]`, `[PASSWORD]`, dan `[REGION]` sesuai data Anda
+
+4. Simpan kedua URL ini - Anda akan butuhkan untuk environment variables
 
 ---
 
@@ -58,7 +58,7 @@ git commit -m "Initial commit: Sistem Pencatatan Bayi Baru Lahir"
 ```
 
 ### Langkah 2: Buat Repository di GitHub
-1. Buka [github.com](https://github.com) dan klik **"+" → "New repository"**
+1. Buka [github.com](https://github.com) dan klik **"+"** → **"New repository"**
 2. Nama: `sistem-bayi-baru-lahir`
 3. Pilih **Private** atau **Public**
 4. Jangan centang "Add a README file" (kita sudah punya)
@@ -82,13 +82,13 @@ Ganti `USERNAME` dengan username GitHub Anda.
 4. Klik **"Import"**
 
 ### Langkah 2: Set Environment Variables
-Di halaman **Settings** → **Environment Variables**, tambahkan:
+Di halaman konfigurasi Vercel, tambahkan environment variables berikut:
 
 | Variable | Value | Keterangan |
 |----------|-------|------------|
-| `DATABASE_URL` | *(dari Supabase dengan ?pgbouncer=true)* | Connection pooling untuk aplikasi |
-| `DIRECT_DATABASE_URL` | *(dari Supabase tanpa ?pgbouncer)* | Direct connection untuk migration |
-| `NEXTAUTH_SECRET` | *(generate dengan `openssl rand -base64 32`)* | Secret key untuk JWT signing |
+| `DATABASE_URL` | `postgresql://postgres.[REF]:[PASS]@aws-0-[REGION].pooler.supabase.com:6543/postgres?pgbouncer=true` | Dari Supabase (dengan pgbouncer) |
+| `DIRECT_DATABASE_URL` | `postgresql://postgres.[REF]:[PASS]@aws-0-[REGION].pooler.supabase.com:5432/postgres` | Dari Supabase (tanpa pgbouncer) |
+| `NEXTAUTH_SECRET` | Generate dengan: `openssl rand -base64 32` | Secret key untuk JWT |
 | `NEXTAUTH_URL` | `https://nama-app.vercel.app` | URL production (tanpa trailing slash) |
 | `NODE_ENV` | `production` | Environment production |
 
@@ -99,32 +99,50 @@ Di halaman **Settings** → **Environment Variables**, tambahkan:
 
 ---
 
-## 4️⃣ Jalankan Database Migration & Seed
+## 4️⃣ Jalankan Migration & Seed Data
 
-### Via Vercel Dashboard (Recommended)
-1. Buka **Storage** → **Database** di Vercel dashboard
-2. Klik **"Query"** tab
-3. Jalankan migration:
-   ```bash
-   npx prisma migrate deploy
-   ```
-4. Jalankan seed:
-   ```bash
-   npx prisma db seed
-   ```
+Setelah deploy pertama kali, jalankan migration (jika ada) dan seed untuk mengisi data awal:
 
-### Via Local CLI
+### Metode 1: Via Vercel CLI (Recommended)
 ```bash
-# Set environment variables lokal
-export DATABASE_URL="your-supabase-url"
-export DIRECT_DATABASE_URL="your-direct-url"
+# Install Vercel CLI
+npm i -g vercel
 
-# Run migration
+# Login
+vercel login
+
+# Link project
+vercel link
+
+# Pull environment variables dari Vercel ke .env.local
+vercel env pull
+
+# Jalankan migration (jika diperlukan)
 npx prisma migrate deploy
 
-# Run seed
+# Jalankan seed
+bun run prisma/seed.ts
+```
+
+### Metode 2: Via Local CLI
+```bash
+# Set environment variables lokal (dari Supabase)
+export DATABASE_URL="postgresql://postgres.[REF]:[PASS]@aws-0-[REGION].pooler.supabase.com:5432/postgres"
+export DIRECT_DATABASE_URL="postgresql://postgres.[REF]:[PASS]@aws-0-[REGION].pooler.supabase.com:5432/postgres"
+
+# Jalankan migration
+npx prisma migrate deploy
+
+# Jalankan seed
 npx prisma db seed
 ```
+
+### Metode 3: Via Prisma Studio
+1. Buka Prisma Studio:
+   ```bash
+   npx prisma studio
+   ```
+2. Tambah data secara manual melalui UI
 
 ---
 
@@ -138,12 +156,36 @@ Gunakan akun default untuk testing:
 | Admin Dukcapil | `admin` | `password123` |
 | Operator Puskesmas | `operator1` | `password123` |
 
-### ⚠️ PENTING: Ganti Password Default!
-Segera ganti password default setelah deploy!
+### Ganti Password Default
+⚠️ **PENTING**: Segera ganti password default setelah deploy!
 
 1. Login sebagai admin
 2. Buka menu **Kelola User** (Admin Dashboard)
 3. Edit user dan set password baru yang kuat
+
+---
+
+## 📁 Environment Variables Reference
+
+### Development (.env.local)
+```env
+# Direct connection (tanpa pgbouncer) agar Prisma migrate berjalan lancar
+DATABASE_URL="postgresql://postgres.[REF]:[PASS]@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+NEXTAUTH_SECRET="dev-secret-key-for-testing-only"
+NEXTAUTH_URL="http://localhost:3000"
+```
+
+### Production (Vercel Dashboard)
+Set via Vercel Dashboard → Settings → Environment Variables:
+```env
+DATABASE_URL="postgresql://postgres.[REF]:[PASS]@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
+DIRECT_DATABASE_URL="postgresql://postgres.[REF]:[PASS]@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+NEXTAUTH_SECRET="generate-with-openssl-rand-base64-32"
+NEXTAUTH_URL="https://your-app-name.vercel.app"
+NODE_ENV="production"
+```
+
+> Jangan pernah commit file `.env` atau `.env.local` ke repository - keduanya sudah masuk `.gitignore`.
 
 ---
 
@@ -155,16 +197,16 @@ PrismaClientInitializationError: Can't reach database server
 ```
 **Solusi:**
 - Pastikan `DATABASE_URL` benar
-- Ceksa IP Vercel tidak diblokir di Supabase (Settings → Database -> Connection Pooling)
+- Pastikan menggunakan mode **Transaction pooling** (port 6543 + `?pgbouncer=true`) untuk aplikasi
+- Cek apakah IP Vercel tidak diblokir di Supabase (Settings → Database → Connection Pooling)
 - Pastikan password database benar
-- Pastikan menggunakan mode **Transaction pooling** untuk aplikasi
 
 ### Error: Prisma Migration Failed
 ```
 Error: P3001: Migration `xxx` failed
 ```
 **Solusi:**
-- Jalankan `npx prisma migrate deploy` (bukan `migrate dev`)
+- Jalankan `npx prisma migrate deploy` secara manual (bukan `migrate dev` di production)
 - Pastikan schema Prisma kompatibel dengan PostgreSQL
 - Cek log di Vercel untuk detail error
 
@@ -174,7 +216,7 @@ Error: P3001: Migration `xxx` failed
 ```
 **Solusi:**
 - Pastikan `NEXTAUTH_SECRET` sama di semua environment
-- Pastikan `NEXTAUTH_URL` sesuai dengan domain production
+- Pastikan `NEXTAUTH_URL` sesuai dengan domain production (tanpa trailing slash)
 - Clear browser cookies dan coba login ulang
 
 ### Error: Build Failed di Vercel
@@ -183,33 +225,14 @@ Error: Command "prisma generate" failed
 ```
 **Solusi:**
 - Pastikan `prisma` ada di dependencies (bukan devDependencies)
-- Cek versi Node.js di Vercel (Settings → Environment Variables → NODE_VERSION=18)
+- Cek versi Node.js di Vercel (Settings → Environment Variables → `NODE_VERSION`)
 - Jalankan build ulang
 
 ---
 
-## 📁 Environment Variables Reference
-
-### Development (.env.local)
-```env
-DATABASE_URL="file:./db/custom.db"
-NEXTAUTH_SECRET="dev-secret-key-for-testing-only"
-NEXTAUTH_URL="http://localhost:3000"
-```
-
-### Production (Vercel Dashboard)
-```env
-DATABASE_URL="postgresql://postgres.[REF]:[PASS]@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
-DIRECT_DATABASE_URL="postgresql://postgres.[REF]:[PASS]@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
-NEXTAUTH_SECRET="generate-with-openssl-rand-base64-32"
-NEXTAUTH_URL="https://your-app-name.vercel.app"
-NODE_ENV="production"
-```
-
----
-
 ## 📞 Support
-Jika mengalami masalah:
+
+Jika mengalami masalah, silakan:
 1. Buat issue di GitHub repository
 2. Sertakan screenshot error dan langkah-langkah reproduksi
 3. Jelaskan environment yang digunakan (development/production)
