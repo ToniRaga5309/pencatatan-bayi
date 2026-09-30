@@ -57,3 +57,7 @@ server.log
 
 # Upload directory
 /upload/
+
+# Secrets & session data (jangan pernah commit)
+.env
+cookies.txt
